@@ -3,7 +3,7 @@
     <color name="transparent_color">#00ffffff</color>
     <color name="colorPrimary">#a62b22</color>
     <color name="colorPrimaryDark">#D32F2F</color>
-    <color name="colorAccent">#008b8b</color>
+    <color name="colorAccent">#f84fed</color>
 
     <color name="colorTextNavigation">#cc5b5858</color>
     <color name="colorTextPrimaryNavigation">#000000</color>

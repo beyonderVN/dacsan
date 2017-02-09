@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
-apply plugin: 'android-apt'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'android-apt'
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.1"
@@ -35,9 +35,12 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.0.1'
     compile 'com.android.support:support-v4:25.0.1'
     compile 'com.android.support:design:25.0.1'
-
-
     compile 'com.google.code.gson:gson:2.7'
-
+    compile 'com.jakewharton:butterknife:8.1.0'
+    compile 'io.reactivex:rxjava:1.0.14'
+    compile 'io.reactivex:rxandroid:1.0.1'
+    compile 'javax.annotation:jsr250-api:1.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    apt 'com.jakewharton:butterknife-compiler:8.1.0'
     testCompile 'junit:junit:4.12'
 }
