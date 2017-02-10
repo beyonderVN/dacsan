@@ -34,13 +34,12 @@ public class LoginActivity extends BaseActivity {
         viewModel.login()
                 .takeUntil(stopEvent())
                 .observeOn(AndroidSchedulers.mainThread())
-//                .delay(2, TimeUnit.SECONDS)
                 .subscribe(loginResponse -> handleResponse(loginResponse))
         ;
     }
     private void handleResponse(LoginResponse loginResponse) {
         if (loginResponse.isSuccess()) {
-            startActivity(MainActivity.getIntentNewTask(this));
+//            startActivity(MainActivity.getIntentNewTask(this));
         }
     }
     @OnClick(R.id.btn_signup)
@@ -78,11 +77,26 @@ public class LoginActivity extends BaseActivity {
                 .takeUntil(stopEvent())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::setLoadingState);
+        viewModel.loginIsSuccess()
+                .takeUntil(stopEvent())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(aBoolean -> {
+                    if(aBoolean){
+                        new AlertDialog.Builder(this)
+                                .setMessage("Login Successfully!")
+                                .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                                    dialog.dismiss();
+                                    startActivity(MainActivity.getIntentNewTask(LoginActivity.this));
+                                })
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                    }
+                });
         viewModel.init();
     }
 
     private void showMessage(String value) {
-        new AlertDialog.Builder(getApplicationContext())
+        new AlertDialog.Builder(this)
                 .setMessage(value)
                 .setPositiveButton(android.R.string.yes, (dialog, which) -> dialog.dismiss())
                 .setIcon(android.R.drawable.ic_dialog_alert)
