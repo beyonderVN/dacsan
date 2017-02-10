@@ -53,7 +53,7 @@
                     android:hint="@string/hint_email"
                     android:inputType="textEmailAddress"
                     android:textColor="#828282"
-
+                    app:textChange="@{viewModel.emailSignupChange}"
                     tools:text="asdasdad" />
             </android.support.design.widget.TextInputLayout>
             <!--app:textChange="@{viewModel.emailSignupChange}"-->

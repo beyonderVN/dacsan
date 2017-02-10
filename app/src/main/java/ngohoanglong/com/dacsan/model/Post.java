@@ -4,383 +4,188 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.util.HashMap;
 
 /**
  * Created by Long on 2/8/2017.
  */
 
-public class Post implements Serializable {
+public class Post implements Serializable{
 
-    @SerializedName("updatedAt")
+    @SerializedName("productIndex")
     @Expose
-    private String updatedAt;
-    @SerializedName("tipImageRatio")
+    private Integer productIndex;
+    @SerializedName("productId")
     @Expose
-    private Double tipImageRatio;
-    @SerializedName("tipTime")
+    private String productId;
+    @SerializedName("productName")
     @Expose
-    private String tipTime;
-    @SerializedName("tipHot")
+    private String productName;
+    @SerializedName("productImage")
     @Expose
-    private Boolean tipHot;
-    @SerializedName("tipOven")
+    private String productImage;
+    @SerializedName("productDes")
     @Expose
-    private Boolean tipOven;
-    @SerializedName("objectId")
+    private String productDes;
+    @SerializedName("productPrice")
     @Expose
-    private String objectId;
-    @SerializedName("tipName")
+    private Double productPrice;
+    @SerializedName("moreinfo")
     @Expose
-    private String tipName;
-    @SerializedName("tipDescription")
+    private String moreinfo;
+    @SerializedName("rownum")
     @Expose
-    private String tipDescription;
-    @SerializedName("tipIngredients")
+    private Integer rownum;
+    @SerializedName("newPrice")
     @Expose
-    private String tipIngredients;
-    @SerializedName("tipZzz")
+    private Double newPrice;
+    @SerializedName("pricePercent")
     @Expose
-    private String tipZzz;
-    @SerializedName("tipImage")
+    private Integer pricePercent;
+    @SerializedName("isPromo")
     @Expose
-    private TipImage tipImage;
-    @SerializedName("tipPortion")
+    private Integer isPromo;
+    @SerializedName("num_cart")
     @Expose
-    private String tipPortion;
-    @SerializedName("tipPublished")
+    private Double numCart;
+    @SerializedName("title")
     @Expose
-    private Integer tipPublished;
-    @SerializedName("tipDifficulty")
+    private String title;
+    @SerializedName("Nlike")
     @Expose
-    private Integer tipDifficulty;
-    @SerializedName("tipSeasons")
+    private Integer nlike;
+    @SerializedName("Nview")
     @Expose
-    private String tipSeasons;
-    @SerializedName("tipCategories")
+    private Integer nview;
+    @SerializedName("Nbuy")
     @Expose
-    private String tipCategories;
-    @SerializedName("tipSender")
-    @Expose
-    private String tipSender;
-    @SerializedName("tipDairy")
-    @Expose
-    private Boolean tipDairy;
-    @SerializedName("createdAt")
-    @Expose
-    private String createdAt;
-    @SerializedName("tipPersons")
-    @Expose
-    private Integer tipPersons;
+    private Integer nbuy;
 
-    @SerializedName("tipUserId")
-    @Expose
-    private String tipUserId;
-    public String getTipUserId() {
-        return tipUserId;
+    public Integer getProductIndex() {
+        return productIndex;
     }
 
-    @SerializedName("tipComments")
-    @Expose
-    private HashMap<String,Comment> tipComments;
-
-    public void setTipUserId(String tipUserId) {
-        this.tipUserId = tipUserId;
+    public void setProductIndex(Integer productIndex) {
+        this.productIndex = productIndex;
     }
 
-    public HashMap<String,Comment> getTipComments() {
-        return tipComments;
+    public String getProductId() {
+        return productId;
     }
 
-    public void setTipComments(HashMap<String,Comment> tipComments) {
-        this.tipComments = tipComments;
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 
-    public Post() {
+    public String getProductName() {
+        return productName;
     }
 
-    public Post(String tipName) {
-        this.tipName = tipName;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
-    /**
-     * @return The updatedAt
-     */
-    public String getUpdatedAt() {
-        return updatedAt;
+    public String getProductImage() {
+        return productImage;
     }
 
-    /**
-     * @param updatedAt The updatedAt
-     */
-    public void setUpdatedAt(String updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setProductImage(String productImage) {
+        this.productImage = productImage;
     }
 
-    /**
-     * @return The tipImageRatio
-     */
-    public Double getTipImageRatio() {
-        return tipImageRatio;
+    public String getProductDes() {
+        return productDes;
     }
 
-    /**
-     * @param tipImageRatio The tipImageRatio
-     */
-    public void setTipImageRatio(Double tipImageRatio) {
-        this.tipImageRatio = tipImageRatio;
+    public void setProductDes(String productDes) {
+        this.productDes = productDes;
     }
 
-    /**
-     * @return The tipTime
-     */
-    public String getTipTime() {
-        return tipTime;
+    public Double getProductPrice() {
+        return productPrice;
     }
 
-    /**
-     * @param tipTime The tipTime
-     */
-    public void setTipTime(String tipTime) {
-        this.tipTime = tipTime;
+    public void setProductPrice(Double productPrice) {
+        this.productPrice = productPrice;
     }
 
-    /**
-     * @return The tipHot
-     */
-    public Boolean getTipHot() {
-        return tipHot;
+    public String getMoreinfo() {
+        return moreinfo;
     }
 
-    /**
-     * @param tipHot The tipHot
-     */
-    public void setTipHot(Boolean tipHot) {
-        this.tipHot = tipHot;
+    public void setMoreinfo(String moreinfo) {
+        this.moreinfo = moreinfo;
     }
 
-    /**
-     * @return The tipOven
-     */
-    public Boolean getTipOven() {
-        return tipOven;
+    public Integer getRownum() {
+        return rownum;
     }
 
-    /**
-     * @param tipOven The tipOven
-     */
-    public void setTipOven(Boolean tipOven) {
-        this.tipOven = tipOven;
+    public void setRownum(Integer rownum) {
+        this.rownum = rownum;
     }
 
-    /**
-     * @return The objectId
-     */
-    public String getObjectId() {
-        return objectId;
+    public Double getNewPrice() {
+        return newPrice;
     }
 
-    /**
-     * @param objectId The objectId
-     */
-    public void setObjectId(String objectId) {
-        this.objectId = objectId;
+    public void setNewPrice(Double newPrice) {
+        this.newPrice = newPrice;
     }
 
-    /**
-     * @return The tipName
-     */
-    public String getTipName() {
-        return tipName;
+    public Integer getPricePercent() {
+        return pricePercent;
     }
 
-    /**
-     * @param tipName The tipName
-     */
-    public void setTipName(String tipName) {
-        this.tipName = tipName;
+    public void setPricePercent(Integer pricePercent) {
+        this.pricePercent = pricePercent;
     }
 
-    /**
-     * @return The tipDescription
-     */
-    public String getTipDescription() {
-        return tipDescription;
+    public Integer getIsPromo() {
+        return isPromo;
     }
 
-    /**
-     * @param tipDescription The tipDescription
-     */
-    public void setTipDescription(String tipDescription) {
-        this.tipDescription = tipDescription;
+    public void setIsPromo(Integer isPromo) {
+        this.isPromo = isPromo;
     }
 
-    /**
-     * @return The tipIngredients
-     */
-    public String getTipIngredients() {
-        return tipIngredients;
+    public Double getNumCart() {
+        return numCart;
     }
 
-    /**
-     * @param tipIngredients The tipIngredients
-     */
-    public void setTipIngredients(String tipIngredients) {
-        this.tipIngredients = tipIngredients;
+    public void setNumCart(Double numCart) {
+        this.numCart = numCart;
     }
 
-    /**
-     * @return The tipZzz
-     */
-    public String getTipZzz() {
-        return tipZzz;
+    public String getTitle() {
+        return title;
     }
 
-    /**
-     * @param tipZzz The tipZzz
-     */
-    public void setTipZzz(String tipZzz) {
-        this.tipZzz = tipZzz;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    /**
-     * @return The tipImage
-     */
-    public TipImage getTipImage() {
-        return tipImage;
+    public Integer getNlike() {
+        return nlike;
     }
 
-    /**
-     * @param tipImage The tipImage
-     */
-    public void setTipImage(TipImage tipImage) {
-        this.tipImage = tipImage;
+    public void setNlike(Integer nlike) {
+        this.nlike = nlike;
     }
 
-    /**
-     * @return The tipPortion
-     */
-    public String getTipPortion() {
-        return tipPortion;
+    public Integer getNview() {
+        return nview;
     }
 
-    /**
-     * @param tipPortion The tipPortion
-     */
-    public void setTipPortion(String tipPortion) {
-        this.tipPortion = tipPortion;
+    public void setNview(Integer nview) {
+        this.nview = nview;
     }
 
-    /**
-     * @return The tipPublished
-     */
-    public Integer getTipPublished() {
-        return tipPublished;
+    public Integer getNbuy() {
+        return nbuy;
     }
 
-    /**
-     * @param tipPublished The tipPublished
-     */
-    public void setTipPublished(Integer tipPublished) {
-        this.tipPublished = tipPublished;
-    }
-
-    /**
-     * @return The tipDifficulty
-     */
-    public Integer getTipDifficulty() {
-        return tipDifficulty;
-    }
-
-    /**
-     * @param tipDifficulty The tipDifficulty
-     */
-    public void setTipDifficulty(Integer tipDifficulty) {
-        this.tipDifficulty = tipDifficulty;
-    }
-
-    /**
-     * @return The tipSeasons
-     */
-    public String getTipSeasons() {
-        return tipSeasons;
-    }
-
-    /**
-     * @param tipSeasons The tipSeasons
-     */
-    public void setTipSeasons(String tipSeasons) {
-        this.tipSeasons = tipSeasons;
-    }
-
-    /**
-     * @return The tipCategories
-     */
-    public String getTipCategories() {
-        return tipCategories;
-    }
-
-    /**
-     * @param tipCategories The tipCategories
-     */
-    public void setTipCategories(String tipCategories) {
-        this.tipCategories = tipCategories;
-    }
-
-    /**
-     * @return The tipSender
-     */
-    public String getTipSender() {
-        return tipSender;
-    }
-
-    /**
-     * @param tipSender The tipSender
-     */
-    public void setTipSender(String tipSender) {
-        this.tipSender = tipSender;
-    }
-
-    /**
-     * @return The tipDairy
-     */
-    public Boolean getTipDairy() {
-        return tipDairy;
-    }
-
-    /**
-     * @param tipDairy The tipDairy
-     */
-    public void setTipDairy(Boolean tipDairy) {
-        this.tipDairy = tipDairy;
-    }
-
-    /**
-     * @return The createdAt
-     */
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    /**
-     * @param createdAt The createdAt
-     */
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    /**
-     * @return The tipPersons
-     */
-    public Integer getTipPersons() {
-        return tipPersons;
-    }
-
-    /**
-     * @param tipPersons The tipPersons
-     */
-    public void setTipPersons(Integer tipPersons) {
-        this.tipPersons = tipPersons;
+    public void setNbuy(Integer nbuy) {
+        this.nbuy = nbuy;
     }
 
 }

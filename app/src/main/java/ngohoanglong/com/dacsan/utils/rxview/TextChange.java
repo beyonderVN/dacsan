@@ -1,4 +1,4 @@
-package ngohoanglong.com.dacsan.utils.view;
+package ngohoanglong.com.dacsan.utils.rxview;
 
 /**
  * Created by nongdenchet on 11/22/16.

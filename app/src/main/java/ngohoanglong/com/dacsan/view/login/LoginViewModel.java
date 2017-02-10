@@ -8,7 +8,7 @@ import ngohoanglong.com.dacsan.data.repo.UserRepo;
 import ngohoanglong.com.dacsan.data.repo.UserRepoImpl;
 import ngohoanglong.com.dacsan.data.request.LoginRequest;
 import ngohoanglong.com.dacsan.data.response.LoginResponse;
-import ngohoanglong.com.dacsan.utils.view.TextChange;
+import ngohoanglong.com.dacsan.utils.rxview.TextChange;
 import rx.Observable;
 import rx.subjects.BehaviorSubject;
 import rx.subjects.PublishSubject;

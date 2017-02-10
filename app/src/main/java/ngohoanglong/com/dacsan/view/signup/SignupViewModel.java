@@ -9,7 +9,7 @@ import ngohoanglong.com.dacsan.data.repo.UserRepo;
 import ngohoanglong.com.dacsan.data.repo.UserRepoImpl;
 import ngohoanglong.com.dacsan.data.request.SignupRequest;
 import ngohoanglong.com.dacsan.data.response.SignupResponse;
-import ngohoanglong.com.dacsan.utils.view.TextChange;
+import ngohoanglong.com.dacsan.utils.rxview.TextChange;
 import rx.Observable;
 import rx.subjects.PublishSubject;
 

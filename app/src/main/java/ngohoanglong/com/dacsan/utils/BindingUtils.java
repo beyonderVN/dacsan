@@ -3,8 +3,8 @@ package ngohoanglong.com.dacsan.utils;
 import android.databinding.BindingAdapter;
 import android.widget.EditText;
 
-import ngohoanglong.com.dacsan.utils.view.TextChange;
-import ngohoanglong.com.dacsan.utils.view.TextChangeAdapter;
+import ngohoanglong.com.dacsan.utils.rxview.TextChange;
+import ngohoanglong.com.dacsan.utils.rxview.TextChangeAdapter;
 
 
 /**

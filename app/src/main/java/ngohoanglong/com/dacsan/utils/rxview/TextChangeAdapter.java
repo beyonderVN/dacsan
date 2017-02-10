@@ -1,4 +1,4 @@
-package ngohoanglong.com.dacsan.utils.view;
+package ngohoanglong.com.dacsan.utils.rxview;
 
 import android.text.Editable;
 import android.text.TextWatcher;
