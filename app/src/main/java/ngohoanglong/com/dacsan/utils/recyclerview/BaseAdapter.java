@@ -10,6 +10,7 @@ import java.util.List;
 
 import ngohoanglong.com.dacsan.utils.recyclerview.holderfactory.HolderFactory;
 import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.BaseHM;
+import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.LoadMoreHM;
 import ngohoanglong.com.dacsan.utils.recyclerview.viewholder.BaseViewHolder;
 
 /**
@@ -40,6 +41,20 @@ public class BaseAdapter extends RecyclerView.Adapter<BaseViewHolder<BaseHM>> {
     public void addItem(BaseHM baseHM){
         this.list.add(baseHM);
         notifyDataSetChanged();
+    }
+    public void removeItem(int pos){
+        this.list.remove(pos);
+        notifyDataSetChanged();
+    }
+    public void showLoadingMore(){
+        this.list.add(new LoadMoreHM());
+        notifyDataSetChanged();
+    }
+    public void hideLoadingMore(){
+        if(list.get(list.size()-1) instanceof LoadMoreHM){
+            this.list.remove(list.size()-1);
+            notifyDataSetChanged();
+        }
     }
     @Override
     public BaseViewHolder<BaseHM> onCreateViewHolder(ViewGroup parent, int viewType) {

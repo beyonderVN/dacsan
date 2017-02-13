@@ -34,7 +34,8 @@ public abstract class InfiniteScrollListener extends RecyclerView.OnScrollListen
     @Override
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
-
+        if(isNoMore()) return;
+        if(isLoading()) return;
         int lastVisibleItemPosition = 0;
         int totalItemCount = mLayoutManager.getItemCount();
         int[] lastVisibleItemPositions = ((StaggeredGridLayoutManager) mLayoutManager).findLastVisibleItemPositions(null);
@@ -57,8 +58,7 @@ public abstract class InfiniteScrollListener extends RecyclerView.OnScrollListen
         // If we do need to reload some more data, we execute finishLoadingMore to fetch the data.
         // threshold should reflect how many total columns there are too
         if ((lastVisibleItemPosition + visibleThreshold) > totalItemCount) {
-            if(isNoMore()) return;
-            if(isLoading()) return;
+
             onLoadMore();
         }
     }

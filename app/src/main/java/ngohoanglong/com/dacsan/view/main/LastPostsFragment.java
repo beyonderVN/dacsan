@@ -14,18 +14,14 @@ import android.view.ViewGroup;
 import com.vnwarriors.advancedui.appcore.common.recyclerviewhelper.InfiniteScrollListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindInt;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ngohoanglong.com.dacsan.R;
-import ngohoanglong.com.dacsan.model.PostVivmall;
 import ngohoanglong.com.dacsan.utils.ThreadSchedulerImpl;
 import ngohoanglong.com.dacsan.utils.recyclerview.BaseAdapter;
 import ngohoanglong.com.dacsan.utils.recyclerview.holderfactory.HolderFactoryImpl;
-import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.BaseHM;
-import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.SimpleVerticalHM;
 import ngohoanglong.com.dacsan.view.BaseFragment;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -43,6 +39,7 @@ public class LastPostsFragment extends BaseFragment {
     @BindView(R.id.rvPosts)
     RecyclerView rvPosts;
     BaseAdapter baseAdapter;
+    boolean isLoadingMore = false;
 
     public LastPostsFragment() {
     }
@@ -74,40 +71,34 @@ public class LastPostsFragment extends BaseFragment {
             @Override
             public void onLoadMore() {
                 Log.d(TAG, "onLoadMore: ");
-//                isLoadingMore = true;
                 try {
                     viewModel.loadMorePosts()
                             .takeUntil(stopEvent())
-                            .doOnSubscribe(() -> isLoadingMore = true)
-                            .doOnTerminate(() ->
-                                    isLoadingMore = false)
-                            .map(postVivmalls -> {
-                                List<BaseHM> baseHMs = new ArrayList<BaseHM>();
-                                for (PostVivmall postVivmall : postVivmalls
-                                        ) {
-                                    Log.d(TAG, "bindViewModel>>map" + postVivmall.getProductName());
-                                    baseHMs.add(new SimpleVerticalHM(postVivmall.getProductName()));
-                                }
-                                return baseHMs;
+                            .doOnSubscribe(() -> {
+                                Log.d(TAG, "doOnSubscribe: ");
+                                isLoadingMore = true;
+                                showLoadingMore();
                             })
                             .subscribe(posts -> {
+                                hideLoadingMore();
+                                isLoadingMore = false;
                                 baseAdapter.addList(posts);
-                                isLoadingMore = false;
                             }, throwable -> {
-//                    ToastUtils.showLong(getContext(), throwable.getMessage());
-                                Log.e(TAG, "bindViewModel: " + throwable.getMessage());
                                 isLoadingMore = false;
+                                hideLoadingMore();
+                            }, () -> {
+                                Log.d(TAG, "onComplete: ");
+                                isLoadingMore = false;
+                                hideLoadingMore();
                             });
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
             }
 
-            boolean isLoadingMore = false;
 
             @Override
             public boolean isLoading() {
-
                 Log.d(TAG, "isLoading: " + isLoadingMore);
                 return isLoadingMore;
             }
@@ -126,20 +117,19 @@ public class LastPostsFragment extends BaseFragment {
                 .takeUntil(stopEvent())
                 .doOnTerminate(() -> {
                 })
-                .map(postVivmalls -> {
-                    List<BaseHM> baseHMs = new ArrayList<BaseHM>();
-                    for (PostVivmall postVivmall : postVivmalls
-                            ) {
-                        Log.d(TAG, "bindViewModel>>map" + postVivmall.getProductName());
-                        baseHMs.add(new SimpleVerticalHM(postVivmall.getProductName()));
-                    }
-                    return baseHMs;
-                })
                 .subscribe(posts -> {
                     baseAdapter.addList(posts);
                 }, throwable -> {
-//                    ToastUtils.showLong(getContext(), throwable.getMessage());
                     Log.e(TAG, "bindViewModel: " + throwable.getMessage());
                 });
     }
+
+    private void showLoadingMore() {
+        baseAdapter.showLoadingMore();
+    }
+
+    private void hideLoadingMore() {
+        baseAdapter.hideLoadingMore();
+    }
+
 }

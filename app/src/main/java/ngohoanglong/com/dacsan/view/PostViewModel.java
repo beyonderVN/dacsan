@@ -6,8 +6,8 @@ import android.databinding.ObservableList;
 
 import java.util.List;
 
-import ngohoanglong.com.dacsan.model.PostVivmall;
 import ngohoanglong.com.dacsan.utils.ThreadScheduler;
+import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.BaseHM;
 import rx.Observable;
 import rx.subjects.PublishSubject;
 
@@ -15,7 +15,7 @@ public abstract class PostViewModel extends BaseViewModel {
     protected final int SHOW_STATE = 0;
     protected final int LOADING_STATE = 1;
     protected final int EMPTY_STATE = 2;
-    protected ObservableList<PostVivmall> posts = new ObservableArrayList<>();
+    protected ObservableList<BaseHM> posts = new ObservableArrayList<>();
     private PublishSubject<Integer> viewState = PublishSubject.create();
 
     public PostViewModel(ThreadScheduler threadScheduler,
@@ -28,7 +28,7 @@ public abstract class PostViewModel extends BaseViewModel {
         return viewState.asObservable().distinctUntilChanged();
     }
 
-    public ObservableList<PostVivmall> getPosts() {
+    public ObservableList<BaseHM> getPosts() {
         return posts;
     }
 
@@ -40,7 +40,7 @@ public abstract class PostViewModel extends BaseViewModel {
         viewState.onNext(LOADING_STATE);
     }
 
-    protected int indexOf(PostVivmall post) {
+    protected int indexOf(BaseHM post) {
         return posts.indexOf(post);
     }
 
@@ -51,16 +51,16 @@ public abstract class PostViewModel extends BaseViewModel {
         viewState.onNext(EMPTY_STATE);
     }
 
-    protected void updatePosts(List<PostVivmall> posts) {
+    protected void updatePosts(List<BaseHM> posts) {
         this.posts.clear();
         this.posts.addAll(posts);
     }
 
-    public void setPost(PostVivmall post) {
+    public void setPost(BaseHM post) {
         posts.set(indexOf(post), post);
     }
 
-    public void addPost(PostVivmall post) {
+    public void addPost(BaseHM post) {
         posts.add(0, post);
     }
 }
