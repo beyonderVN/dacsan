@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.util.Log;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import ngohoanglong.com.dacsan.data.repo.PostVivmallRepo;
 import ngohoanglong.com.dacsan.data.repo.PostVivmallRepoImpl;
@@ -28,6 +29,7 @@ public class LastPostsViewModel extends PostViewModel {
 
     public Observable<List<PostVivmall>> loadPosts() {
         return postRepo.getLatest(new LatestRequest(0))
+                .delay(2, TimeUnit.SECONDS)
                 .compose(withScheduler())
                 .doOnSubscribe(() -> showLoading())
                 .doOnNext(posts -> {
@@ -42,6 +44,7 @@ public class LastPostsViewModel extends PostViewModel {
         return postRepo.getLatest(new LatestRequest(page + 1))
                 .compose(withScheduler())
                 .doOnNext(posts -> {
+                    Log.d(TAG, "loadMorePosts: ");
                     this.posts.addAll(posts);
                     this.page += 1;
                 });

@@ -14,12 +14,9 @@ public abstract class InfiniteScrollListener extends RecyclerView.OnScrollListen
     // The minimum amount of items to have below your current scroll position
     // before loading more.
     private int visibleThreshold = 5;
-    // The current offset index of data you have loaded
-    private int currentPage = 0;
+
     // The total number of items in the dataset after the last load
     private int previousTotalItemCount = 0;
-    // True if we are still waiting for the last set of data to load.
-    private boolean loading = true;
     // Sets the starting page index
     private int startingPageIndex = 0;
     RecyclerView.LayoutManager mLayoutManager ;
@@ -37,15 +34,13 @@ public abstract class InfiniteScrollListener extends RecyclerView.OnScrollListen
     @Override
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
-        if(isNoMore()) return;
-        if(isLoading()) return;
+
         int lastVisibleItemPosition = 0;
         int totalItemCount = mLayoutManager.getItemCount();
         int[] lastVisibleItemPositions = ((StaggeredGridLayoutManager) mLayoutManager).findLastVisibleItemPositions(null);
         // get maximum element within the list
         lastVisibleItemPosition = getLastVisibleItem(lastVisibleItemPositions);
         if (totalItemCount < previousTotalItemCount) {
-            this.currentPage = this.startingPageIndex;
             this.previousTotalItemCount = totalItemCount;
             if (totalItemCount == 0) {
             }
@@ -62,7 +57,8 @@ public abstract class InfiniteScrollListener extends RecyclerView.OnScrollListen
         // If we do need to reload some more data, we execute finishLoadingMore to fetch the data.
         // threshold should reflect how many total columns there are too
         if ((lastVisibleItemPosition + visibleThreshold) > totalItemCount) {
-            currentPage++;
+            if(isNoMore()) return;
+            if(isLoading()) return;
             onLoadMore();
         }
     }

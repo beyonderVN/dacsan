@@ -74,22 +74,41 @@ public class LastPostsFragment extends BaseFragment {
             @Override
             public void onLoadMore() {
                 Log.d(TAG, "onLoadMore: ");
+//                isLoadingMore = true;
                 try {
                     viewModel.loadMorePosts()
                             .takeUntil(stopEvent())
-                            .doOnSubscribe(() ->isLoadingMore=true)
+                            .doOnSubscribe(() -> isLoadingMore = true)
                             .doOnTerminate(() ->
-                                    isLoadingMore=false);
+                                    isLoadingMore = false)
+                            .map(postVivmalls -> {
+                                List<BaseHM> baseHMs = new ArrayList<BaseHM>();
+                                for (PostVivmall postVivmall : postVivmalls
+                                        ) {
+                                    Log.d(TAG, "bindViewModel>>map" + postVivmall.getProductName());
+                                    baseHMs.add(new SimpleVerticalHM(postVivmall.getProductName()));
+                                }
+                                return baseHMs;
+                            })
+                            .subscribe(posts -> {
+                                baseAdapter.addList(posts);
+                                isLoadingMore = false;
+                            }, throwable -> {
+//                    ToastUtils.showLong(getContext(), throwable.getMessage());
+                                Log.e(TAG, "bindViewModel: " + throwable.getMessage());
+                                isLoadingMore = false;
+                            });
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
             }
+
             boolean isLoadingMore = false;
 
             @Override
             public boolean isLoading() {
 
-                Log.d(TAG, "isLoading: "+isLoadingMore);
+                Log.d(TAG, "isLoading: " + isLoadingMore);
                 return isLoadingMore;
             }
 
