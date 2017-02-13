@@ -13,8 +13,10 @@
     tools:context="ngohoanglong.com.dacsan.view.main.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
+    <fragment
+        android:id="@+id/frmAllPost"
+        android:name="ngohoanglong.com.dacsan.view.main.LastPostsFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+    </fragment>
 </RelativeLayout>

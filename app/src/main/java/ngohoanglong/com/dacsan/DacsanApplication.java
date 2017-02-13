@@ -1,13 +1,7 @@
 package ngohoanglong.com.dacsan;
 
 import android.app.Application;
-import android.util.Log;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import ngohoanglong.com.dacsan.model.Post;
-import ngohoanglong.com.dacsan.utils.AssetsUtils;
+import android.content.Context;
 
 /**
  * Created by Long on 2/10/2017.
@@ -15,11 +9,14 @@ import ngohoanglong.com.dacsan.utils.AssetsUtils;
 
 public class DacsanApplication extends Application {
     private static final String TAG = "DacsanApplication";
+    private static Context mContext;
     @Override
     public void onCreate() {
         super.onCreate();
-        List<Post> posts = new ArrayList<>();
-        posts = AssetsUtils.getPostList("posts.json", this);
-        Log.d(TAG, "posts: " + posts.size());
+        mContext = getApplicationContext();
+    }
+
+    public static Context getAppContext() {
+        return mContext;
     }
 }

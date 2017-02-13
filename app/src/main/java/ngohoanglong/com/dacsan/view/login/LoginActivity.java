@@ -15,16 +15,18 @@ import butterknife.OnClick;
 import ngohoanglong.com.dacsan.R;
 import ngohoanglong.com.dacsan.data.response.LoginResponse;
 import ngohoanglong.com.dacsan.databinding.ActivityLoginBinding;
+import ngohoanglong.com.dacsan.utils.ThreadSchedulerImpl;
 import ngohoanglong.com.dacsan.view.BaseActivity;
 import ngohoanglong.com.dacsan.view.main.MainActivity;
 import ngohoanglong.com.dacsan.view.signup.SignupActivity;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 
 public class LoginActivity extends BaseActivity {
     private static final String TAG = "LoginActivity";
     private ActivityLoginBinding binding;
-    LoginViewModel viewModel = new LoginViewModel();
+    LoginViewModel viewModel ;
     @BindView(R.id.vaStateController)
     ViewAnimator viewAnimator;
 
@@ -33,7 +35,6 @@ public class LoginActivity extends BaseActivity {
         Log.d(TAG, "onLoginClick: ");
         viewModel.login()
                 .takeUntil(stopEvent())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(loginResponse -> handleResponse(loginResponse))
         ;
     }
@@ -55,9 +56,11 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        viewModel = new LoginViewModel(new ThreadSchedulerImpl(AndroidSchedulers.mainThread(), Schedulers.io()),this.getApplicationContext().getResources());
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
         binding.setViewModel(viewModel);
         ButterKnife.bind(this);
+
         setupUI();
     }
 
@@ -71,15 +74,12 @@ public class LoginActivity extends BaseActivity {
     protected void bindViewModel() {
         viewModel.toast()
                 .takeUntil(stopEvent())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::showMessage);
         viewModel.loadingState()
                 .takeUntil(stopEvent())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::setLoadingState);
         viewModel.loginIsSuccess()
                 .takeUntil(stopEvent())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(aBoolean -> {
                     if(aBoolean){
                         new AlertDialog.Builder(this)

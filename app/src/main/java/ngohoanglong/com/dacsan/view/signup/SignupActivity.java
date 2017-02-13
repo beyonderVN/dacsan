@@ -13,6 +13,7 @@ import butterknife.OnClick;
 import ngohoanglong.com.dacsan.R;
 import ngohoanglong.com.dacsan.data.response.SignupResponse;
 import ngohoanglong.com.dacsan.databinding.ActivitySignupBinding;
+import ngohoanglong.com.dacsan.utils.ThreadSchedulerImpl;
 import ngohoanglong.com.dacsan.view.BaseActivity;
 import ngohoanglong.com.dacsan.view.login.LoginActivity;
 import rx.Subscriber;
@@ -23,7 +24,7 @@ import rx.schedulers.Schedulers;
 public class SignupActivity extends BaseActivity {
     private static final String TAG = "SignupActivity";
     private ActivitySignupBinding binding;
-    SignupViewModel viewModel = new SignupViewModel();
+    SignupViewModel viewModel ;
     @BindView(R.id.pbLoading)
     ProgressBar pbLoading;
     @BindView(R.id.vaLoginState)
@@ -65,6 +66,7 @@ public class SignupActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        viewModel = new SignupViewModel(new ThreadSchedulerImpl(AndroidSchedulers.mainThread(), Schedulers.io()), this.getApplicationContext().getResources());
         binding = DataBindingUtil.setContentView(this, R.layout.activity_signup);
         binding.setViewModel(viewModel);
         ButterKnife.bind(this);
@@ -80,11 +82,9 @@ public class SignupActivity extends BaseActivity {
     protected void bindViewModel() {
         viewModel.message()
                 .takeUntil(stopEvent())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::showMessage);
         viewModel.loadingState()
                 .takeUntil(stopEvent())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::setLoadingState);
     }
 

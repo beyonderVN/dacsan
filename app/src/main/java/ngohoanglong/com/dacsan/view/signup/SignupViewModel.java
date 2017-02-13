@@ -1,5 +1,6 @@
 package ngohoanglong.com.dacsan.view.signup;
 
+import android.content.res.Resources;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
@@ -9,7 +10,9 @@ import ngohoanglong.com.dacsan.data.repo.UserRepo;
 import ngohoanglong.com.dacsan.data.repo.UserRepoImpl;
 import ngohoanglong.com.dacsan.data.request.SignupRequest;
 import ngohoanglong.com.dacsan.data.response.SignupResponse;
+import ngohoanglong.com.dacsan.utils.ThreadScheduler;
 import ngohoanglong.com.dacsan.utils.rxview.TextChange;
+import ngohoanglong.com.dacsan.view.BaseViewModel;
 import rx.Observable;
 import rx.subjects.PublishSubject;
 
@@ -17,10 +20,9 @@ import rx.subjects.PublishSubject;
  * Created by Long on 12/5/2016.
  */
 
-public class SignupViewModel {
+public class SignupViewModel extends BaseViewModel{
     private static final String TAG = "SignupViewModel";
     private SignupValidator validator = new SignupValidator();
-    static final String USER_REFERENCE = "usermodel";
     private UserRepo repo ;
     ;
     private String email = "";
@@ -30,6 +32,10 @@ public class SignupViewModel {
     public ObservableBoolean signupBtnState = new ObservableBoolean(false);
     private PublishSubject<String> toast = PublishSubject.create();
     private PublishSubject<Integer> loadingState = PublishSubject.create();
+
+    public SignupViewModel(@NonNull ThreadScheduler threadScheduler, @NonNull Resources resources) {
+        super(threadScheduler, resources);
+    }
 
     public Observable<String> message() {
         return toast.asObservable();
@@ -87,6 +93,7 @@ public class SignupViewModel {
     @NonNull
     public  Observable<SignupResponse> signup() {
         return repo.signup(new SignupRequest(email,password))
+                .compose(withScheduler())
                 .doOnSubscribe(() ->  loadingState.onNext(0));
     }
 

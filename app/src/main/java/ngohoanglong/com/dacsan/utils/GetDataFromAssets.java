@@ -13,25 +13,25 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import ngohoanglong.com.dacsan.model.Post;
-
 /**
  * Created by Long on 2/9/2017.
  */
 
-public class AssetsUtils {
-    private static final String TAG = "AssetsUtils";
-    public static List<Post> getPostList(String fileName, Context context){
+public class GetDataFromAssets<T> {
+    private static final String TAG = "GetDataFromAssets";
+
+    public List<T> getPostList(String fileName, Context context){
         Gson gson = new Gson();
-        List<Post> rateList = new ArrayList<>();
+        List<T> rateList = new ArrayList<>();
         String rateListString =  FileUtils.readFromfile(fileName, context);
+        if (rateListString==null||rateListString.equals("")){
+            Log.d(TAG, "getPostList: File not found or File type is wrong!");
+        }
+        Type listType = new TypeToken<List<T>>() {}.getType();
         JsonParser parser = new JsonParser();
         JsonArray jsonArray = (JsonArray) parser.parse(rateListString).getAsJsonObject().get("posts");
-        Type listType = new TypeToken<List<Post>>() {}.getType();
         rateList = new Gson().fromJson(jsonArray, listType);
         JsonElement element = gson.toJsonTree(rateList, listType);
-        String result = element.getAsJsonArray().toString();
-        Log.d(TAG, "rateList: "+result);
         return  rateList;
     }
 //    public static List<Post> getPostListWithComments(String fileName, Context context){

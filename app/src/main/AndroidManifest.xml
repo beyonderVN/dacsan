@@ -23,7 +23,7 @@
 
         <activity-alias
             android:name=".laucher"
-            android:targetActivity=".view.login.LoginActivity">
+            android:targetActivity=".view.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
