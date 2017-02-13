@@ -37,5 +37,6 @@
     <color name="page_indicator_dark">#80333333</color>
     <color name="page_indicator_tran">#00333333</color>
     <color name="page_indicator_dark_selected">#ff333333</color>
+    <color name="gray_alpha">#443b3b3b</color>
     <!--FireBase-->
 </resources>

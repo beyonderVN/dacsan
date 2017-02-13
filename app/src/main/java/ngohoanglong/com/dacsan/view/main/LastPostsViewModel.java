@@ -20,6 +20,7 @@ import rx.Observable;
 public class LastPostsViewModel extends PostViewModel {
     private static final String TAG = "LastPostsViewModel";
     int page=0;
+    boolean isLoadingMore = false;
     PostVivmallRepo postRepo = new PostVivmallRepoImpl();
     public LastPostsViewModel(ThreadScheduler threadScheduler, Resources resources) {
         super(threadScheduler, resources);

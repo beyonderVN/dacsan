@@ -13,6 +13,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import ngohoanglong.com.dacsan.model.PostVivmall;
+
 /**
  * Created by Long on 2/9/2017.
  */
@@ -20,14 +22,28 @@ import java.util.List;
 public class GetDataFromAssets<T> {
     private static final String TAG = "GetDataFromAssets";
 
-    public List<T> getPostList(String fileName, Context context){
+//    public List<T> getPostList(String fileName, Context context){
+//        Gson gson = new Gson();
+//        List<T> rateList = new ArrayList<>();
+//        String rateListString =  FileUtils.readFromfile(fileName, context);
+//        if (rateListString==null||rateListString.equals("")){
+//            Log.d(TAG, "getPostList: File not found or File type is wrong!");
+//        }
+//        Type listType = new TypeToken<List<T>>() {}.getType();
+//        JsonParser parser = new JsonParser();
+//        JsonArray jsonArray = (JsonArray) parser.parse(rateListString).getAsJsonObject().get("posts");
+//        rateList = new Gson().fromJson(jsonArray, listType);
+//        JsonElement element = gson.toJsonTree(rateList, listType);
+//        return  rateList;
+//    }
+    public static List<PostVivmall> getPostList(String fileName, Context context){
         Gson gson = new Gson();
-        List<T> rateList = new ArrayList<>();
+        List<PostVivmall> rateList = new ArrayList<>();
         String rateListString =  FileUtils.readFromfile(fileName, context);
         if (rateListString==null||rateListString.equals("")){
             Log.d(TAG, "getPostList: File not found or File type is wrong!");
         }
-        Type listType = new TypeToken<List<T>>() {}.getType();
+        Type listType = new TypeToken<List<PostVivmall>>() {}.getType();
         JsonParser parser = new JsonParser();
         JsonArray jsonArray = (JsonArray) parser.parse(rateListString).getAsJsonObject().get("posts");
         rateList = new Gson().fromJson(jsonArray, listType);
