@@ -13,7 +13,7 @@ import ngohoanglong.com.dacsan.data.request.LatestRequest;
 import ngohoanglong.com.dacsan.model.PostVivmall;
 import ngohoanglong.com.dacsan.utils.ThreadScheduler;
 import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.BaseHM;
-import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.SimpleVerticalHM;
+import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.ProductItemHM;
 import ngohoanglong.com.dacsan.view.PostViewModel;
 import rx.Observable;
 
@@ -39,7 +39,7 @@ public class LastPostsViewModel extends PostViewModel {
                     List<BaseHM> baseHMs = new ArrayList<BaseHM>();
                     for (PostVivmall baseHM : postVivmalls
                             ) {
-                        baseHMs.add(new SimpleVerticalHM(baseHM.getProductName()));
+                        baseHMs.add(new ProductItemHM(baseHM));
                     }
                     return baseHMs;
                 })
@@ -59,15 +59,16 @@ public class LastPostsViewModel extends PostViewModel {
                     List<BaseHM> baseHMs = new ArrayList<BaseHM>();
                     for (PostVivmall baseHM : postVivmalls
                             ) {
-                        baseHMs.add(new SimpleVerticalHM(baseHM.getProductName()));
+                        baseHMs.add(new ProductItemHM(baseHM));
                     }
                     return baseHMs;
                 })
                 .doOnSubscribe(() -> {
-
+                    showLoadingMore();
                 })
                 .doOnNext(posts -> {
                     Log.d(TAG, "loadMorePosts: ");
+                    hideLoadingMore();
                     this.posts.addAll(posts);
                     this.page += 1;
                 })

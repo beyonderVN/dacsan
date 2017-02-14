@@ -1,26 +1,25 @@
 package ngohoanglong.com.dacsan.view.main;
 
 
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.vnwarriors.advancedui.appcore.common.recyclerviewhelper.InfiniteScrollListener;
 
-import java.util.ArrayList;
-
 import butterknife.BindInt;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ngohoanglong.com.dacsan.R;
+import ngohoanglong.com.dacsan.databinding.FragmentLastPostBinding;
 import ngohoanglong.com.dacsan.utils.ThreadSchedulerImpl;
-import ngohoanglong.com.dacsan.utils.recyclerview.BaseAdapter;
+import ngohoanglong.com.dacsan.utils.recyclerview.EndlessPostsAdapter;
 import ngohoanglong.com.dacsan.utils.recyclerview.holderfactory.HolderFactoryImpl;
 import ngohoanglong.com.dacsan.view.BaseFragment;
 import rx.android.schedulers.AndroidSchedulers;
@@ -31,14 +30,13 @@ import rx.schedulers.Schedulers;
  */
 public class LastPostsFragment extends BaseFragment {
     private static final String TAG = "LastPostsFragment";
+    private FragmentLastPostBinding binding;
     LastPostsViewModel viewModel;
-
-
     @BindInt(R.integer.column_num)
     int columnNum;
     @BindView(R.id.rvPosts)
     RecyclerView rvPosts;
-    BaseAdapter baseAdapter;
+    EndlessPostsAdapter baseAdapter;
     boolean isLoadingMore = false;
 
     public LastPostsFragment() {
@@ -51,9 +49,10 @@ public class LastPostsFragment extends BaseFragment {
         viewModel = new LastPostsViewModel(new ThreadSchedulerImpl(AndroidSchedulers.mainThread(), Schedulers.io()), getActivity().getApplicationContext().getResources());
         View rootView = inflater.inflate(R.layout.fragment_last_post, container, false);
         ButterKnife.bind(this, rootView);
+        binding = DataBindingUtil.bind(rootView);
+        binding.setViewModel(viewModel);
         setUpViews();
         return rootView;
-
     }
 
     private void setUpViews() {
@@ -63,34 +62,18 @@ public class LastPostsFragment extends BaseFragment {
                         LinearLayoutManager.VERTICAL);
         staggeredGridLayoutManagerVertical.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
         staggeredGridLayoutManagerVertical.invalidateSpanAssignments();
-        baseAdapter = new BaseAdapter(getActivity(), new ArrayList<>(), new HolderFactoryImpl());
+        baseAdapter = new EndlessPostsAdapter(getActivity(),new HolderFactoryImpl());
         rvPosts.setAdapter(baseAdapter);
         rvPosts.setLayoutManager(staggeredGridLayoutManagerVertical);
         rvPosts.setHasFixedSize(true);
         rvPosts.addOnScrollListener(new InfiniteScrollListener(staggeredGridLayoutManagerVertical) {
             @Override
             public void onLoadMore() {
-                Log.d(TAG, "onLoadMore: ");
                 try {
                     viewModel.loadMorePosts()
                             .takeUntil(stopEvent())
-                            .doOnSubscribe(() -> {
-                                Log.d(TAG, "doOnSubscribe: ");
-                                isLoadingMore = true;
-                                showLoadingMore();
-                            })
-                            .subscribe(posts -> {
-                                hideLoadingMore();
-                                isLoadingMore = false;
-                                baseAdapter.addList(posts);
-                            }, throwable -> {
-                                isLoadingMore = false;
-                                hideLoadingMore();
-                            }, () -> {
-                                Log.d(TAG, "onComplete: ");
-                                isLoadingMore = false;
-                                hideLoadingMore();
-                            });
+                            .subscribe(baseHMs -> {})
+                    ;
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
@@ -99,7 +82,6 @@ public class LastPostsFragment extends BaseFragment {
 
             @Override
             public boolean isLoading() {
-                Log.d(TAG, "isLoading: " + isLoadingMore);
                 return isLoadingMore;
             }
 
@@ -117,19 +99,11 @@ public class LastPostsFragment extends BaseFragment {
                 .takeUntil(stopEvent())
                 .doOnTerminate(() -> {
                 })
-                .subscribe(posts -> {
-                    baseAdapter.addList(posts);
-                }, throwable -> {
-                    Log.e(TAG, "bindViewModel: " + throwable.getMessage());
-                });
-    }
-
-    private void showLoadingMore() {
-        baseAdapter.showLoadingMore();
-    }
-
-    private void hideLoadingMore() {
-        baseAdapter.hideLoadingMore();
+        .subscribe(baseHMs -> {})
+                ;
+        viewModel.getIsLoadingMore()
+                .takeUntil(stopEvent())
+                .subscribe(aBoolean -> isLoadingMore = aBoolean);
     }
 
 }

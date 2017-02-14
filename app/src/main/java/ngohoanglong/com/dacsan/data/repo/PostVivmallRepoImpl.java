@@ -19,7 +19,7 @@ public class PostVivmallRepoImpl implements PostVivmallRepo {
     public Observable<List<PostVivmall>> getLatest(LatestRequest request) {
         List<PostVivmall> posts = new ArrayList<PostVivmall>();
         GetDataFromAssets<PostVivmall> getDataFromAssets =  new GetDataFromAssets<PostVivmall>();
-        posts = getDataFromAssets.getPostList("posts_vivmall.json", DacsanApplication.getAppContext());
+        posts = getDataFromAssets.getPostList("posts_vivmall2.json", DacsanApplication.getAppContext());
         List<PostVivmall> finalPosts = posts;
         return Observable.create(subscriber -> {
             try {

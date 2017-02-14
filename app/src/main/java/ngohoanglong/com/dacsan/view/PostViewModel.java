@@ -8,6 +8,7 @@ import java.util.List;
 
 import ngohoanglong.com.dacsan.utils.ThreadScheduler;
 import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.BaseHM;
+import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.LoadMoreHM;
 import rx.Observable;
 import rx.subjects.PublishSubject;
 
@@ -17,6 +18,7 @@ public abstract class PostViewModel extends BaseViewModel {
     protected final int EMPTY_STATE = 2;
     protected ObservableList<BaseHM> posts = new ObservableArrayList<>();
     private PublishSubject<Integer> viewState = PublishSubject.create();
+    private PublishSubject<Boolean> isLoadingMore = PublishSubject.create();
 
     public PostViewModel(ThreadScheduler threadScheduler,
                          Resources resources) {
@@ -27,7 +29,10 @@ public abstract class PostViewModel extends BaseViewModel {
 //      https://github.com/Froussios/Intro-To-RxJava/blob/master/Part%202%20-%20Sequence%20Basics/2.%20Reducing%20a%20sequence.md
         return viewState.asObservable().distinctUntilChanged();
     }
-
+    public Observable<Boolean> getIsLoadingMore() {
+//      https://github.com/Froussios/Intro-To-RxJava/blob/master/Part%202%20-%20Sequence%20Basics/2.%20Reducing%20a%20sequence.md
+        return isLoadingMore.asObservable().distinctUntilChanged();
+    }
     public ObservableList<BaseHM> getPosts() {
         return posts;
     }
@@ -45,8 +50,9 @@ public abstract class PostViewModel extends BaseViewModel {
     }
 
     protected void showLoading() {
-        viewState.onNext(SHOW_STATE);
+        viewState.onNext(LOADING_STATE);
     }
+
     protected void showEmpty() {
         viewState.onNext(EMPTY_STATE);
     }
@@ -62,5 +68,17 @@ public abstract class PostViewModel extends BaseViewModel {
 
     public void addPost(BaseHM post) {
         posts.add(0, post);
+    }
+
+    public void showLoadingMore() {
+        this.posts.add(new LoadMoreHM());
+        isLoadingMore.onNext(true);
+    }
+
+    public void hideLoadingMore() {
+        isLoadingMore.onNext(false);
+        if (posts.get(posts.size() - 1) instanceof LoadMoreHM) {
+            this.posts.remove(posts.size() - 1);
+        }
     }
 }

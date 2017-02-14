@@ -1,13 +1,27 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="ngohoanglong.com.dacsan.view.main.LastPostsFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!-- TODO: Update blank fragment layout -->
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvPosts"
+    <data>
+
+        <import type="ngohoanglong.com.dacsan.view.PostViewModel" />
+
+        <variable
+            name="viewModel"
+            type="PostViewModel" />
+    </data>
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        />
-</FrameLayout>
+        tools:context="ngohoanglong.com.dacsan.view.main.LastPostsFragment">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvPosts"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#d7d7d7"
+            app:items="@{viewModel.posts}"/>
+    </FrameLayout>
+</layout>

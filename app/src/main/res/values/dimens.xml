@@ -6,4 +6,7 @@
     <dimen name="activity_horizontal_margin">0dp</dimen>
     <dimen name="activity_vertical_margin">0dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="small_pad">4dp</dimen>
+    <dimen name="medium_pad">8dp</dimen>
+    <dimen name="large_margin">16dp</dimen>
 </resources>

@@ -29,15 +29,13 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Interpolator;
 
 import com.vnwarriors.advancedui.appcore.R;
+import com.vnwarriors.advancedui.appcore.common.util.AnimUtils;
 
 import java.util.Arrays;
-
-import com.vnwarriors.advancedui.appcore.common.util.AnimUtils;
 
 
 /**
@@ -634,7 +632,7 @@ public class InkPageIndicator extends View implements ViewPager.OnPageChangeList
         if (leftDot < joiningFractions.length) {
 
             if (leftDot == 1) {
-                Log.d("PageIndicator", "dot 1 fraction:\t" + fraction);
+//                Log.d("PageIndicator", "dot 1 fraction:\t" + fraction);
             }
 
             joiningFractions[leftDot] = fraction;

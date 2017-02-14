@@ -1,8 +1,12 @@
 package ngohoanglong.com.dacsan.utils;
 
 import android.databinding.BindingAdapter;
+import android.support.v7.widget.RecyclerView;
 import android.widget.EditText;
 
+import java.util.List;
+
+import ngohoanglong.com.dacsan.utils.recyclerview.BaseRecyclerViewAdapter;
 import ngohoanglong.com.dacsan.utils.rxview.TextChange;
 import ngohoanglong.com.dacsan.utils.rxview.TextChangeAdapter;
 
@@ -21,5 +25,11 @@ public class BindingUtils {
                 textChange.onChange(charSequence.toString());
             }
         });
+    }
+
+    @BindingAdapter("items")
+    public static <T> void setItems(RecyclerView recyclerView, List<T> items) {
+        BaseRecyclerViewAdapter<T> adapter = (BaseRecyclerViewAdapter<T>) recyclerView.getAdapter();
+        if (adapter != null) adapter.setItems(items);
     }
 }
