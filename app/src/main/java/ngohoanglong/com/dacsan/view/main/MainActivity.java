@@ -13,6 +13,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.vnwarriors.advancedui.appcore.common.viewpager.InkPageIndicator;
 import com.vnwarriors.advancedui.appcore.common.viewpager.ModelPagerAdapter;
@@ -37,6 +40,8 @@ public class MainActivity extends AppCompatActivity
     AppBarLayout mAppBar;
     @BindView(R.id.collapsing_toolbar)
     CollapsingToolbarLayout mCollapsingToolbar;
+    @BindView(R.id.nav_view)
+    NavigationView mNavigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +67,7 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
+        setupNavigationMenu();
     }
 
     @Override
@@ -77,7 +82,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.menu_home, menu);
         return true;
     }
 
@@ -147,5 +152,23 @@ public class MainActivity extends AppCompatActivity
             }
 
         });
+    }
+
+    private void setupNavigationMenu() {
+        ImageView ivAvatar;
+        TextView tvNavigationHeader;
+        TextView tvName;
+        TextView tvEmail;
+        TextView tvDes;
+
+        View headerLayout = mNavigationView.getHeaderView(0);
+        ivAvatar = (ImageView) headerLayout.findViewById(R.id.ivAvatar);
+        tvNavigationHeader = (TextView) headerLayout.findViewById(R.id.tvNavigationHeader);
+        tvName = (TextView) headerLayout.findViewById(R.id.tvName);
+        tvName.setText("vivmall.vn");
+        tvEmail = (TextView) headerLayout.findViewById(R.id.tvEmail);
+        tvEmail.setText("admin@vivmall.vn");
+        tvDes = (TextView) headerLayout.findViewById(R.id.tvDes);
+        tvDes.setText("Today is good for shopping!");
     }
 }

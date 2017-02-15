@@ -1,6 +1,10 @@
 package ngohoanglong.com.dacsan.utils.recyclerview.viewholder;
 
 
+import android.app.Activity;
+import android.app.ActivityOptions;
+import android.content.Intent;
+import android.util.Pair;
 import android.view.View;
 import android.widget.TextView;
 
@@ -8,11 +12,15 @@ import com.squareup.picasso.Picasso;
 import com.vnwarriors.advancedui.appcore.common.DynamicHeightImageView;
 import com.vnwarriors.advancedui.appcore.common.recyclerviewhelper.PlaceHolderDrawableHelper;
 
+import java.util.Locale;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ngohoanglong.com.dacsan.R;
 import ngohoanglong.com.dacsan.model.PostVivmall;
+import ngohoanglong.com.dacsan.utils.CurrencyUtil;
 import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.ProductItemHM;
+import ngohoanglong.com.dacsan.view.detail.ProductItemDetailActivity;
 
 /**
  * Created by Long on 11/10/2016.
@@ -41,7 +49,19 @@ public class ProductItemHolder extends BaseViewHolder<ProductItemHM> {
 //                .resize(400, (int) (400 * model.getTipImageRatio()))
                 .into(ivProductImage);
         tvProductName.setText(postVivmall.getProductName());
-        tvProductPrice.setText(postVivmall.getProductPrice().toString());
+
+        tvProductPrice.setText(CurrencyUtil.convertCurrency(postVivmall.getProductPrice(),new Locale("vn", "VN")));
         tvProductStore.setText("VinhSangCommerce");
+        Intent intent = new Intent(itemView.getContext(), ProductItemDetailActivity.class);
+        intent.putExtra("POST", "hi");
+
+        itemView.setOnClickListener(view -> {
+            ActivityOptions ops = ActivityOptions.makeSceneTransitionAnimation((Activity) view.getContext(),
+                    Pair.create(ivProductImage, view.getContext().getString(R.string.detail_image))
+            );
+            view.getContext().startActivity(intent, ops.toBundle());
+        });
+
+
     }
 }

@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/EasyMoney-Widgets-Library/EasyMoney-Widgets-Library.iml" filepath="$PROJECT_DIR$/EasyMoney-Widgets-Library/EasyMoney-Widgets-Library.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/dacsan.iml" filepath="$PROJECT_DIR$/dacsan.iml" />
       <module fileurl="file://$PROJECT_DIR$/libs/libs.iml" filepath="$PROJECT_DIR$/libs/libs.iml" />

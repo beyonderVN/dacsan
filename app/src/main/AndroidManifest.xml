@@ -18,6 +18,10 @@
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".view.detail.ProductItemDetailActivity"
+            android:theme="@style/AppTheme.Translucent"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity
             android:name=".view.login.LoginActivity"
             android:theme="@style/AppTheme.Translucent" />
 
