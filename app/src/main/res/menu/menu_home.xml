@@ -13,13 +13,11 @@
         android:id="@+id/action_user_post"
         android:orderInCategory="100"
         android:title="Cart"
-        app:showAsAction="never"
         android:icon="@drawable/ic_shopping_cart_black_24dp"/>
 
     <item
         android:id="@+id/action_logout"
         android:orderInCategory="100"
         android:title="Logout"
-        app:showAsAction="never"
         android:icon="@drawable/ic_nav_sign_out"/>
 </menu>

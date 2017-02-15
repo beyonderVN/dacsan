@@ -49,12 +49,11 @@ public class ProductItemHolder extends BaseViewHolder<ProductItemHM> {
 //                .resize(400, (int) (400 * model.getTipImageRatio()))
                 .into(ivProductImage);
         tvProductName.setText(postVivmall.getProductName());
-
         tvProductPrice.setText(CurrencyUtil.convertCurrency(postVivmall.getProductPrice(),new Locale("vn", "VN")));
         tvProductStore.setText("VinhSangCommerce");
-        Intent intent = new Intent(itemView.getContext(), ProductItemDetailActivity.class);
-        intent.putExtra("POST", "hi");
 
+        Intent intent = new Intent(itemView.getContext(), ProductItemDetailActivity.class);
+        intent.putExtra("POST", item);
         itemView.setOnClickListener(view -> {
             ActivityOptions ops = ActivityOptions.makeSceneTransitionAnimation((Activity) view.getContext(),
                     Pair.create(ivProductImage, view.getContext().getString(R.string.detail_image))

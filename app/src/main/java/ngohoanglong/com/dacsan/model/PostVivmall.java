@@ -3,11 +3,13 @@ package ngohoanglong.com.dacsan.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by Long on 2/8/2017.
  */
 
-public class PostVivmall {
+public class PostVivmall implements Serializable{
 
     @SerializedName("productIndex")
     @Expose

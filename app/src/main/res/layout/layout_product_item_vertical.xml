@@ -27,7 +27,7 @@
         android:id="@+id/tvProductName"
         android:textSize="14sp"
         android:textAlignment="viewStart"
-        android:textColor="@color/dark_blue"
+        android:textColor="@color/black_86p"
         android:padding="@dimen/medium_pad"/>
         <TextView
             android:text="78,000 đ"

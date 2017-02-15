@@ -10,6 +10,7 @@
     android:animateLayoutChanges="true"
     android:focusable="true"
     android:focusableInTouchMode="true"
+    android:background="#00000000"
     app:dragDismissDistance="260dp"
     app:dragDismissScale="0.8"
     tools:context=".view.detail.ProductItemDetailActivity">
@@ -42,12 +43,12 @@
             android:orientation="vertical"
             android:paddingBottom="50dp"
             >
-            <!--<View-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="1sp"-->
-                <!--android:background="@color/red"-->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1sp"
+                android:background="@color/gray"
 
-                <!--/>-->
+                />
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -73,11 +74,12 @@
                         android:textSize="24dp" />
 
                     <TextView
+                        android:id="@+id/tvStore"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
                         android:text="Appetizer, side dishes"
-                        android:textColor="@color/black_54p" />
+                        android:textColor="@color/dark_blue" />
 
                     <include layout="@layout/devider_item" />
 
@@ -133,7 +135,7 @@
                         android:weightSum="4">
 
                         <TextView
-                            android:id="@+id/tvPersons"
+                            android:id="@+id/tvBuyTimes"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -142,7 +144,7 @@
                             android:textColor="@color/black_54p" />
 
                         <TextView
-                            android:id="@+id/tvDifficult"
+                            android:id="@+id/tvWatchTimes"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -151,7 +153,7 @@
                             android:textColor="@color/black_54p" />
 
                         <TextView
-                            android:id="@+id/tvPreparationTime"
+                            android:id="@+id/tvPrice"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -160,7 +162,7 @@
                             android:textColor="@color/black_54p" />
 
                         <TextView
-                            android:id="@+id/tvCookTime"
+                            android:id="@+id/tvFavourite"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -183,11 +185,7 @@
 
 
             </RelativeLayout>
-            <!--<View-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="1sp"-->
-                <!--android:background="@color/red"-->
-                <!--/>-->
+
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -197,97 +195,15 @@
                 app:cardBackgroundColor="@color/white"
                 app:cardUseCompatPadding="true">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp">
-
-                    <ImageView
-                        android:id="@+id/ivIngredientSpan"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_marginRight="16dp"
-                        android:src="@drawable/ic_ingredients" />
-
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBottom="@+id/ivIngredientSpan"
-                        android:layout_alignTop="@+id/ivIngredientSpan"
-                        android:layout_toRightOf="@+id/ivIngredientSpan"
-                        android:gravity="center"
-                        android:text="INGREDIENT"
-                        android:textColor="@color/red"
-                        android:textSize="24sp" />
-
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/rvIngredientList"
+                        android:id="@+id/tvProductDes"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/ivIngredientSpan"
-                        android:layout_marginTop="16dp"
-                        android:nestedScrollingEnabled="false" />
-                </RelativeLayout>
+                        android:padding="16dp"
+                        />
+
             </android.support.v7.widget.CardView>
 
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:layout_marginTop="4dp"
-                app:cardBackgroundColor="@color/white"
-                app:cardUseCompatPadding="true">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp">
-
-                    <ImageView
-                        android:id="@+id/ivPreparationSpan"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_marginRight="16dp"
-                        android:src="@drawable/ic_preparation" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBottom="@+id/ivPreparationSpan"
-                        android:layout_alignTop="@+id/ivPreparationSpan"
-                        android:layout_toRightOf="@+id/ivPreparationSpan"
-                        android:gravity="center"
-                        android:text="PREPARE"
-                        android:textColor="@color/red"
-                        android:textSize="24sp" />
-
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/rvPreparationList"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/ivPreparationSpan"
-                        android:layout_marginTop="16dp"
-                        android:nestedScrollingEnabled="false"
-                        android:paddingBottom="50dp" />
-                </RelativeLayout>
-            </android.support.v7.widget.CardView>
-            <Button
-                android:id="@+id/btnShareRecipe"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginTop="4dp"
-                android:textSize="24sp"
-                android:textColor="@color/white"
-                android:text="SHARE YOUR DISH"
-                android:background="@drawable/share_button"
-                android:shadowColor="@color/white"
-                android:shadowDx="0"
-                android:shadowDy="4"
-                android:shadowRadius="0"/>
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -304,12 +220,14 @@
 
                     <TextView
                         android:id="@+id/ivCommentSpan"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="COMMENTS"
-                        android:textColor="@color/red"
-                        android:textSize="24sp" />
+                        android:text="Phản hồi"
+                        android:textColor="@color/black_54p"
+                        android:textAlignment="center"
+                        android:textSize="20sp"
+                        android:textStyle="bold"/>
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/rvCommentList"
