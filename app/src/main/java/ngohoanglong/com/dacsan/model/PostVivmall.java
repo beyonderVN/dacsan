@@ -408,4 +408,45 @@ public class PostVivmall implements Serializable{
         this.email = email;
     }
 
+    @Override
+    public String toString() {
+        return "PostVivmall{" +
+                "productIndex=" + productIndex +
+                ", productId='" + productId + '\'' +
+                ", productName='" + productName + '\'' +
+                ", producTypeId=" + producTypeId +
+                ", productImage='" + productImage + '\'' +
+                ", productDes=" + productDes +
+                ", productPrice=" + productPrice +
+                ", productProviderId=" + productProviderId +
+                ", productInputDate=" + productInputDate +
+                ", productguide=" + productguide +
+                ", productDescShort=" + productDescShort +
+                ", productquantity=" + productquantity +
+                ", moreinfo=" + moreinfo +
+                ", producttype=" + producttype +
+                ", orderproduct=" + orderproduct +
+                ", rownum=" + rownum +
+                ", productimglarg=" + productimglarg +
+                ", typeimglarg=" + typeimglarg +
+                ", newPrice=" + newPrice +
+                ", pricePercent=" + pricePercent +
+                ", catePromotionId=" + catePromotionId +
+                ", isPromo=" + isPromo +
+                ", customerId='" + customerId + '\'' +
+                ", shopName=" + shopName +
+                ", urlShop=" + urlShop +
+                ", percentDiscount=" + percentDiscount +
+                ", pricePromo=" + pricePromo +
+                ", priceOld=" + priceOld +
+                ", property=" + property +
+                ", color=" + color +
+                ", propertyValue=" + propertyValue +
+                ", colorValue=" + colorValue +
+                ", branch=" + branch +
+                ", numView=" + numView +
+                ", numBuy=" + numBuy +
+                ", email=" + email +
+                '}';
+    }
 }

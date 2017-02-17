@@ -1,5 +1,11 @@
 package ngohoanglong.com.dacsan.manager;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.text.TextUtils;
+
+import com.google.gson.Gson;
+
 import ngohoanglong.com.dacsan.model.User;
 import rx.Observable;
 import rx.subjects.BehaviorSubject;
@@ -9,18 +15,47 @@ import rx.subjects.BehaviorSubject;
  */
 
 public class AuthManager {
-    private User currentUser;
+    public static final String USER = "USER";
+    private SharedPreferences sharedPreferences;
+    private Gson gson;
     private BehaviorSubject<Boolean> isLoginSuccess;
+
+    public AuthManager(Context context) {
+        this.sharedPreferences = context.getSharedPreferences(
+                "vivmall.com", Context.MODE_PRIVATE);
+        gson = new Gson();
+        if (getCurrentUser() != null) {
+            isLoginSuccess = BehaviorSubject.create(true);
+        }else {
+            isLoginSuccess = BehaviorSubject.create(false);
+        }
+
+    }
 
     public Observable<Boolean> isLogin(){
         return isLoginSuccess.asObservable();
     }
 
     public User getCurrentUser() {
-        return currentUser;
+        String userJSON = sharedPreferences.getString(USER, "");
+        if (!TextUtils.isEmpty(userJSON)) {
+            return gson.fromJson(userJSON, User.class);
+        }
+        return null;
     }
 
-    public void setCurrentUser(User currentUser) {
-        this.currentUser = currentUser;
+    public void login(User currentUser) {
+        sharedPreferences.edit()
+                .putString(USER, gson.toJson(currentUser))
+                .apply();
+        isLoginSuccess.onNext(true);
     }
+    public void signout() {
+        sharedPreferences.edit()
+                .remove(USER)
+                .apply();
+        isLoginSuccess.onNext(false);
+    }
+
+
 }

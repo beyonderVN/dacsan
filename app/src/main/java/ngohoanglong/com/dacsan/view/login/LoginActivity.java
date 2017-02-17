@@ -12,6 +12,7 @@ import android.widget.ViewAnimator;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import ngohoanglong.com.dacsan.DacsanApplication;
 import ngohoanglong.com.dacsan.R;
 import ngohoanglong.com.dacsan.data.response.LoginResponse;
 import ngohoanglong.com.dacsan.databinding.ActivityLoginBinding;
@@ -29,7 +30,6 @@ public class LoginActivity extends BaseActivity {
     LoginViewModel viewModel ;
     @BindView(R.id.vaStateController)
     ViewAnimator viewAnimator;
-
     @OnClick(R.id.btn_login)
     public void onLoginClick() {
         Log.d(TAG, "onLoginClick: ");
@@ -55,6 +55,9 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        DacsanApplication.authManager.isLogin()
+                .takeUntil(stopEvent())
+                .subscribe(aBoolean -> handleResponse(aBoolean));
         super.onCreate(savedInstanceState);
         viewModel = new LoginViewModel(new ThreadSchedulerImpl(AndroidSchedulers.mainThread(), Schedulers.io()),this.getApplicationContext().getResources());
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
@@ -77,22 +80,13 @@ public class LoginActivity extends BaseActivity {
                 .subscribe(this::showMessage);
         viewModel.loadingState()
                 .takeUntil(stopEvent())
+                .startWith(1)
                 .subscribe(this::setLoadingState);
-        viewModel.loginIsSuccess()
-                .takeUntil(stopEvent())
-                .subscribe(aBoolean -> {
-                    if(aBoolean){
-                        new AlertDialog.Builder(this)
-                                .setMessage("Login Successfully!")
-                                .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                                    dialog.dismiss();
-                                    startActivity(MainActivity.getIntentNewTask(LoginActivity.this));
-                                })
-                                .setIcon(android.R.drawable.ic_dialog_alert)
-                                .show();
-                    }
-                });
-        viewModel.init();
+//        viewModel.loginIsSuccess()
+//                .takeUntil(stopEvent())
+//                .subscribe(aBoolean -> {
+//                    handleResponse(aBoolean);
+//                });
     }
 
     private void showMessage(String value) {
@@ -107,6 +101,19 @@ public class LoginActivity extends BaseActivity {
         viewAnimator.setDisplayedChild(value);
     }
 
+    private void handleResponse(Boolean aBoolean){
+        if(aBoolean){
+//            new AlertDialog.Builder(this)
+//                    .setMessage("Login Successfully!")
+//                    .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+//                        dialog.dismiss();
+//                        startActivity(MainActivity.getIntentNewTask(LoginActivity.this));
+//                    })
+//                    .setIcon(android.R.drawable.ic_dialog_alert)
+//                    .show();
+            startActivity(MainActivity.getIntentNewTask(LoginActivity.this));
+        }
+    }
 
     public static Intent getIntentNewTask(Context context) {
         Intent intent = new Intent(context, LoginActivity.class);

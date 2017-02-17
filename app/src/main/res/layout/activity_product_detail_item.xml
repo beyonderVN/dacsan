@@ -33,7 +33,8 @@
         android:clipToPadding="false"
         android:paddingLeft="0dp"
         android:paddingRight="0dp"
-        android:paddingTop="300dp">
+        android:paddingTop="300dp"
+        >
 
         <LinearLayout
             android:id="@+id/llWrap"
@@ -94,37 +95,37 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-
+                            android:textSize="12sp"
                             android:gravity="center"
                             android:text="Lượt mua"
-                            android:textColor="@color/black" />
+                            android:textColor="@color/black_54p" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-
+                            android:textSize="12sp"
                             android:gravity="center"
                             android:text="Lượt xem"
-                            android:textColor="@color/black" />
+                            android:textColor="@color/black_54p" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-
+                            android:textSize="12sp"
                             android:gravity="center"
                             android:text="Giá"
-                            android:textColor="@color/black" />
+                            android:textColor="@color/black_54p" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-
+                            android:textSize="12sp"
                             android:gravity="center"
                             android:text="Yêu thích"
-                            android:textColor="@color/black" />
+                            android:textColor="@color/black_54p" />
 
                     </LinearLayout>
 
@@ -141,7 +142,7 @@
                             android:layout_weight="1"
                             android:gravity="center"
                             android:text="1.000"
-                            android:textColor="@color/black_54p" />
+                            android:textColor="@color/black_86p" />
 
                         <TextView
                             android:id="@+id/tvWatchTimes"
@@ -150,7 +151,7 @@
                             android:layout_weight="1"
                             android:gravity="center"
                             android:text="1.000"
-                            android:textColor="@color/black_54p" />
+                            android:textColor="@color/black_86p" />
 
                         <TextView
                             android:id="@+id/tvPrice"
@@ -158,8 +159,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:text="vnd 2.000.000"
-                            android:textColor="@color/black_54p" />
+                            android:text="vnd 200.000"
+                            android:textColor="@color/dark_red" />
 
                         <TextView
                             android:id="@+id/tvFavourite"
@@ -168,7 +169,7 @@
                             android:layout_weight="1"
                             android:gravity="center"
                             android:text="1000"
-                            android:textColor="@color/black_54p" />
+                            android:textColor="@color/black_86p" />
 
                     </LinearLayout>
 
@@ -204,40 +205,40 @@
 
             </android.support.v7.widget.CardView>
 
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:layout_marginTop="4dp"
-                app:cardBackgroundColor="@color/white"
-                app:cardUseCompatPadding="true">
+            <!--<android.support.v7.widget.CardView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="4dp"-->
+                <!--android:layout_marginRight="4dp"-->
+                <!--android:layout_marginTop="4dp"-->
+                <!--app:cardBackgroundColor="@color/white"-->
+                <!--app:cardUseCompatPadding="true">-->
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp">
+                <!--<RelativeLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:padding="8dp">-->
 
-                    <TextView
-                        android:id="@+id/ivCommentSpan"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="Phản hồi"
-                        android:textColor="@color/black_54p"
-                        android:textAlignment="center"
-                        android:textSize="20sp"
-                        android:textStyle="bold"/>
+                    <!--<TextView-->
+                        <!--android:id="@+id/ivCommentSpan"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:gravity="center"-->
+                        <!--android:text="Phản hồi"-->
+                        <!--android:textColor="@color/black_54p"-->
+                        <!--android:textAlignment="center"-->
+                        <!--android:textSize="20sp"-->
+                        <!--android:textStyle="bold"/>-->
 
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/rvCommentList"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:nestedScrollingEnabled="false"
-                        android:layout_below="@+id/ivCommentSpan"/>
-                </RelativeLayout>
-            </android.support.v7.widget.CardView>
+                    <!--<android.support.v7.widget.RecyclerView-->
+                        <!--android:id="@+id/rvCommentList"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_marginTop="16dp"-->
+                        <!--android:nestedScrollingEnabled="false"-->
+                        <!--android:layout_below="@+id/ivCommentSpan"/>-->
+                <!--</RelativeLayout>-->
+            <!--</android.support.v7.widget.CardView>-->
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
@@ -249,44 +250,45 @@
         android:background="@drawable/action_bar"
         android:fitsSystemWindows="true"
         app:title=" "
+        app:theme="@style/ToolBarStyle"
         />
     <RelativeLayout
         android:id="@+id/rlWrapCommentInput"
         android:background="@color/tran_gray"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="2dp"
         android:layout_gravity="bottom"
         android:elevation="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
         >
-        <ImageView
-            android:id="@+id/buttonEmoji"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:padding="4dp"
-            android:src="@drawable/ic_camera_alt_24dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignBottom="@+id/editTextMessage"
-            />
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/editTextMessage"
-            android:layout_toStartOf="@+id/buttonMessage"
-            android:layout_toRightOf="@+id/buttonEmoji"
-            android:layout_toEndOf="@+id/buttonEmoji"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:textColor="@color/black_54p"
-            />
-        <ImageView
+            android:textSize="16sp"
+            android:hint="Số lượng"
+            android:layout_marginRight="8dp"
+            android:inputType="numberSigned"
+            android:layout_toStartOf="@+id/buttonMessage" />
+        <Button
             android:id="@+id/buttonMessage"
-            android:src="@android:drawable/ic_menu_send"
-            android:layout_width="40dp"
+            android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:padding="4dp"
             android:layout_alignBottom="@+id/editTextMessage"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
+            android:background="@drawable/button_login"
+            android:text="Đặt nhanh"
+            android:textSize="12sp"
+            android:textColor="@color/white"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
             />
     </RelativeLayout>
     <RelativeLayout

@@ -1,4 +1,4 @@
-package ngohoanglong.com.dacsan.utils;
+package ngohoanglong.com.dacsan.view.delegate;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -9,6 +9,7 @@ import com.vnwarriors.advancedui.appcore.common.ElasticDragDismissFrameLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ngohoanglong.com.dacsan.R;
+import ngohoanglong.com.dacsan.utils.BaseDelegate;
 
 /**
  * Created by Long on 11/15/2016.

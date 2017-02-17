@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -15,13 +15,35 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="ngohoanglong.com.dacsan.view.main.LastPostsFragment">
+        tools:context="ngohoanglong.com.dacsan.view.main.LastPostsFragment"
+        android:background="#d7d7d7">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rvPosts"
+        <ViewAnimator
+            android:id="@+id/vaStateController"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#d7d7d7"
-            app:items="@{viewModel.posts}"/>
+            android:inAnimation="@android:anim/fade_in"
+            android:outAnimation="@android:anim/fade_out">
+            <com.tuyenmonkey.mkloader.MKLoader
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="100dp"
+                app:mk_color="@color/red"
+                app:mk_type="Whirlpool" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvPosts"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:items="@{viewModel.posts}" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="No Item Found"
+                android:textAlignment="center"
+                android:textColor="@color/dark_red"/>
+
+        </ViewAnimator>
     </FrameLayout>
 </layout>

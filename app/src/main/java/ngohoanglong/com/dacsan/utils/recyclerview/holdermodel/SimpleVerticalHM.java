@@ -26,6 +26,14 @@ public class SimpleVerticalHM extends BaseHM {
         this.tittle = tittle;
     }
 
+    @Override
+    public String toString() {
+        return "SimpleVerticalHM{" +
+                "color=" + color +
+                ", tittle='" + tittle + '\'' +
+                '}';
+    }
+
     String tittle;
     public SimpleVerticalHM(String tittle) {
         this.tittle = tittle;

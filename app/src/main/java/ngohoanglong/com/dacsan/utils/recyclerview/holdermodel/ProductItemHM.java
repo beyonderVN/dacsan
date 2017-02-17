@@ -26,4 +26,11 @@ public class ProductItemHM extends BaseHM {
     public int getVMType(ViewTypeFactory vmTypeFactory) {
         return vmTypeFactory.getType(this);
     }
+
+    @Override
+    public String toString() {
+        return "ProductItemHM{" +
+                "postVivmall=" + postVivmall +
+                '}';
+    }
 }

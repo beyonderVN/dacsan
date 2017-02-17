@@ -6,6 +6,7 @@ import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import ngohoanglong.com.dacsan.DacsanApplication;
 import ngohoanglong.com.dacsan.data.repo.UserRepo;
 import ngohoanglong.com.dacsan.data.repo.UserRepoImpl;
 import ngohoanglong.com.dacsan.data.request.LoginRequest;
@@ -25,6 +26,7 @@ public class LoginViewModel extends BaseViewModel {
     private static final String TAG = "LoginViewModel";
     private LoginValidator validator = new LoginValidator();
     private UserRepo userRepo;
+
     private String email = "";
     private String password = "";
     public ObservableField<String> emailError = new ObservableField<>();
@@ -32,15 +34,11 @@ public class LoginViewModel extends BaseViewModel {
     public ObservableBoolean loginBtnState = new ObservableBoolean(false);
     private BehaviorSubject<String> toast = BehaviorSubject.create();
     private PublishSubject<Integer> loadingState = PublishSubject.create();
-    private BehaviorSubject<Boolean> isSuccess = BehaviorSubject.create();
+//    private BehaviorSubject<Boolean> isSuccess = BehaviorSubject.create();
 
     public LoginViewModel(@NonNull ThreadScheduler threadScheduler, @NonNull Resources resources) {
         super(threadScheduler, resources);
-    }
-
-    public void init() {
         userRepo = new UserRepoImpl();
-        loadingState.onNext(1);
     }
 
     public Observable<String> toast() {
@@ -51,9 +49,9 @@ public class LoginViewModel extends BaseViewModel {
         return loadingState.asObservable();
     }
 
-    public Observable<Boolean> loginIsSuccess() {
-        return isSuccess.asObservable();
-    }
+//    public Observable<Boolean> loginIsSuccess() {
+//        return isSuccess.asObservable();
+//    }
 
     public TextChange emailChange = value -> {
         email = value;
@@ -108,8 +106,7 @@ public class LoginViewModel extends BaseViewModel {
 
     private void handleResponse(LoginResponse loginResponse) {
         if (loginResponse.isSuccess()) {
-//            toast.onNext("Login Successfully!");
-            isSuccess.onNext(true);
+            DacsanApplication.authManager.login(loginResponse.getUser());
             Log.d(TAG, "handleResponse: authentication.isSuccess()");
         } else {
             loadingState.onNext(1);

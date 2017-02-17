@@ -10,6 +10,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ViewAnimator;
 
 import com.vnwarriors.advancedui.appcore.common.recyclerviewhelper.InfiniteScrollListener;
 
@@ -38,10 +39,11 @@ public class LastPostsFragment extends BaseFragment {
     RecyclerView rvPosts;
     EndlessPostsAdapter baseAdapter;
     boolean isLoadingMore = false;
+    @BindView(R.id.vaStateController)
+    ViewAnimator vaStateController;
 
     public LastPostsFragment() {
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,7 +64,7 @@ public class LastPostsFragment extends BaseFragment {
                         LinearLayoutManager.VERTICAL);
         staggeredGridLayoutManagerVertical.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
         staggeredGridLayoutManagerVertical.invalidateSpanAssignments();
-        baseAdapter = new EndlessPostsAdapter(getActivity(),new HolderFactoryImpl());
+        baseAdapter = new EndlessPostsAdapter(getActivity(), new HolderFactoryImpl());
         rvPosts.setAdapter(baseAdapter);
         rvPosts.setLayoutManager(staggeredGridLayoutManagerVertical);
         rvPosts.setHasFixedSize(true);
@@ -72,13 +74,13 @@ public class LastPostsFragment extends BaseFragment {
                 try {
                     viewModel.loadMorePosts()
                             .takeUntil(stopEvent())
-                            .subscribe(baseHMs -> {})
+                            .subscribe(baseHMs -> {
+                            })
                     ;
                 } catch (Exception e) {
                     e.getStackTrace();
                 }
             }
-
 
             @Override
             public boolean isLoading() {
@@ -95,15 +97,23 @@ public class LastPostsFragment extends BaseFragment {
 
     @Override
     protected void bindViewModel() {
-        viewModel.loadPosts()
+        viewModel.getViewState()
                 .takeUntil(stopEvent())
-                .doOnTerminate(() -> {
-                })
-        .subscribe(baseHMs -> {})
-                ;
+                .subscribe(integer -> {
+                    vaStateController.setDisplayedChild(integer);
+                });
         viewModel.getIsLoadingMore()
                 .takeUntil(stopEvent())
                 .subscribe(aBoolean -> isLoadingMore = aBoolean);
+        viewModel.loadFirstPosts()
+                .takeUntil(stopEvent())
+                .doOnTerminate(() -> {
+                })
+                .subscribe(baseHMs -> {
+                })
+        ;
+
+
     }
 
 }

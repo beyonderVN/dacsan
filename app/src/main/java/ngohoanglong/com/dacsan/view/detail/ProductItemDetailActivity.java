@@ -3,10 +3,9 @@ package ngohoanglong.com.dacsan.view.detail;
 import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.transition.Transition;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,9 +17,8 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.vnwarriors.advancedui.appcore.common.recyclerviewhelper.PlaceHolderDrawableHelper;
+import com.vnwarriors.advancedui.appcore.common.util.AnimUtils;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -28,20 +26,18 @@ import butterknife.ButterKnife;
 import ngohoanglong.com.dacsan.R;
 import ngohoanglong.com.dacsan.model.PostVivmall;
 import ngohoanglong.com.dacsan.utils.CurrencyUtil;
-import ngohoanglong.com.dacsan.utils.DragDismissDelegate;
-import ngohoanglong.com.dacsan.utils.LifecycleDelegate;
 import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.ProductItemHM;
+import ngohoanglong.com.dacsan.view.BaseActivity;
+import ngohoanglong.com.dacsan.view.delegate.DragDismissDelegate;
 
-public class ProductItemDetailActivity extends AppCompatActivity {
-
+public class ProductItemDetailActivity extends BaseActivity {
+    private static final String TAG = "ProductItemDetailActivi";
     @BindView(R.id.ivCover)
     ImageView ivCover;
-
     @BindView(R.id.tvName)
     TextView tvName;
     @BindView(R.id.toolBar)
     Toolbar toolBar;
-
     @BindView(R.id.tvStore)
     TextView tvStore;
     @BindView(R.id.tvBuyTimes)
@@ -54,56 +50,64 @@ public class ProductItemDetailActivity extends AppCompatActivity {
     TextView tvPrice;
     @BindView(R.id.tvProductDes)
     TextView tvProductDes;
-
-
-    @BindView(R.id.rvCommentList)
-    RecyclerView rvCommentList;
-
     @BindView(R.id.nsScrollView)
     NestedScrollView nsScrollView;
     @BindView(R.id.pbLoading)
     ProgressBar pbLoading;
     @BindView(R.id.rlProgressLoading)
     RelativeLayout rlProgressLoading;
-
-
-    List<LifecycleDelegate> lifecycleDelegates = new ArrayList<>();
-
-    { // Initializer block
+    @BindView(R.id.rlWrapCommentInput)
+    View rlWrapCommentInput;
+    {
         lifecycleDelegates.add(new DragDismissDelegate(this));
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_product_detail_item);
-        for (LifecycleDelegate lifecycleDelegate : lifecycleDelegates) {
-            lifecycleDelegate.onCreate(savedInstanceState);
-        }
-
+        super.onCreate(savedInstanceState,R.layout.activity_product_detail_item);
         ButterKnife.bind(this);
-
         setupUI();
+    }
 
+    @Override
+    protected void bindViewModel() {
 
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        setupAnimation();
+    }
+
+    private void setupAnimation() {
         nsScrollView.setTranslationY(nsScrollView.getTranslationY()+1000);
-        ViewCompat.animate(nsScrollView)
-                .translationYBy(-1000)
-                .setStartDelay(200)
-                .setDuration(500)
-                .start();
-        View rlWrapCommentInput = findViewById(R.id.rlWrapCommentInput);
         rlWrapCommentInput.setTranslationY(rlWrapCommentInput.getTranslationY()+200);
-        ViewCompat.animate(rlWrapCommentInput)
-                .translationYBy(-200)
-                .setStartDelay(500)
-                .setDuration(500)
-                .start();
+        toolBar.setTranslationY(toolBar.getTranslationY()-100);
+        getWindow().getSharedElementEnterTransition().addListener(new AnimUtils.TransitionListenerAdapter(){
+            @Override
+            public void onTransitionEnd(Transition transition) {
+                super.onTransitionEnd(transition);
+
+                ViewCompat.animate(nsScrollView)
+                        .translationYBy(-1000)
+                        .setStartDelay(0)
+                        .setDuration(300)
+                        .start();
+
+                ViewCompat.animate(rlWrapCommentInput)
+                        .translationYBy(-200)
+                        .setStartDelay(0)
+                        .setDuration(300)
+                        .start();
+
+                ViewCompat.animate(toolBar)
+                        .translationYBy(+100)
+                        .setStartDelay(0)
+                        .setDuration(300)
+                        .start();
+            }
+        });
     }
 
     private void setupUI() {
@@ -176,22 +180,6 @@ public class ProductItemDetailActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        for (LifecycleDelegate lifecycleDelegate : lifecycleDelegates) {
-            lifecycleDelegate.onResume();
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        for (LifecycleDelegate lifecycleDelegate : lifecycleDelegates) {
-            lifecycleDelegate.onPause();
-        }
-        super.onPause();
     }
 
 

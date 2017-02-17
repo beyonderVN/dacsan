@@ -3,13 +3,14 @@
     <color name="transparent_color">#00ffffff</color>
     <color name="colorPrimary">#a62b22</color>
     <color name="colorPrimaryDark">#D32F2F</color>
-    <color name="colorAccent">#B6A19E</color>
+    <color name="colorAccent">@color/red</color>
 
     <color name="colorTextNavigation">#cc5b5858</color>
     <color name="colorTextPrimaryNavigation">#000000</color>
     <color name="colorDividerNavigation">#DEBF8B8B</color>
     <color name="gray">#cacaca</color>
     <color name="tran_gray">#bbffffff</color>
+    <color name="black_tran">#91000000</color>
     <color name="white">#ffffff</color>
 
     <color name="scrim">#86323232</color>
