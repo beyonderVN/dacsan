@@ -14,7 +14,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ngohoanglong.com.dacsan.DacsanApplication;
 import ngohoanglong.com.dacsan.R;
-import ngohoanglong.com.dacsan.data.response.LoginResponse;
 import ngohoanglong.com.dacsan.databinding.ActivityLoginBinding;
 import ngohoanglong.com.dacsan.utils.ThreadSchedulerImpl;
 import ngohoanglong.com.dacsan.view.BaseActivity;
@@ -33,16 +32,12 @@ public class LoginActivity extends BaseActivity {
     @OnClick(R.id.btn_login)
     public void onLoginClick() {
         Log.d(TAG, "onLoginClick: ");
-        viewModel.login()
+        compositeSubscription.add(viewModel.login()
                 .takeUntil(stopEvent())
-                .subscribe(loginResponse -> handleResponse(loginResponse))
+                .subscribe())
         ;
     }
-    private void handleResponse(LoginResponse loginResponse) {
-        if (loginResponse.isSuccess()) {
-//            startActivity(MainActivity.getIntentNewTask(this));
-        }
-    }
+
     @OnClick(R.id.btn_signup)
     public void onSighupClick() {
         startActivity(new Intent(this, SignupActivity.class));
@@ -55,15 +50,17 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        DacsanApplication.authManager.isLogin()
+        compositeSubscription.add(DacsanApplication.authManager.isLogin()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .takeUntil(stopEvent())
-                .subscribe(aBoolean -> handleResponse(aBoolean));
+                .subscribe(aBoolean -> handleResponse(aBoolean)));
+
         super.onCreate(savedInstanceState);
         viewModel = new LoginViewModel(new ThreadSchedulerImpl(AndroidSchedulers.mainThread(), Schedulers.io()),this.getApplicationContext().getResources());
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
         binding.setViewModel(viewModel);
         ButterKnife.bind(this);
-
         setupUI();
     }
 
@@ -75,18 +72,13 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void bindViewModel() {
-        viewModel.toast()
+        compositeSubscription.add(viewModel.toast()
                 .takeUntil(stopEvent())
-                .subscribe(this::showMessage);
-        viewModel.loadingState()
+                .subscribe(this::showMessage));
+        compositeSubscription.add(viewModel.loadingState()
                 .takeUntil(stopEvent())
                 .startWith(1)
-                .subscribe(this::setLoadingState);
-//        viewModel.loginIsSuccess()
-//                .takeUntil(stopEvent())
-//                .subscribe(aBoolean -> {
-//                    handleResponse(aBoolean);
-//                });
+                .subscribe(this::setLoadingState));
     }
 
     private void showMessage(String value) {
@@ -103,14 +95,6 @@ public class LoginActivity extends BaseActivity {
 
     private void handleResponse(Boolean aBoolean){
         if(aBoolean){
-//            new AlertDialog.Builder(this)
-//                    .setMessage("Login Successfully!")
-//                    .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-//                        dialog.dismiss();
-//                        startActivity(MainActivity.getIntentNewTask(LoginActivity.this));
-//                    })
-//                    .setIcon(android.R.drawable.ic_dialog_alert)
-//                    .show();
             startActivity(MainActivity.getIntentNewTask(LoginActivity.this));
         }
     }

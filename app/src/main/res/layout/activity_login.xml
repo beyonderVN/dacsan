@@ -12,130 +12,129 @@
             name="viewModel"
             type="LoginViewModel" />
     </data>
-<android.support.design.widget.CoordinatorLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context=".view.login.LoginActivity"
-    >
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="#ffffff"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="@dimen/activity_horizontal_margin"
-        android:fitsSystemWindows="true">
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:transitionName="@string/viewWrap_share_element"
+        tools:context=".view.login.LoginActivity">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="#ffffff"
+            android:fitsSystemWindows="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/activity_horizontal_margin">
 
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_gravity="center_horizontal"
-            android:scaleType="centerInside"
-            android:padding="20dp"
-            android:src="@drawable/icon" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_gravity="center_horizontal"
+                android:padding="@dimen/medium_pad"
+                android:scaleType="centerInside"
+                android:src="@drawable/icon" />
 
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            app:error="@{viewModel.emailError}"
-            app:errorEnabled="true">
-
-            <EditText
-                android:id="@+id/etEmail"
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:backgroundTint="@color/gray"
-                android:hint="@string/hint_email"
-                android:inputType="textEmailAddress"
-                android:textColor="#828282"
-                app:textChange="@{viewModel.emailChange}"
-                tools:text="asdasdad" />
-        </android.support.design.widget.TextInputLayout>
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                app:error="@{viewModel.emailError}"
+                app:errorEnabled="true">
 
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            app:error="@{viewModel.passwordError}"
-            app:errorEnabled="true">
+                <EditText
+                    android:id="@+id/etEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:backgroundTint="@color/gray"
+                    android:hint="@string/hint_email"
+                    android:inputType="textEmailAddress"
+                    android:textColor="#828282"
+                    app:textChange="@{viewModel.emailChange}"
+                    tools:text="asdasdad" />
+            </android.support.design.widget.TextInputLayout>
 
-            <EditText
-                android:id="@+id/etPassword"
-                android:layout_width="fill_parent"
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:backgroundTint="@color/gray"
-                android:hint="@string/hint_password"
-                android:inputType="textPassword"
-                android:textColor="#828282"
-                app:textChange="@{viewModel.passwordChange}"
-                tools:text="asdasdad" />
-        </android.support.design.widget.TextInputLayout>
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                app:error="@{viewModel.passwordError}"
+                app:errorEnabled="true">
 
-        <!-- Login Button -->
-        <!-- Link to Login Screen -->
-        <ViewAnimator
-            android:id="@+id/vaStateController"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inAnimation="@android:anim/fade_in"
-            android:outAnimation="@android:anim/fade_out"
-            >
+                <EditText
+                    android:id="@+id/etPassword"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:backgroundTint="@color/gray"
+                    android:hint="@string/hint_password"
+                    android:inputType="textPassword"
+                    android:textColor="#828282"
+                    app:textChange="@{viewModel.passwordChange}"
+                    tools:text="asdasdad" />
+            </android.support.design.widget.TextInputLayout>
 
-            <ProgressBar
-                android:id="@+id/pbLoading"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center|bottom"
-                />
+            <!-- Login Button -->
+            <!-- Link to Login Screen -->
+            <ViewAnimator
+                android:id="@+id/vaStateController"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inAnimation="@android:anim/fade_in"
+                android:outAnimation="@android:anim/fade_out">
+
+                <ProgressBar
+                    android:id="@+id/pbLoading"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center|bottom" />
+
+                <Button
+                    android:id="@+id/btn_login"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginTop="10dip"
+                    android:background="@drawable/button_login"
+                    android:enabled="@{viewModel.loginBtnState}"
+                    android:text="@string/btn_login"
+                    android:textColor="@android:color/white" />
+            </ViewAnimator>
 
             <Button
-                android:id="@+id/btn_login"
+                android:id="@+id/btnResetPassword"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dip"
+                android:background="@null"
+                android:text="@string/btn_forgot_password"
+                android:textAllCaps="false"
+                android:textColor="#cecece" />
+
+
+            <Button
+                android:id="@+id/btn_signup"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="25dp"
                 android:layout_marginRight="25dp"
-                android:layout_marginTop="10dip"
-                android:background="@drawable/button_login"
-                android:enabled="@{viewModel.loginBtnState}"
-                android:text="@string/btn_login"
-                android:textColor="@android:color/white" />
-        </ViewAnimator>
-
-        <Button
-            android:id="@+id/btnResetPassword"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dip"
-            android:background="@null"
-            android:text="@string/btn_forgot_password"
-            android:textAllCaps="false"
-            android:textColor="#cecece" />
+                android:layout_marginTop="20dip"
+                android:background="@null"
+                android:text="@string/btn_link_to_register"
+                android:textAllCaps="false"
+                android:textColor="#9a635c"
+                android:textSize="15dp" />
 
 
-        <Button
-            android:id="@+id/btn_signup"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginTop="20dip"
-            android:background="@null"
-            android:text="@string/btn_link_to_register"
-            android:textAllCaps="false"
-            android:textColor="#9a635c"
-            android:textSize="15dp" />
+        </LinearLayout>
 
 
-    </LinearLayout>
-
-
-</android.support.design.widget.CoordinatorLayout>
+    </android.support.design.widget.CoordinatorLayout>
 </layout>

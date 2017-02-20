@@ -7,6 +7,8 @@ import ngohoanglong.com.dacsan.DacsanApplication;
 import ngohoanglong.com.dacsan.utils.BaseDelegate;
 import ngohoanglong.com.dacsan.view.BaseActivity;
 import ngohoanglong.com.dacsan.view.login.LoginActivity;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Long on 11/15/2016.
@@ -23,14 +25,17 @@ public class AuthDelegate extends BaseDelegate {
 
     @Override
     public void onCreate(Bundle bundle) {
-        DacsanApplication.authManager.isLogin()
+        activity.getCompositeSubscription().add(DacsanApplication.authManager.isLogin()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .takeUntil(activity.stopEvent())
                 .subscribe(aBoolean -> {
-                    if(!aBoolean){
+                    if (!aBoolean) {
                         Intent intent = LoginActivity.getIntentNewTask(activity);
                         activity.startActivity(intent);
                     }
-                });
+                }));
+
     }
 
 }

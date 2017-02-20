@@ -3,6 +3,7 @@ package ngohoanglong.com.dacsan.manager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.google.gson.Gson;
 
@@ -15,6 +16,7 @@ import rx.subjects.BehaviorSubject;
  */
 
 public class AuthManager {
+    private static final String TAG = "AuthManager";
     public static final String USER = "USER";
     private SharedPreferences sharedPreferences;
     private Gson gson;
@@ -33,7 +35,9 @@ public class AuthManager {
     }
 
     public Observable<Boolean> isLogin(){
-        return isLoginSuccess.asObservable();
+        return isLoginSuccess.asObservable()
+                .doOnNext(aBoolean -> Log.d(TAG, "doOnNext: "))
+                .doOnSubscribe(() -> Log.d(TAG, "doOnSubscribe: "));
     }
 
     public User getCurrentUser() {

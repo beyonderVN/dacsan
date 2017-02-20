@@ -28,4 +28,6 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="detail_image">tn_detail_image</string>
+    <string name="logo_share_element">logo_tran_share</string>
+    <string name="viewWrap_share_element">viewWrap_share_element</string>
 </resources>

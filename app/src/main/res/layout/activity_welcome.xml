@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_welcome"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@color/white"
+    tools:context="ngohoanglong.com.dacsan.view.welcome.WelcomeActivity">
+
+    <com.tuyenmonkey.mkloader.MKLoader
+        android:id="@+id/MKLoader"
+        android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:mk_type="Whirlpool"
+            app:mk_color="@color/colorAccent"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:id="@+id/ivLogo"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:src="@drawable/icon"
+        android:layout_marginLeft="@dimen/medium_pad"
+        android:layout_marginRight="@dimen/medium_pad"
+        android:layout_above="@+id/MKLoader"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Good time for shopping !"
+        android:layout_below="@+id/MKLoader"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="29dp"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:textColor="@color/black_54p"/>
+
+</RelativeLayout>

@@ -69,10 +69,6 @@ public class ProductItemDetailActivity extends BaseActivity {
         setupUI();
     }
 
-    @Override
-    protected void bindViewModel() {
-
-    }
 
     @Override
     protected void onStart() {
@@ -182,6 +178,10 @@ public class ProductItemDetailActivity extends BaseActivity {
         super.onBackPressed();
     }
 
+    @Override
+    protected void bindViewModel() {
+
+    }
 
  }
 

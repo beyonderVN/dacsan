@@ -10,6 +10,7 @@ import java.util.List;
 import ngohoanglong.com.dacsan.utils.LifecycleDelegate;
 import rx.Observable;
 import rx.subjects.PublishSubject;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by nongdenchet on 11/26/16.
@@ -28,18 +29,17 @@ public abstract class BaseActivity extends AppCompatActivity {
         return startEvent.asObservable();
     }
     protected List<LifecycleDelegate> lifecycleDelegates = new ArrayList<>();
-
+    protected CompositeSubscription compositeSubscription = new CompositeSubscription();
     protected void onCreate(@Nullable Bundle savedInstanceState,int layout) {
         super.onCreate(savedInstanceState);
         setContentView(layout);
         for (LifecycleDelegate lifecycleDelegate : lifecycleDelegates) {
             lifecycleDelegate.onCreate(savedInstanceState);
         }
-//        appComponent = ((MyApplication) getApplication()).component();
     }
-//    protected AppComponent getAppComponent() {
-//        return appComponent;
-//    }
+    public CompositeSubscription getCompositeSubscription(){
+        return compositeSubscription;
+    }
 
     protected abstract void bindViewModel();
 
@@ -80,10 +80,12 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
+
+        compositeSubscription.clear();
         for (LifecycleDelegate lifecycleDelegate : lifecycleDelegates) {
             lifecycleDelegate.onStop();
         }
+        super.onDestroy();
     }
 
     @Override

@@ -7,12 +7,12 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".DacsanApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name=".DacsanApplication">
+        android:theme="@style/AppTheme">
         <activity
             android:name=".view.main.MainActivity"
             android:label="@string/app_name"
@@ -20,14 +20,17 @@
         <activity
             android:name=".view.detail.ProductItemDetailActivity"
             android:theme="@style/AppTheme.Translucent"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".view.login.LoginActivity"
+            android:theme="@style/AppTheme.Translucent" />
+        <activity
+            android:name=".view.welcome.WelcomeActivity"
             android:theme="@style/AppTheme.Translucent" />
 
         <activity-alias
             android:name=".laucher"
-            android:targetActivity=".view.login.LoginActivity">
+            android:targetActivity=".view.welcome.WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -35,10 +38,12 @@
             </intent-filter>
         </activity-alias>
 
-        <activity android:name=".view.signup.SignupActivity"
-            android:theme="@style/AppTheme.Translucent"/>
-        <activity android:name=".view.resetpassword.ResetPassword"
-            android:theme="@style/AppTheme.Translucent"></activity>
+        <activity
+            android:name=".view.signup.SignupActivity"
+            android:theme="@style/AppTheme.Translucent" />
+        <activity
+            android:name=".view.resetpassword.ResetPassword"
+            android:theme="@style/AppTheme.Translucent" />
     </application>
 
 </manifest>
