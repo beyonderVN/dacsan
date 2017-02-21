@@ -34,7 +34,6 @@ public class LoginViewModel extends BaseViewModel {
     public ObservableBoolean loginBtnState = new ObservableBoolean(false);
     private BehaviorSubject<String> toast = BehaviorSubject.create();
     private PublishSubject<Integer> loadingState = PublishSubject.create();
-//    private BehaviorSubject<Boolean> isSuccess = BehaviorSubject.create();
 
     public LoginViewModel(@NonNull ThreadScheduler threadScheduler, @NonNull Resources resources) {
         super(threadScheduler, resources);
@@ -49,9 +48,10 @@ public class LoginViewModel extends BaseViewModel {
         return loadingState.asObservable();
     }
 
-//    public Observable<Boolean> loginIsSuccess() {
-//        return isSuccess.asObservable();
-//    }
+    public Observable<Boolean> loginIsSuccess() {
+        return DacsanApplication.authManager.isLogin()
+                .compose(withScheduler());
+    }
 
     public TextChange emailChange = value -> {
         email = value;
@@ -95,7 +95,6 @@ public class LoginViewModel extends BaseViewModel {
     }
 
     public Observable<LoginResponse> login() {
-
         return userRepo
                 .login(new LoginRequest(email, password))
                 .compose(withScheduler())

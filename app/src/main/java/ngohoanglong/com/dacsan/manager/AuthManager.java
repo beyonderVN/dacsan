@@ -31,7 +31,6 @@ public class AuthManager {
         }else {
             isLoginSuccess = BehaviorSubject.create(false);
         }
-
     }
 
     public Observable<Boolean> isLogin(){

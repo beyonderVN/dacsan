@@ -10,8 +10,6 @@ import java.util.Locale;
 public class CurrencyUtil {
     public static String convertCurrency(double value, Locale locale){
         String result = "";
-//        double amount =200.0;
-//        Locale locale = new Locale("vn", "VN");
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
         result = currencyFormatter.format(value);
         return result;

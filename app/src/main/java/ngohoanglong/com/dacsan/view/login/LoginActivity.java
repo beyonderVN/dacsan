@@ -12,7 +12,6 @@ import android.widget.ViewAnimator;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import ngohoanglong.com.dacsan.DacsanApplication;
 import ngohoanglong.com.dacsan.R;
 import ngohoanglong.com.dacsan.databinding.ActivityLoginBinding;
 import ngohoanglong.com.dacsan.utils.ThreadSchedulerImpl;
@@ -50,12 +49,6 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        compositeSubscription.add(DacsanApplication.authManager.isLogin()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .takeUntil(stopEvent())
-                .subscribe(aBoolean -> handleResponse(aBoolean)));
-
         super.onCreate(savedInstanceState);
         viewModel = new LoginViewModel(new ThreadSchedulerImpl(AndroidSchedulers.mainThread(), Schedulers.io()),this.getApplicationContext().getResources());
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
@@ -79,6 +72,9 @@ public class LoginActivity extends BaseActivity {
                 .takeUntil(stopEvent())
                 .startWith(1)
                 .subscribe(this::setLoadingState));
+        compositeSubscription.add(viewModel.loginIsSuccess()
+                .takeUntil(stopEvent())
+                .subscribe(this::handleResponse));
     }
 
     private void showMessage(String value) {

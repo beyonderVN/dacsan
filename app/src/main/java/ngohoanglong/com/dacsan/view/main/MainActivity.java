@@ -29,8 +29,11 @@ import butterknife.ButterKnife;
 import ngohoanglong.com.dacsan.DacsanApplication;
 import ngohoanglong.com.dacsan.R;
 import ngohoanglong.com.dacsan.utils.GuideFragment;
+import ngohoanglong.com.dacsan.utils.ThreadSchedulerImpl;
 import ngohoanglong.com.dacsan.view.BaseActivity;
-import ngohoanglong.com.dacsan.view.delegate.AuthDelegate;
+import ngohoanglong.com.dacsan.view.login.LoginActivity;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -44,15 +47,14 @@ public class MainActivity extends BaseActivity
     CollapsingToolbarLayout mCollapsingToolbar;
     @BindView(R.id.nav_view)
     NavigationView mNavigationView;
-
-    {
-        lifecycleDelegates.add(new AuthDelegate(this));
-    }
-
+    MainViewModel viewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState,R.layout.activity_main);
         ButterKnife.bind(this);
+
+        viewModel = new MainViewModel(new ThreadSchedulerImpl(AndroidSchedulers.mainThread(), Schedulers.io()),this.getApplicationContext().getResources());
+
         PagerModelManager manager = new PagerModelManager();
         manager.addCommonFragment(GuideFragment.class, getBgRes(), getTitles());
         ModelPagerAdapter adapter = new ModelPagerAdapter(getSupportFragmentManager(), manager);
@@ -77,9 +79,14 @@ public class MainActivity extends BaseActivity
 
     @Override
     protected void bindViewModel() {
-
+        viewModel.loginIsSuccess()
+                .subscribe(this::handleResponse);
     }
-
+    private void handleResponse(Boolean aBoolean){
+        if(!aBoolean){
+            startActivity(LoginActivity.getIntentNewTask(this));
+        }
+    }
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

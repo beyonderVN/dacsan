@@ -38,16 +38,12 @@ public class WelcomeActivity extends BaseActivity {
             if (aBoolean) {
                 startActivity(MainActivity.getIntentNewTask(WelcomeActivity.this));
             } else {
-
                 View ivLogo = WelcomeActivity.this.findViewById(R.id.ivLogo);
                 ActivityOptions ops = ActivityOptions.makeSceneTransitionAnimation(WelcomeActivity.this,
                         Pair.create(ivLogo, WelcomeActivity.this.getString(R.string.viewWrap_share_element))
                 );
                 startActivity(LoginActivity.getIntentNewTask(WelcomeActivity.this), ops.toBundle());
-
-
             }
-//        });
     }
 
     @Override
