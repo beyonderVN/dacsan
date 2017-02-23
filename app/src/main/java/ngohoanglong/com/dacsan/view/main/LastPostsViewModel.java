@@ -3,6 +3,7 @@ package ngohoanglong.com.dacsan.view.main;
 import android.content.res.Resources;
 import android.util.Log;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,32 +29,55 @@ public class LastPostsViewModel extends PostViewModel {
 
     public LastPostsViewModel(ThreadScheduler threadScheduler, Resources resources) {
         super(threadScheduler, resources);
+        Log.d(TAG, "LastPostsViewModel: ");
+    }
+
+    public boolean isNeedLoadFirst() {
+        Log.d(TAG, "isNeedLoadFirst: " + posts.size());
+        return posts.isEmpty() || posts == null ? true : false;
     }
 
     public Observable<List<BaseHM>> loadFirstPosts() {
-        return postRepo.getLatest(new LatestRequest(0))
-                .compose(withScheduler())
-                .map(postVivmalls -> {
-                    List<BaseHM> baseHMs = new ArrayList<BaseHM>();
-                    for (PostVivmall baseHM : postVivmalls
-                            ) {
-                        baseHMs.add(new ProductItemHM(baseHM));
-                    }
-                    return baseHMs;
-                })
-                .doOnSubscribe(() -> {
-                    Log.d(TAG, "loadFirstPosts: doOnSubscribe");
-                    showLoadingPage();
-                })
-                .doOnNext(posts -> {
-                    this.page = 0;
-                    if (posts.size()>0) {
-                        updatePosts(posts);
-                        showContentPage();
-                    }else {
-                        showEmpty();
-                    }
-                });
+        Observable<List<BaseHM>> listObservable;
+        if (isNeedLoadFirst()) {
+            listObservable = postRepo.getLatest(new LatestRequest(0))
+                    .compose(withScheduler())
+                    .map(postVivmalls -> {
+                        List<BaseHM> baseHMs = new ArrayList<BaseHM>();
+                        for (PostVivmall baseHM : postVivmalls
+                                ) {
+                            baseHMs.add(new ProductItemHM(baseHM));
+                        }
+                        return baseHMs;
+                    });
+
+        } else {
+            listObservable = Observable.just(posts)
+                    .compose(withScheduler())
+                    .map(posts -> {
+                        List<BaseHM> baseHMs = new ArrayList<BaseHM>();
+                        for (BaseHM baseHM : posts
+                                ) {
+                            baseHMs.add(baseHM);
+                        }
+                        return baseHMs;
+                    });
+        }
+            return listObservable
+                    .doOnSubscribe(() -> {
+                        Log.d(TAG, "loadFirstPosts: doOnSubscribe");
+                        showLoadingPage();
+                    })
+                    .doOnNext(posts -> {
+                        this.page = 0;
+                        if (posts.size() > 0) {
+                            updatePosts(posts);
+                            showContentPage();
+                        } else {
+                            showEmpty();
+                        }
+                    });
+
     }
 
     public Observable<List<BaseHM>> loadMorePosts() {
@@ -77,5 +101,34 @@ public class LastPostsViewModel extends PostViewModel {
                     this.page += 1;
                 })
                 ;
+    }
+
+
+    public Serializable getInstanceState() {
+        hideLoadingMore();
+        return new LastPostsState(posts);
+    }
+
+    public void setInstanceState(LastPostsState instanceState) {
+        updatePosts(instanceState.getBaseHMs());
+    }
+
+    public static class LastPostsState implements Serializable {
+        List<BaseHM> baseHMs;
+
+        public LastPostsState() {
+        }
+
+        public LastPostsState(List<BaseHM> baseHMs) {
+            this.baseHMs = baseHMs;
+        }
+
+        public List<BaseHM> getBaseHMs() {
+            return baseHMs;
+        }
+
+        public void setBaseHMs(List<BaseHM> baseHMs) {
+            this.baseHMs = baseHMs;
+        }
     }
 }

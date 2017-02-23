@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +49,14 @@ public class LastPostsFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
         viewModel = new LastPostsViewModel(new ThreadSchedulerImpl(AndroidSchedulers.mainThread(), Schedulers.io()), getActivity().getApplicationContext().getResources());
+        LastPostsViewModel.LastPostsState savedViewModelState = null;
+        if (savedInstanceState != null) {
+            savedViewModelState = (LastPostsViewModel.LastPostsState)savedInstanceState.get(EXTRA_VIEW_MODEL_STATE);
+            Log.d(TAG, "savedViewModelState: "+savedViewModelState.getBaseHMs().size());
+            viewModel.setInstanceState(savedViewModelState);
+        }
         View rootView = inflater.inflate(R.layout.fragment_last_post, container, false);
         ButterKnife.bind(this, rootView);
         binding = DataBindingUtil.bind(rootView);
@@ -105,15 +113,24 @@ public class LastPostsFragment extends BaseFragment {
         viewModel.getIsLoadingMore()
                 .takeUntil(stopEvent())
                 .subscribe(aBoolean -> isLoadingMore = aBoolean);
+        Log.d(TAG, "viewModel.isNeedLoadFirst(): "+viewModel.isNeedLoadFirst());
+
         viewModel.loadFirstPosts()
-                .takeUntil(stopEvent())
-                .doOnTerminate(() -> {
-                })
-                .subscribe(baseHMs -> {
-                })
-        ;
+                    .takeUntil(stopEvent())
+                    .doOnTerminate(() -> {
+                    })
+                    .subscribe(baseHMs -> {
+                    }) ;
 
+    }
 
+    private static final String EXTRA_VIEW_MODEL_STATE = "viewModelState";
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (viewModel != null) {
+            outState.putSerializable(EXTRA_VIEW_MODEL_STATE, viewModel.getInstanceState());
+        }
     }
 
 }
