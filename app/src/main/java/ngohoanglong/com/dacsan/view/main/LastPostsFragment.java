@@ -100,6 +100,11 @@ public class LastPostsFragment extends BaseFragment {
                 return false;
             }
         });
+//        rvPosts.setItemAnimator(new SlideInUpAnimator());
+//        rvPosts.getItemAnimator().setAddDuration(20);
+//        rvPosts.getItemAnimator().setRemoveDuration(0);
+//        rvPosts.getItemAnimator().setMoveDuration(0);
+//        rvPosts.getItemAnimator().setChangeDuration(0);
     }
 
 
