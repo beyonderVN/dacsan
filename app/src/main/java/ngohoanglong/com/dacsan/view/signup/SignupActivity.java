@@ -14,14 +14,14 @@ import ngohoanglong.com.dacsan.R;
 import ngohoanglong.com.dacsan.data.response.SignupResponse;
 import ngohoanglong.com.dacsan.databinding.ActivitySignupBinding;
 import ngohoanglong.com.dacsan.utils.ThreadSchedulerImpl;
-import ngohoanglong.com.dacsan.view.BaseActivity;
+import ngohoanglong.com.dacsan.view.BaseDelegateRxActivity;
 import ngohoanglong.com.dacsan.view.login.LoginActivity;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 
-public class SignupActivity extends BaseActivity {
+public class SignupActivity extends BaseDelegateRxActivity {
     private static final String TAG = "SignupActivity";
     private ActivitySignupBinding binding;
     SignupViewModel viewModel ;

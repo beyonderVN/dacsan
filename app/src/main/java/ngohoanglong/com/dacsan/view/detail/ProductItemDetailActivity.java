@@ -27,10 +27,10 @@ import ngohoanglong.com.dacsan.R;
 import ngohoanglong.com.dacsan.model.PostVivmall;
 import ngohoanglong.com.dacsan.utils.CurrencyUtil;
 import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.ProductItemHM;
-import ngohoanglong.com.dacsan.view.BaseActivity;
+import ngohoanglong.com.dacsan.view.BaseDelegateRxActivity;
 import ngohoanglong.com.dacsan.view.delegate.DragDismissDelegate;
 
-public class ProductItemDetailActivity extends BaseActivity {
+public class ProductItemDetailActivity extends BaseDelegateRxActivity {
     private static final String TAG = "ProductItemDetailActivi";
     @BindView(R.id.ivCover)
     ImageView ivCover;

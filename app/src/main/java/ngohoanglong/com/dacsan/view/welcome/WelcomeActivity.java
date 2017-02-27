@@ -10,13 +10,13 @@ import java.util.concurrent.TimeUnit;
 
 import ngohoanglong.com.dacsan.DacsanApplication;
 import ngohoanglong.com.dacsan.R;
-import ngohoanglong.com.dacsan.view.BaseActivity;
+import ngohoanglong.com.dacsan.view.BaseDelegateRxActivity;
 import ngohoanglong.com.dacsan.view.login.LoginActivity;
 import ngohoanglong.com.dacsan.view.main.MainActivity;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class WelcomeActivity extends BaseActivity {
+public class WelcomeActivity extends BaseDelegateRxActivity {
     private static final String TAG = "WelcomeActivity";
 
     @Override

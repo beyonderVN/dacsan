@@ -30,12 +30,12 @@ import ngohoanglong.com.dacsan.DacsanApplication;
 import ngohoanglong.com.dacsan.R;
 import ngohoanglong.com.dacsan.utils.GuideFragment;
 import ngohoanglong.com.dacsan.utils.ThreadSchedulerImpl;
-import ngohoanglong.com.dacsan.view.BaseActivity;
+import ngohoanglong.com.dacsan.view.BaseDelegateRxActivity;
 import ngohoanglong.com.dacsan.view.login.LoginActivity;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class MainActivity extends BaseActivity
+public class MainActivity extends BaseDelegateRxActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     @BindView(R.id.view_pager)
     ScrollerViewPager viewPager;

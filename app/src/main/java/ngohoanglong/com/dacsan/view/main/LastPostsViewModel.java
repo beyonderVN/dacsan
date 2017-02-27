@@ -1,19 +1,20 @@
 package ngohoanglong.com.dacsan.view.main;
 
 import android.content.res.Resources;
+import android.databinding.ObservableList;
 import android.util.Log;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import ngohoanglong.com.dacsan.data.repo.PostVivmallRepo;
-import ngohoanglong.com.dacsan.data.repo.PostVivmallRepoImpl;
 import ngohoanglong.com.dacsan.data.request.LatestRequest;
 import ngohoanglong.com.dacsan.model.PostVivmall;
 import ngohoanglong.com.dacsan.utils.ThreadScheduler;
 import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.BaseHM;
 import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.ProductItemHM;
+import ngohoanglong.com.dacsan.view.BaseState;
 import ngohoanglong.com.dacsan.view.PostViewModel;
 import rx.Observable;
 
@@ -25,12 +26,16 @@ public class LastPostsViewModel extends PostViewModel {
     private static final String TAG = "LastPostsViewModel";
     int page = 0;
 
-    PostVivmallRepo postRepo = new PostVivmallRepoImpl();
+    PostVivmallRepo postRepo;
 
-    public LastPostsViewModel(ThreadScheduler threadScheduler, Resources resources) {
+    public LastPostsViewModel(ThreadScheduler threadScheduler,
+                              Resources resources,
+                              PostVivmallRepo postRepo
+                              ) {
         super(threadScheduler, resources);
-        Log.d(TAG, "LastPostsViewModel: ");
+        this.postRepo = postRepo;
     }
+
 
     public boolean isNeedLoadFirst() {
         Log.d(TAG, "isNeedLoadFirst: " + posts.size());
@@ -82,6 +87,7 @@ public class LastPostsViewModel extends PostViewModel {
 
     public Observable<List<BaseHM>> loadMorePosts() {
         return postRepo.getLatest(new LatestRequest(page + 1))
+                .delay(2, TimeUnit.SECONDS)
                 .compose(withScheduler())
                 .map(postVivmalls -> {
                     List<BaseHM> baseHMs = new ArrayList<BaseHM>();
@@ -103,21 +109,18 @@ public class LastPostsViewModel extends PostViewModel {
                 ;
     }
 
-
-    public Serializable getInstanceState() {
+    @Override
+    public BaseState getInstanceState() {
         hideLoadingMore();
         return new LastPostsState(posts);
     }
-
-    public void setInstanceState(LastPostsState instanceState) {
-        updatePosts(instanceState.getBaseHMs());
+    @Override
+    public void setInstanceState(BaseState instanceState) {
+        updatePosts(((LastPostsState)instanceState).getBaseHMs());
     }
 
-    public static class LastPostsState implements Serializable {
+    public static class LastPostsState extends BaseState {
         List<BaseHM> baseHMs;
-
-        public LastPostsState() {
-        }
 
         public LastPostsState(List<BaseHM> baseHMs) {
             this.baseHMs = baseHMs;
@@ -127,7 +130,7 @@ public class LastPostsViewModel extends PostViewModel {
             return baseHMs;
         }
 
-        public void setBaseHMs(List<BaseHM> baseHMs) {
+        public void setBaseHMs(ObservableList<BaseHM> baseHMs) {
             this.baseHMs = baseHMs;
         }
     }

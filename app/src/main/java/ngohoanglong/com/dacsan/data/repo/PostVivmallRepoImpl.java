@@ -21,14 +21,11 @@ public class PostVivmallRepoImpl implements PostVivmallRepo {
         GetDataFromAssets<PostVivmall> getDataFromAssets =  new GetDataFromAssets<PostVivmall>();
         posts = getDataFromAssets.getPostList("posts_vivmall2.json", DacsanApplication.getAppContext());
         List<PostVivmall> finalPosts = posts;
-        return Observable.create(subscriber -> {
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        return Observable
+                .create(subscriber -> {
             subscriber.onNext(finalPosts);
             subscriber.onCompleted();
-        });
+        })
+               ;
     }
 }

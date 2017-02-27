@@ -18,6 +18,12 @@ public class MainViewModel extends BaseViewModel {
         super(threadScheduler, resources);
 
     }
+
+    @Override
+    public void bindViewModel() {
+
+    }
+
     public Observable<Boolean> loginIsSuccess() {
         return DacsanApplication.authManager.isLogin()
                 .compose(withScheduler());

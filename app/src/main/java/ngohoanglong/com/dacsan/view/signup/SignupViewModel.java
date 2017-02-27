@@ -37,6 +37,11 @@ public class SignupViewModel extends BaseViewModel{
         super(threadScheduler, resources);
     }
 
+    @Override
+    public void bindViewModel() {
+
+    }
+
     public Observable<String> message() {
         return toast.asObservable();
     }

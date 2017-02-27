@@ -1,13 +1,11 @@
 package ngohoanglong.com.dacsan.view.main;
 
-
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,25 +13,29 @@ import android.widget.ViewAnimator;
 
 import com.vnwarriors.advancedui.appcore.common.recyclerviewhelper.InfiniteScrollListener;
 
+import java.util.ArrayList;
+
 import butterknife.BindInt;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ngohoanglong.com.dacsan.DacsanApplication;
 import ngohoanglong.com.dacsan.R;
+import ngohoanglong.com.dacsan.data.repo.PostVivmallRepoImpl;
 import ngohoanglong.com.dacsan.databinding.FragmentLastPostBinding;
 import ngohoanglong.com.dacsan.utils.ThreadSchedulerImpl;
 import ngohoanglong.com.dacsan.utils.recyclerview.EndlessPostsAdapter;
 import ngohoanglong.com.dacsan.utils.recyclerview.holderfactory.HolderFactoryImpl;
-import ngohoanglong.com.dacsan.view.BaseFragment;
+import ngohoanglong.com.dacsan.view.BaseDelegateRxFragmentWithState;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Created by Long on 2/27/2017.
  */
-public class LastPostsFragment extends BaseFragment {
-    private static final String TAG = "LastPostsFragment";
+
+public class LastPostFragment extends BaseDelegateRxFragmentWithState<LastPostsViewModel,LastPostsViewModel.LastPostsState> {
+    private static final String TAG = "LastPostFragment";
     private FragmentLastPostBinding binding;
-    LastPostsViewModel viewModel;
     @BindInt(R.integer.column_num)
     int columnNum;
     @BindView(R.id.rvPosts)
@@ -42,29 +44,17 @@ public class LastPostsFragment extends BaseFragment {
     boolean isLoadingMore = false;
     @BindView(R.id.vaStateController)
     ViewAnimator vaStateController;
-
-    public LastPostsFragment() {
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        viewModel = new LastPostsViewModel(new ThreadSchedulerImpl(AndroidSchedulers.mainThread(), Schedulers.io()), getActivity().getApplicationContext().getResources());
-        LastPostsViewModel.LastPostsState savedViewModelState = null;
-        if (savedInstanceState != null) {
-            savedViewModelState = (LastPostsViewModel.LastPostsState)savedInstanceState.get(EXTRA_VIEW_MODEL_STATE);
-            Log.d(TAG, "savedViewModelState: "+savedViewModelState.getBaseHMs().size());
-            viewModel.setInstanceState(savedViewModelState);
-        }
         View rootView = inflater.inflate(R.layout.fragment_last_post, container, false);
         ButterKnife.bind(this, rootView);
         binding = DataBindingUtil.bind(rootView);
-        binding.setViewModel(viewModel);
+        binding.setViewModel(getViewModel());
         setUpViews();
         return rootView;
     }
-
     private void setUpViews() {
         final StaggeredGridLayoutManager staggeredGridLayoutManagerVertical =
                 new StaggeredGridLayoutManager(
@@ -80,7 +70,7 @@ public class LastPostsFragment extends BaseFragment {
             @Override
             public void onLoadMore() {
                 try {
-                    viewModel.loadMorePosts()
+                    getViewModel().loadMorePosts()
                             .takeUntil(stopEvent())
                             .subscribe(baseHMs -> {
                             })
@@ -100,42 +90,43 @@ public class LastPostsFragment extends BaseFragment {
                 return false;
             }
         });
-//        rvPosts.setItemAnimator(new SlideInUpAnimator());
-//        rvPosts.getItemAnimator().setAddDuration(20);
-//        rvPosts.getItemAnimator().setRemoveDuration(0);
-//        rvPosts.getItemAnimator().setMoveDuration(0);
-//        rvPosts.getItemAnimator().setChangeDuration(0);
     }
 
+    @NonNull
+    @Override
+    protected LastPostsViewModel createViewModel() {
+        LastPostsViewModel lastPostsViewModel =
+                new LastPostsViewModel(
+                        new ThreadSchedulerImpl(AndroidSchedulers.mainThread(),
+                                Schedulers.io()),
+                        DacsanApplication.getAppContext().getResources(),
+                        new PostVivmallRepoImpl()
+                );
+        return lastPostsViewModel;
+    }
+
+    @NonNull
+    @Override
+    protected LastPostsViewModel.LastPostsState createPresentationModel() {
+        return new LastPostsViewModel.LastPostsState(new ArrayList<>());
+    }
 
     @Override
     protected void bindViewModel() {
-        viewModel.getViewState()
+        getViewModel().bindViewModel();
+        getViewModel().getViewState()
                 .takeUntil(stopEvent())
                 .subscribe(integer -> {
                     vaStateController.setDisplayedChild(integer);
                 });
-        viewModel.getIsLoadingMore()
+        getViewModel().getIsLoadingMore()
                 .takeUntil(stopEvent())
                 .subscribe(aBoolean -> isLoadingMore = aBoolean);
-        Log.d(TAG, "viewModel.isNeedLoadFirst(): "+viewModel.isNeedLoadFirst());
-
-        viewModel.loadFirstPosts()
-                    .takeUntil(stopEvent())
-                    .doOnTerminate(() -> {
-                    })
-                    .subscribe(baseHMs -> {
-                    }) ;
-
+        getViewModel().loadFirstPosts()
+                .takeUntil(stopEvent())
+                .doOnTerminate(() -> {
+                })
+                .subscribe(baseHMs -> {
+                }) ;
     }
-
-    private static final String EXTRA_VIEW_MODEL_STATE = "viewModelState";
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (viewModel != null) {
-            outState.putSerializable(EXTRA_VIEW_MODEL_STATE, viewModel.getInstanceState());
-        }
-    }
-
 }

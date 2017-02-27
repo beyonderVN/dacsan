@@ -40,6 +40,11 @@ public class LoginViewModel extends BaseViewModel {
         userRepo = new UserRepoImpl();
     }
 
+    @Override
+    public void bindViewModel() {
+
+    }
+
     public Observable<String> toast() {
         return toast.asObservable();
     }

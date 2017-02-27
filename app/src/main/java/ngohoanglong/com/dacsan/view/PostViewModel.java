@@ -14,7 +14,7 @@ import rx.Observable;
 import rx.subjects.BehaviorSubject;
 import rx.subjects.PublishSubject;
 
-public abstract class PostViewModel extends BaseViewModel {
+public abstract class PostViewModel extends BaseStateViewModel {
     private static final String TAG = "PostViewModel";
 
     public final int LOADING_STATE = 0;

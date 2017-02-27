@@ -15,7 +15,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="ngohoanglong.com.dacsan.view.main.LastPostsFragment"
+        tools:context="ngohoanglong.com.dacsan.view.main.LastPostFragment"
         android:background="#d7d7d7">
 
         <ViewAnimator

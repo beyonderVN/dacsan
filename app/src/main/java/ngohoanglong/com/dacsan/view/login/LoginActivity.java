@@ -15,14 +15,14 @@ import butterknife.OnClick;
 import ngohoanglong.com.dacsan.R;
 import ngohoanglong.com.dacsan.databinding.ActivityLoginBinding;
 import ngohoanglong.com.dacsan.utils.ThreadSchedulerImpl;
-import ngohoanglong.com.dacsan.view.BaseActivity;
+import ngohoanglong.com.dacsan.view.BaseDelegateRxActivity;
 import ngohoanglong.com.dacsan.view.main.MainActivity;
 import ngohoanglong.com.dacsan.view.signup.SignupActivity;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends BaseDelegateRxActivity {
     private static final String TAG = "LoginActivity";
     private ActivityLoginBinding binding;
     LoginViewModel viewModel ;
