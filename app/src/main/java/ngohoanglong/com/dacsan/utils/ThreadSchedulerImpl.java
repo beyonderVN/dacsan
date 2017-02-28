@@ -2,9 +2,6 @@ package ngohoanglong.com.dacsan.utils;
 
 import rx.Scheduler;
 
-/**
- * Created by nongdenchet on 8/1/16.
- */
 
 public class ThreadSchedulerImpl implements ThreadScheduler {
     private Scheduler observerOn;

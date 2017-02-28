@@ -110,12 +110,12 @@ public class LastPostsViewModel extends PostViewModel {
     }
 
     @Override
-    public BaseState getInstanceState() {
+    public BaseState saveInstanceState() {
         hideLoadingMore();
         return new LastPostsState(posts);
     }
     @Override
-    public void setInstanceState(BaseState instanceState) {
+    public void returnInstanceState(BaseState instanceState) {
         updatePosts(((LastPostsState)instanceState).getBaseHMs());
     }
 

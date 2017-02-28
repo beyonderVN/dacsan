@@ -23,11 +23,11 @@ public abstract class BaseStateViewModel extends BaseViewModel {
         this.state = state;
     }
 
-    public abstract BaseState getInstanceState();
+    public abstract BaseState saveInstanceState();
 
-    public abstract void setInstanceState(BaseState instanceState);
+    public abstract void returnInstanceState(BaseState instanceState);
     @Override
     public void bindViewModel() {
-        setInstanceState(state);
+        returnInstanceState(state);
     }
 }

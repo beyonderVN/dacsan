@@ -1,7 +1,9 @@
 package ngohoanglong.com.dacsan.view;
 
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +17,7 @@ import ngohoanglong.com.dacsan.utils.LifecycleDelegate;
  * Created by Long on 2/27/2017.
  */
 
-public abstract class BaseDelegateRxFragment extends BaseRxFragment {
+public abstract class BaseDelegateFragment extends Fragment {
     protected List<LifecycleDelegate> lifecycleDelegates = new ArrayList<>();
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,13 +26,11 @@ public abstract class BaseDelegateRxFragment extends BaseRxFragment {
         }
     }
 
-    protected abstract void bindViewModel();
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         for (LifecycleDelegate lifecycleDelegate : lifecycleDelegates) {
-            lifecycleDelegate.onStart();
+            lifecycleDelegate.onCreateView(inflater, container, savedInstanceState);
         }
         return super.onCreateView(inflater, container, savedInstanceState);
     }

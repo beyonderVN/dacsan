@@ -6,11 +6,13 @@ import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import javax.inject.Inject;
+
 import ngohoanglong.com.dacsan.DacsanApplication;
 import ngohoanglong.com.dacsan.data.repo.UserRepo;
-import ngohoanglong.com.dacsan.data.repo.UserRepoImpl;
 import ngohoanglong.com.dacsan.data.request.LoginRequest;
 import ngohoanglong.com.dacsan.data.response.LoginResponse;
+import ngohoanglong.com.dacsan.dependencyinjection.ActivityScope;
 import ngohoanglong.com.dacsan.utils.ThreadScheduler;
 import ngohoanglong.com.dacsan.utils.rxview.TextChange;
 import ngohoanglong.com.dacsan.view.BaseViewModel;
@@ -21,7 +23,7 @@ import rx.subjects.PublishSubject;
 /**
  * Created by Long on 12/1/2016.
  */
-
+@ActivityScope
 public class LoginViewModel extends BaseViewModel {
     private static final String TAG = "LoginViewModel";
     private LoginValidator validator = new LoginValidator();
@@ -35,9 +37,13 @@ public class LoginViewModel extends BaseViewModel {
     private BehaviorSubject<String> toast = BehaviorSubject.create();
     private PublishSubject<Integer> loadingState = PublishSubject.create();
 
-    public LoginViewModel(@NonNull ThreadScheduler threadScheduler, @NonNull Resources resources) {
+    @Inject
+    public LoginViewModel(@NonNull ThreadScheduler threadScheduler,
+                          @NonNull Resources resources,
+                          @NonNull UserRepo userRepo
+    ) {
         super(threadScheduler, resources);
-        userRepo = new UserRepoImpl();
+        this.userRepo = userRepo;
     }
 
     @Override
@@ -55,7 +61,8 @@ public class LoginViewModel extends BaseViewModel {
 
     public Observable<Boolean> loginIsSuccess() {
         return DacsanApplication.authManager.isLogin()
-                .compose(withScheduler());
+                .compose(withScheduler())
+                .doOnNext(aBoolean -> Log.d(TAG, "loginIsSuccess: "+aBoolean));
     }
 
     public TextChange emailChange = value -> {

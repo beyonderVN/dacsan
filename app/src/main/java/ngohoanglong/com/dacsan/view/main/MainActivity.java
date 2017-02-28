@@ -31,12 +31,14 @@ import ngohoanglong.com.dacsan.R;
 import ngohoanglong.com.dacsan.utils.GuideFragment;
 import ngohoanglong.com.dacsan.utils.ThreadSchedulerImpl;
 import ngohoanglong.com.dacsan.view.BaseDelegateRxActivity;
-import ngohoanglong.com.dacsan.view.login.LoginActivity;
+import ngohoanglong.com.dacsan.view.login.NewLoginActivity;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class MainActivity extends BaseDelegateRxActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private static final String TAG = "MainActivity";
+    private static final String SHOW_TITLE = "SHOW_TITLE";
     @BindView(R.id.view_pager)
     ScrollerViewPager viewPager;
     @BindView(R.id.toolbar)
@@ -63,7 +65,9 @@ public class MainActivity extends BaseDelegateRxActivity
         InkPageIndicator springIndicator = (InkPageIndicator) findViewById(R.id.indicator);
         // just set viewPager
         springIndicator.setViewPager(viewPager);
-
+        if (savedInstanceState != null) {
+            showTitle = savedInstanceState.getBoolean(SHOW_TITLE);
+        }
         setupToolbar();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -84,7 +88,7 @@ public class MainActivity extends BaseDelegateRxActivity
     }
     private void handleResponse(Boolean aBoolean){
         if(!aBoolean){
-            startActivity(LoginActivity.getIntentNewTask(this));
+            startActivity(NewLoginActivity.getIntentNewTask(this));
         }
     }
     @Override
@@ -145,12 +149,13 @@ public class MainActivity extends BaseDelegateRxActivity
         list.add("https://a2milk.co.uk/wp-content/uploads/foodtip02-copy203kb.png");
         return list;
     }
-
+    boolean showTitle = false;
     private void setupToolbar() {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        mAppBar.setExpanded(!showTitle);
         mAppBar.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
-            boolean showTitle = (mCollapsingToolbar.getHeight() + verticalOffset) <= (mToolbar.getHeight() * 2);
+            showTitle = (mCollapsingToolbar.getHeight() + verticalOffset) <= (mToolbar.getHeight() * 2);
             if (showTitle) {
                 mCollapsingToolbar.setTitle("Vivmall.com");
             } else {
@@ -158,6 +163,7 @@ public class MainActivity extends BaseDelegateRxActivity
             }
 
         });
+
     }
 
     private void setupNavigationMenu() {
@@ -176,5 +182,11 @@ public class MainActivity extends BaseDelegateRxActivity
         tvEmail.setText("admin@vivmall.vn");
         tvDes = (TextView) headerLayout.findViewById(R.id.tvDes);
         tvDes.setText("Today is good for shopping!");
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle bundle) {
+        super.onSaveInstanceState(bundle);
+        bundle.putBoolean(SHOW_TITLE,showTitle);
     }
 }

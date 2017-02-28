@@ -32,7 +32,16 @@ public class AuthManager {
             isLoginSuccess = BehaviorSubject.create(false);
         }
     }
-
+    public AuthManager(Context context,Gson gson) {
+        this.sharedPreferences = context.getSharedPreferences(
+                "vivmall.com", Context.MODE_PRIVATE);
+        this.gson = gson;
+        if (getCurrentUser() != null) {
+            isLoginSuccess = BehaviorSubject.create(true);
+        }else {
+            isLoginSuccess = BehaviorSubject.create(false);
+        }
+    }
     public Observable<Boolean> isLogin(){
         return isLoginSuccess.asObservable()
                 .doOnNext(aBoolean -> Log.d(TAG, "doOnNext: "))

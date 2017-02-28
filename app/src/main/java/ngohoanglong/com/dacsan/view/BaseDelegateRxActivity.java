@@ -49,7 +49,7 @@ public abstract class BaseDelegateRxActivity extends BaseRxActivity {
     protected void onResume() {
         super.onResume();
         for (LifecycleDelegate lifecycleDelegate : lifecycleDelegates) {
-            lifecycleDelegate.onStop();
+            lifecycleDelegate.onResume();
         }
     }
 
@@ -57,14 +57,14 @@ public abstract class BaseDelegateRxActivity extends BaseRxActivity {
     protected void onPause() {
         super.onPause();
         for (LifecycleDelegate lifecycleDelegate : lifecycleDelegates) {
-            lifecycleDelegate.onStop();
+            lifecycleDelegate.onPause();
         }
     }
 
     @Override
     protected void onDestroy() {
         for (LifecycleDelegate lifecycleDelegate : lifecycleDelegates) {
-            lifecycleDelegate.onStop();
+            lifecycleDelegate.onDestroy();
         }
         super.onDestroy();
     }
@@ -73,7 +73,7 @@ public abstract class BaseDelegateRxActivity extends BaseRxActivity {
     protected void onSaveInstanceState(Bundle bundle) {
         super.onSaveInstanceState(bundle);
         for (LifecycleDelegate lifecycleDelegate : lifecycleDelegates) {
-            lifecycleDelegate.onStop();
+            lifecycleDelegate.onSaveInstanceState(bundle);
         }
     }
 }

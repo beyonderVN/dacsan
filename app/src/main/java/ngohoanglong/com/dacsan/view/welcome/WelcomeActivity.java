@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 import ngohoanglong.com.dacsan.DacsanApplication;
 import ngohoanglong.com.dacsan.R;
 import ngohoanglong.com.dacsan.view.BaseDelegateRxActivity;
-import ngohoanglong.com.dacsan.view.login.LoginActivity;
+import ngohoanglong.com.dacsan.view.login.NewLoginActivity;
 import ngohoanglong.com.dacsan.view.main.MainActivity;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -42,7 +42,7 @@ public class WelcomeActivity extends BaseDelegateRxActivity {
                 ActivityOptions ops = ActivityOptions.makeSceneTransitionAnimation(WelcomeActivity.this,
                         Pair.create(ivLogo, WelcomeActivity.this.getString(R.string.viewWrap_share_element))
                 );
-                startActivity(LoginActivity.getIntentNewTask(WelcomeActivity.this), ops.toBundle());
+                startActivity(NewLoginActivity.getIntentNewTask(WelcomeActivity.this), ops.toBundle());
             }
     }
 

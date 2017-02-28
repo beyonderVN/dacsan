@@ -39,7 +39,7 @@ public abstract class StateDelegate<M extends BaseStateViewModel,S extends BaseS
      * @param outState
      */
     public void onSaveInstanceState(Bundle outState) {
-        state = (S) viewModel.getInstanceState();
+        state = (S) viewModel.saveInstanceState();
         outState.putSerializable(presentationModelKey, state);
     }
 

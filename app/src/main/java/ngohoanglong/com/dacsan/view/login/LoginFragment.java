@@ -1,12 +1,13 @@
 package ngohoanglong.com.dacsan.view.login;
 
-import android.content.Context;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ViewAnimator;
 
 import javax.inject.Inject;
@@ -18,14 +19,19 @@ import ngohoanglong.com.dacsan.DacsanApplication;
 import ngohoanglong.com.dacsan.R;
 import ngohoanglong.com.dacsan.databinding.ActivityLoginBinding;
 import ngohoanglong.com.dacsan.dependencyinjection.module.UserModule;
-import ngohoanglong.com.dacsan.view.BaseDelegateRxActivity;
+import ngohoanglong.com.dacsan.view.BaseRxDelegateFragment;
 import ngohoanglong.com.dacsan.view.main.MainActivity;
-import ngohoanglong.com.dacsan.view.signup.SignupActivity;
 
+/**
+ * Created by Long on 2/28/2017.
+ */
+public class LoginFragment extends BaseRxDelegateFragment {
+    private static final String TAG = "LoginFragment";
 
-public class LoginActivity extends BaseDelegateRxActivity {
-    private static final String TAG = "LoginActivity";
     private ActivityLoginBinding binding;
+    public static LoginFragment newInstance() {
+        return new LoginFragment();
+    }
 
     @Inject
     LoginViewModel viewModel ;
@@ -35,57 +41,51 @@ public class LoginActivity extends BaseDelegateRxActivity {
     @OnClick(R.id.btn_login)
     public void onLoginClick() {
         Log.d(TAG, "onLoginClick: ");
-        compositeSubscription.add(viewModel.login()
+        getCompositeSubscription().add(viewModel.login()
                 .takeUntil(stopEvent())
                 .subscribe())
         ;
     }
 
-    @OnClick(R.id.btn_signup)
-    public void onSighupClick() {
-        startActivity(new Intent(this, SignupActivity.class));
-    }
-
-    @OnClick(R.id.btnResetPassword)
-    public void onResetPasswordClick() {
-//        startActivity(new Intent(LoginActivity.this, ResetPasswordActivity.class));
-    }
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((DacsanApplication)getApplication()).getAppComponent()
+        ((DacsanApplication)getActivity().getApplication()).getAppComponent()
                 .plus(new UserModule())
                 .inject(this);
-//        viewModel = new LoginViewModel(new ThreadSchedulerImpl(AndroidSchedulers.mainThread(), Schedulers.io()),this.getApplicationContext().getResources());
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
-        binding.setViewModel(viewModel);
-        ButterKnife.bind(this);
-        setupUI();
     }
-
-    private void setupUI() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-    }
-
-
+    @Nullable
     @Override
-    protected void bindViewModel() {
-        compositeSubscription.add(viewModel.toast()
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.activity_login, container, false);
+        ButterKnife.bind(this, rootView);
+        binding = DataBindingUtil.bind(rootView);
+        binding.setViewModel(viewModel);
+        setUpViews(rootView);
+        return rootView;
+    }
+    private void setUpViews(View view) {
+
+    }
+    @Override
+    public void bindViewModel() {
+        Log.d(TAG, "bindViewModel: ");
+        getCompositeSubscription().add(viewModel.toast()
                 .takeUntil(stopEvent())
                 .subscribe(this::showMessage));
-        compositeSubscription.add(viewModel.loadingState()
+        getCompositeSubscription().add(viewModel.loadingState()
                 .takeUntil(stopEvent())
                 .startWith(1)
                 .subscribe(this::setLoadingState));
-        compositeSubscription.add(viewModel.loginIsSuccess()
+        getCompositeSubscription().add(viewModel.loginIsSuccess()
                 .takeUntil(stopEvent())
                 .subscribe(this::handleResponse));
     }
 
     private void showMessage(String value) {
-        new AlertDialog.Builder(this)
+        Log.d(TAG, "showMessage: ");
+        new AlertDialog.Builder(getActivity())
                 .setMessage(value)
                 .setPositiveButton(android.R.string.yes, (dialog, which) -> dialog.dismiss())
                 .setIcon(android.R.drawable.ic_dialog_alert)
@@ -98,13 +98,9 @@ public class LoginActivity extends BaseDelegateRxActivity {
 
     private void handleResponse(Boolean aBoolean){
         if(aBoolean){
-            startActivity(MainActivity.getIntentNewTask(LoginActivity.this));
+            startActivity(MainActivity.getIntentNewTask(getActivity()));
         }
     }
 
-    public static Intent getIntentNewTask(Context context) {
-        Intent intent = new Intent(context, LoginActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        return intent;
-    }
+
 }

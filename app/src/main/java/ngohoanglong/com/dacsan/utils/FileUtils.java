@@ -1,6 +1,7 @@
 package ngohoanglong.com.dacsan.utils;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -11,6 +12,12 @@ import java.io.InputStreamReader;
  */
 
 public class FileUtils {
+    private Context context;
+
+    public FileUtils(@NonNull Context context) {
+        this.context = context;
+    }
+
     public static String readFromfile(String fileName, Context context) {
         StringBuilder returnString = new StringBuilder();
         InputStream fIn = null;
