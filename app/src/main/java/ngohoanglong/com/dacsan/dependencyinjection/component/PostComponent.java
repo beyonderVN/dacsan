@@ -3,6 +3,7 @@ package ngohoanglong.com.dacsan.dependencyinjection.component;
 import dagger.Subcomponent;
 import ngohoanglong.com.dacsan.dependencyinjection.ActivityScope;
 import ngohoanglong.com.dacsan.dependencyinjection.module.PostModule;
+import ngohoanglong.com.dacsan.view.main.LastPostFragment;
 
 /**
  * Created by Long on 2/28/2017.
@@ -10,4 +11,5 @@ import ngohoanglong.com.dacsan.dependencyinjection.module.PostModule;
 @ActivityScope
 @Subcomponent(modules = {PostModule.class})
 public interface PostComponent {
+    void inject(LastPostFragment lastPostFragment);
 }

@@ -29,8 +29,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="100dp"
-                app:mk_color="@color/red"
-                app:mk_type="Worm" />
+                app:mk_color="@color/gray_alpha"
+                app:mk_type="Whirlpool" />
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rvPosts"
                 android:layout_width="match_parent"

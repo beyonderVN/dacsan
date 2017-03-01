@@ -2,6 +2,8 @@ package ngohoanglong.com.dacsan.dependencyinjection.module;
 
 import dagger.Module;
 import dagger.Provides;
+import ngohoanglong.com.dacsan.data.repo.PostVivmallRepo;
+import ngohoanglong.com.dacsan.data.repo.PostVivmallRepoImpl;
 import ngohoanglong.com.dacsan.data.repo.UserRepo;
 import ngohoanglong.com.dacsan.data.repo.UserRepoImpl;
 
@@ -13,5 +15,10 @@ public class DataModule {
     @Provides
     public UserRepo provideUserRepo() {
         return new UserRepoImpl();
+    }
+
+    @Provides
+    public PostVivmallRepo providePostRepo() {
+        return new PostVivmallRepoImpl();
     }
 }

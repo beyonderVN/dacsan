@@ -8,8 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+
 import ngohoanglong.com.dacsan.data.repo.PostVivmallRepo;
 import ngohoanglong.com.dacsan.data.request.LatestRequest;
+import ngohoanglong.com.dacsan.dependencyinjection.ActivityScope;
 import ngohoanglong.com.dacsan.model.PostVivmall;
 import ngohoanglong.com.dacsan.utils.ThreadScheduler;
 import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.BaseHM;
@@ -21,13 +24,14 @@ import rx.Observable;
 /**
  * Created by Long on 2/13/2017.
  */
-
+@ActivityScope
 public class LastPostsViewModel extends PostViewModel {
     private static final String TAG = "LastPostsViewModel";
     int page = 0;
 
     PostVivmallRepo postRepo;
 
+    @Inject
     public LastPostsViewModel(ThreadScheduler threadScheduler,
                               Resources resources,
                               PostVivmallRepo postRepo

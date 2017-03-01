@@ -1,1 +1,2 @@
-include ':app', ':libs', ':EasyMoney-Widgets-Library'
+include ':app', ':libs'
+//, ':EasyMoney-Widgets-Library'

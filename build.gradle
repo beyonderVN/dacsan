@@ -36,4 +36,6 @@ ext {
     //App dependencies
     supportLibraryVersion = '25.1.0'
     butterknife = '7.0.1'
+
+    leakcanaryVersion = '1.5'
 }

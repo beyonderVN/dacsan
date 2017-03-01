@@ -10,26 +10,34 @@ import java.util.concurrent.TimeUnit;
 
 import ngohoanglong.com.dacsan.DacsanApplication;
 import ngohoanglong.com.dacsan.R;
-import ngohoanglong.com.dacsan.view.BaseDelegateRxActivity;
-import ngohoanglong.com.dacsan.view.login.NewLoginActivity;
+import ngohoanglong.com.dacsan.view.BaseDelegateActivity;
+import ngohoanglong.com.dacsan.view.delegate.RxDelegate;
+import ngohoanglong.com.dacsan.view.login.LoginActivity;
 import ngohoanglong.com.dacsan.view.main.MainActivity;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class WelcomeActivity extends BaseDelegateRxActivity {
+public class WelcomeActivity extends BaseDelegateActivity {
     private static final String TAG = "WelcomeActivity";
-
+    private RxDelegate rxDelegate = new RxDelegate();
+    {
+        lifecycleDelegates.add(rxDelegate);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        DacsanApplication.getAppComponent()
+                .inject(this);
         setContentView(R.layout.activity_welcome);
-        compositeSubscription.add(DacsanApplication.authManager.isLogin()
-
-                .takeUntil(stopEvent())
+        DacsanApplication
+                .getAppComponent()
+                .getAuthManager()
+                .isLogin()
+                .takeUntil(rxDelegate.stopEvent())
                 .delay(2, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::handleResponse))
+                .subscribe(this::handleResponse)
         ;
     }
 
@@ -42,12 +50,8 @@ public class WelcomeActivity extends BaseDelegateRxActivity {
                 ActivityOptions ops = ActivityOptions.makeSceneTransitionAnimation(WelcomeActivity.this,
                         Pair.create(ivLogo, WelcomeActivity.this.getString(R.string.viewWrap_share_element))
                 );
-                startActivity(NewLoginActivity.getIntentNewTask(WelcomeActivity.this), ops.toBundle());
+                startActivity(LoginActivity.getIntentNewTask(WelcomeActivity.this), ops.toBundle());
             }
     }
 
-    @Override
-    protected void bindViewModel() {
-
-    }
 }

@@ -6,6 +6,8 @@ import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import javax.inject.Inject;
+
 import ngohoanglong.com.dacsan.data.repo.UserRepo;
 import ngohoanglong.com.dacsan.data.repo.UserRepoImpl;
 import ngohoanglong.com.dacsan.data.request.SignupRequest;
@@ -33,6 +35,7 @@ public class SignupViewModel extends BaseViewModel{
     private PublishSubject<String> toast = PublishSubject.create();
     private PublishSubject<Integer> loadingState = PublishSubject.create();
 
+    @Inject
     public SignupViewModel(@NonNull ThreadScheduler threadScheduler, @NonNull Resources resources) {
         super(threadScheduler, resources);
     }

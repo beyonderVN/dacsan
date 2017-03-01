@@ -3,6 +3,8 @@ package ngohoanglong.com.dacsan.view.main;
 import android.content.res.Resources;
 import android.support.annotation.NonNull;
 
+import javax.inject.Inject;
+
 import ngohoanglong.com.dacsan.DacsanApplication;
 import ngohoanglong.com.dacsan.utils.ThreadScheduler;
 import ngohoanglong.com.dacsan.view.BaseViewModel;
@@ -14,6 +16,7 @@ import rx.Observable;
 
 public class MainViewModel extends BaseViewModel {
 
+    @Inject
     public MainViewModel(@NonNull ThreadScheduler threadScheduler, @NonNull Resources resources) {
         super(threadScheduler, resources);
 

@@ -50,6 +50,10 @@ dependencies {
     compile 'com.tuyenmonkey:mkloader:1.0.0'
     compile 'jp.wasabeef:recyclerview-animators:2.2.5'
 
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:'+ rootProject.ext.leakcanaryVersion
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:'+ rootProject.ext.leakcanaryVersion
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:'+ rootProject.ext.leakcanaryVersion
+
     testCompile 'junit:junit:4.12'
     compile project(path: ':libs')
 }

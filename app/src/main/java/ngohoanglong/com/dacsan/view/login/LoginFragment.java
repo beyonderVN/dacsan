@@ -17,18 +17,19 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ngohoanglong.com.dacsan.DacsanApplication;
 import ngohoanglong.com.dacsan.R;
-import ngohoanglong.com.dacsan.databinding.ActivityLoginBinding;
+import ngohoanglong.com.dacsan.databinding.FragmentLoginBinding;
 import ngohoanglong.com.dacsan.dependencyinjection.module.UserModule;
-import ngohoanglong.com.dacsan.view.BaseRxDelegateFragment;
+import ngohoanglong.com.dacsan.view.BaseDelegateFragment;
+import ngohoanglong.com.dacsan.view.delegate.RxDelegate;
 import ngohoanglong.com.dacsan.view.main.MainActivity;
 
 /**
  * Created by Long on 2/28/2017.
  */
-public class LoginFragment extends BaseRxDelegateFragment {
+public class LoginFragment extends BaseDelegateFragment {
     private static final String TAG = "LoginFragment";
 
-    private ActivityLoginBinding binding;
+    private FragmentLoginBinding binding;
     public static LoginFragment newInstance() {
         return new LoginFragment();
     }
@@ -41,12 +42,15 @@ public class LoginFragment extends BaseRxDelegateFragment {
     @OnClick(R.id.btn_login)
     public void onLoginClick() {
         Log.d(TAG, "onLoginClick: ");
-        getCompositeSubscription().add(viewModel.login()
-                .takeUntil(stopEvent())
+        rxDelegate.getCompositeSubscription().add(viewModel.login()
+                .takeUntil(rxDelegate.stopEvent())
                 .subscribe())
         ;
     }
-
+    private RxDelegate rxDelegate = new RxDelegate();
+    {
+        lifecycleDelegates.add(rxDelegate);
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +62,7 @@ public class LoginFragment extends BaseRxDelegateFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.activity_login, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_login, container, false);
         ButterKnife.bind(this, rootView);
         binding = DataBindingUtil.bind(rootView);
         binding.setViewModel(viewModel);
@@ -68,18 +72,24 @@ public class LoginFragment extends BaseRxDelegateFragment {
     private void setUpViews(View view) {
 
     }
+
     @Override
+    public void onStart() {
+        super.onStart();
+        bindViewModel();
+    }
+
     public void bindViewModel() {
         Log.d(TAG, "bindViewModel: ");
-        getCompositeSubscription().add(viewModel.toast()
-                .takeUntil(stopEvent())
+        rxDelegate.getCompositeSubscription().add(viewModel.toast()
+                .takeUntil(rxDelegate.stopEvent())
                 .subscribe(this::showMessage));
-        getCompositeSubscription().add(viewModel.loadingState()
-                .takeUntil(stopEvent())
+        rxDelegate.getCompositeSubscription().add(viewModel.loadingState()
+                .takeUntil(rxDelegate.stopEvent())
                 .startWith(1)
                 .subscribe(this::setLoadingState));
-        getCompositeSubscription().add(viewModel.loginIsSuccess()
-                .takeUntil(stopEvent())
+        rxDelegate.getCompositeSubscription().add(viewModel.loginIsSuccess()
+                .takeUntil(rxDelegate.stopEvent())
                 .subscribe(this::handleResponse));
     }
 

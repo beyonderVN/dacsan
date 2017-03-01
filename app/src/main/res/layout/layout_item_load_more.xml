@@ -31,6 +31,6 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/medium_pad"
-    app:mk_type="Pulse"
+    app:mk_type="Whirlpool"
     app:mk_color="@color/gray_alpha"
 />

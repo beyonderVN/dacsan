@@ -25,9 +25,6 @@
             android:name=".view.login.LoginActivity"
             android:theme="@style/AppTheme.Translucent" />
         <activity
-            android:name=".view.login.NewLoginActivity"
-            android:theme="@style/AppTheme.Translucent" />
-        <activity
             android:name=".view.welcome.WelcomeActivity"
             android:theme="@style/AppTheme.Translucent" />
 

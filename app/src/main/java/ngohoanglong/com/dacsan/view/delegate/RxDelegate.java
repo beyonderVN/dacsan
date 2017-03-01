@@ -11,7 +11,7 @@ import rx.subscriptions.CompositeSubscription;
  * Created by Long on 2/27/2017.
  */
 
-public abstract class RxDelegate extends BaseDelegate {
+public class RxDelegate extends BaseDelegate {
     private static final String TAG = "RxDelegate";
     //    private AppComponent appComponent;
     private static final int START = 0;
@@ -31,13 +31,9 @@ public abstract class RxDelegate extends BaseDelegate {
         return compositeSubscription;
     }
 
-    protected abstract void bindViewModel();
-
     @Override
     public void onStart() {
-
         startEvent.onNext(START);
-        bindViewModel();
     }
 
     @Override

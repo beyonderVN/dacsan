@@ -27,10 +27,10 @@ import ngohoanglong.com.dacsan.R;
 import ngohoanglong.com.dacsan.model.PostVivmall;
 import ngohoanglong.com.dacsan.utils.CurrencyUtil;
 import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.ProductItemHM;
-import ngohoanglong.com.dacsan.view.BaseDelegateRxActivity;
+import ngohoanglong.com.dacsan.view.BaseDelegateActivity;
 import ngohoanglong.com.dacsan.view.delegate.DragDismissDelegate;
 
-public class ProductItemDetailActivity extends BaseDelegateRxActivity {
+public class ProductItemDetailActivity extends BaseDelegateActivity {
     private static final String TAG = "ProductItemDetailActivi";
     @BindView(R.id.ivCover)
     ImageView ivCover;
@@ -57,14 +57,16 @@ public class ProductItemDetailActivity extends BaseDelegateRxActivity {
     @BindView(R.id.rlProgressLoading)
     RelativeLayout rlProgressLoading;
     @BindView(R.id.rlWrapCommentInput)
+
     View rlWrapCommentInput;
     {
-        lifecycleDelegates.add(new DragDismissDelegate(this));
+        lifecycleDelegates.add(new DragDismissDelegate(ProductItemDetailActivity.this));
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState,R.layout.activity_product_detail_item);
+        setContentView(R.layout.activity_product_detail_item);
+        super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
         setupUI();
     }
@@ -178,10 +180,6 @@ public class ProductItemDetailActivity extends BaseDelegateRxActivity {
         super.onBackPressed();
     }
 
-    @Override
-    protected void bindViewModel() {
-
-    }
 
  }
 

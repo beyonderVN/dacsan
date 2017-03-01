@@ -24,18 +24,18 @@ import com.vnwarriors.advancedui.appcore.common.viewpager.ScrollerViewPager;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ngohoanglong.com.dacsan.DacsanApplication;
 import ngohoanglong.com.dacsan.R;
 import ngohoanglong.com.dacsan.utils.GuideFragment;
-import ngohoanglong.com.dacsan.utils.ThreadSchedulerImpl;
-import ngohoanglong.com.dacsan.view.BaseDelegateRxActivity;
-import ngohoanglong.com.dacsan.view.login.NewLoginActivity;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import ngohoanglong.com.dacsan.view.BaseDelegateActivity;
+import ngohoanglong.com.dacsan.view.delegate.RxDelegate;
+import ngohoanglong.com.dacsan.view.login.LoginActivity;
 
-public class MainActivity extends BaseDelegateRxActivity
+public class MainActivity extends BaseDelegateActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "MainActivity";
     private static final String SHOW_TITLE = "SHOW_TITLE";
@@ -49,14 +49,24 @@ public class MainActivity extends BaseDelegateRxActivity
     CollapsingToolbarLayout mCollapsingToolbar;
     @BindView(R.id.nav_view)
     NavigationView mNavigationView;
+
+    private RxDelegate rxDelegate = new RxDelegate();
+    {
+        lifecycleDelegates.add(rxDelegate);
+    }
+
+    @Inject
     MainViewModel viewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState,R.layout.activity_main);
+        super.onCreate(savedInstanceState);
+        DacsanApplication.getAppComponent()
+                .inject(this);
+        setContentView(R.layout.activity_main);
+        if (savedInstanceState != null) {
+            showTitle = savedInstanceState.getBoolean(SHOW_TITLE);
+        }
         ButterKnife.bind(this);
-
-        viewModel = new MainViewModel(new ThreadSchedulerImpl(AndroidSchedulers.mainThread(), Schedulers.io()),this.getApplicationContext().getResources());
-
         PagerModelManager manager = new PagerModelManager();
         manager.addCommonFragment(GuideFragment.class, getBgRes(), getTitles());
         ModelPagerAdapter adapter = new ModelPagerAdapter(getSupportFragmentManager(), manager);
@@ -65,9 +75,7 @@ public class MainActivity extends BaseDelegateRxActivity
         InkPageIndicator springIndicator = (InkPageIndicator) findViewById(R.id.indicator);
         // just set viewPager
         springIndicator.setViewPager(viewPager);
-        if (savedInstanceState != null) {
-            showTitle = savedInstanceState.getBoolean(SHOW_TITLE);
-        }
+
         setupToolbar();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -82,13 +90,19 @@ public class MainActivity extends BaseDelegateRxActivity
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        bindViewModel();
+    }
+
     protected void bindViewModel() {
         viewModel.loginIsSuccess()
+                .takeUntil(rxDelegate.stopEvent())
                 .subscribe(this::handleResponse);
     }
     private void handleResponse(Boolean aBoolean){
         if(!aBoolean){
-            startActivity(NewLoginActivity.getIntentNewTask(this));
+            startActivity(LoginActivity.getIntentNewTask(this));
         }
     }
     @Override
@@ -123,7 +137,7 @@ public class MainActivity extends BaseDelegateRxActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.sign_out) {
-            DacsanApplication.authManager.signout();
+            ((DacsanApplication)getApplication()).getAppComponent().getAuthManager().signout();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

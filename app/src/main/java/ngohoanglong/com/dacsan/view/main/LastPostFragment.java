@@ -3,6 +3,7 @@ package ngohoanglong.com.dacsan.view.main;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -15,26 +16,51 @@ import com.vnwarriors.advancedui.appcore.common.recyclerviewhelper.InfiniteScrol
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 import butterknife.BindInt;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ngohoanglong.com.dacsan.DacsanApplication;
 import ngohoanglong.com.dacsan.R;
-import ngohoanglong.com.dacsan.data.repo.PostVivmallRepoImpl;
 import ngohoanglong.com.dacsan.databinding.FragmentLastPostBinding;
-import ngohoanglong.com.dacsan.utils.ThreadSchedulerImpl;
+import ngohoanglong.com.dacsan.dependencyinjection.module.PostModule;
 import ngohoanglong.com.dacsan.utils.recyclerview.EndlessPostsAdapter;
 import ngohoanglong.com.dacsan.utils.recyclerview.holderfactory.HolderFactoryImpl;
-import ngohoanglong.com.dacsan.view.BaseDelegateRxFragmentWithState;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import ngohoanglong.com.dacsan.view.BaseDelegateFragment;
+import ngohoanglong.com.dacsan.view.delegate.RxDelegate;
+import ngohoanglong.com.dacsan.view.delegate.StateDelegate;
 
 /**
  * Created by Long on 2/27/2017.
  */
 
-public class LastPostFragment extends BaseDelegateRxFragmentWithState<LastPostsViewModel,LastPostsViewModel.LastPostsState> {
+public class LastPostFragment extends BaseDelegateFragment {
     private static final String TAG = "LastPostFragment";
+
+    private RxDelegate rxDelegate = new RxDelegate();
+    private StateDelegate stateDelegate = new StateDelegate() {
+
+        @NonNull
+        @Override
+        protected LastPostsViewModel createViewModel() {
+            return viewModel;
+        }
+
+        @NonNull
+        @Override
+        protected LastPostsViewModel.LastPostsState createStateModel() {
+            return new LastPostsViewModel.LastPostsState(new ArrayList<>());
+        }
+    };
+    {
+        lifecycleDelegates.add(rxDelegate);
+        lifecycleDelegates.add(stateDelegate);
+    }
+
+    @Inject
+    LastPostsViewModel viewModel;
+
     private FragmentLastPostBinding binding;
     @BindInt(R.integer.column_num)
     int columnNum;
@@ -44,7 +70,17 @@ public class LastPostFragment extends BaseDelegateRxFragmentWithState<LastPostsV
     boolean isLoadingMore = false;
     @BindView(R.id.vaStateController)
     ViewAnimator vaStateController;
-    
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        DacsanApplication.getAppComponent()
+                .plus(new PostModule())
+                .inject(this);
+        super.onCreate(savedInstanceState);
+
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -52,10 +88,11 @@ public class LastPostFragment extends BaseDelegateRxFragmentWithState<LastPostsV
         View rootView = inflater.inflate(R.layout.fragment_last_post, container, false);
         ButterKnife.bind(this, rootView);
         binding = DataBindingUtil.bind(rootView);
-        binding.setViewModel(getViewModel());
+        binding.setViewModel(viewModel);
         setUpViews();
         return rootView;
     }
+
     private void setUpViews() {
         final StaggeredGridLayoutManager staggeredGridLayoutManagerVertical =
                 new StaggeredGridLayoutManager(
@@ -71,8 +108,8 @@ public class LastPostFragment extends BaseDelegateRxFragmentWithState<LastPostsV
             @Override
             public void onLoadMore() {
                 try {
-                    getViewModel().loadMorePosts()
-                            .takeUntil(stopEvent())
+                    viewModel.loadMorePosts()
+                            .takeUntil(rxDelegate.stopEvent())
                             .subscribe(baseHMs -> {
                             })
                     ;
@@ -93,38 +130,24 @@ public class LastPostFragment extends BaseDelegateRxFragmentWithState<LastPostsV
         });
     }
 
-    @NonNull
     @Override
-    protected LastPostsViewModel createViewModel() {
-        LastPostsViewModel lastPostsViewModel =
-                new LastPostsViewModel(
-                        new ThreadSchedulerImpl(AndroidSchedulers.mainThread(),
-                                Schedulers.io()),
-                        DacsanApplication.getAppContext().getResources(),
-                        new PostVivmallRepoImpl()
-                );
-        return lastPostsViewModel;
+    public void onStart() {
+        super.onStart();
+        bindViewModel();
     }
 
-    @NonNull
-    @Override
-    protected LastPostsViewModel.LastPostsState createPresentationModel() {
-        return new LastPostsViewModel.LastPostsState(new ArrayList<>());
-    }
-
-    @Override
     protected void bindViewModel() {
-        getViewModel().bindViewModel();
-        getViewModel().getViewState()
-                .takeUntil(stopEvent())
+        viewModel.bindViewModel();
+        viewModel.getViewState()
+                .takeUntil(rxDelegate.stopEvent())
                 .subscribe(integer -> {
                     vaStateController.setDisplayedChild(integer);
                 });
-        getViewModel().getIsLoadingMore()
-                .takeUntil(stopEvent())
+        viewModel.getIsLoadingMore()
+                .takeUntil(rxDelegate.stopEvent())
                 .subscribe(aBoolean -> isLoadingMore = aBoolean);
-        getViewModel().loadFirstPosts()
-                .takeUntil(stopEvent())
+        viewModel.loadFirstPosts()
+                .takeUntil(rxDelegate.stopEvent())
                 .doOnTerminate(() -> {
                 })
                 .subscribe(baseHMs -> {

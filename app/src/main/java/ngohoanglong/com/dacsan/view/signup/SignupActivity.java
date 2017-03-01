@@ -7,24 +7,34 @@ import android.util.Log;
 import android.widget.ProgressBar;
 import android.widget.ViewAnimator;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import ngohoanglong.com.dacsan.DacsanApplication;
 import ngohoanglong.com.dacsan.R;
 import ngohoanglong.com.dacsan.data.response.SignupResponse;
 import ngohoanglong.com.dacsan.databinding.ActivitySignupBinding;
-import ngohoanglong.com.dacsan.utils.ThreadSchedulerImpl;
-import ngohoanglong.com.dacsan.view.BaseDelegateRxActivity;
+import ngohoanglong.com.dacsan.view.BaseDelegateActivity;
+import ngohoanglong.com.dacsan.view.delegate.RxDelegate;
 import ngohoanglong.com.dacsan.view.login.LoginActivity;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 
-public class SignupActivity extends BaseDelegateRxActivity {
+public class SignupActivity extends BaseDelegateActivity {
     private static final String TAG = "SignupActivity";
+
+    private RxDelegate rxDelegate = new RxDelegate() ;
+
+    {
+        lifecycleDelegates.add(rxDelegate);
+    }
+
     private ActivitySignupBinding binding;
-    SignupViewModel viewModel ;
+
     @BindView(R.id.pbLoading)
     ProgressBar pbLoading;
     @BindView(R.id.vaLoginState)
@@ -32,7 +42,7 @@ public class SignupActivity extends BaseDelegateRxActivity {
     @OnClick(R.id.btnSignup)
     void signupClick(){
         viewModel.signup()
-                .takeUntil(stopEvent())
+                .takeUntil(rxDelegate.stopEvent())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<SignupResponse>() {
@@ -63,10 +73,15 @@ public class SignupActivity extends BaseDelegateRxActivity {
         finishAfterTransition();
     }
 
+
+    @Inject
+    SignupViewModel viewModel;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = new SignupViewModel(new ThreadSchedulerImpl(AndroidSchedulers.mainThread(), Schedulers.io()), this.getApplicationContext().getResources());
+        DacsanApplication.getAppComponent().inject(this);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_signup);
         binding.setViewModel(viewModel);
         ButterKnife.bind(this);
@@ -78,13 +93,12 @@ public class SignupActivity extends BaseDelegateRxActivity {
         viewModel.init();
     }
 
-    @Override
     protected void bindViewModel() {
         viewModel.message()
-                .takeUntil(stopEvent())
+                .takeUntil(rxDelegate.stopEvent())
                 .subscribe(this::showMessage);
         viewModel.loadingState()
-                .takeUntil(stopEvent())
+                .takeUntil(rxDelegate.stopEvent())
                 .subscribe(this::setLoadingState);
     }
 
