@@ -1,10 +1,7 @@
 package ngohoanglong.com.dacsan.view.welcome;
 
-import android.app.ActivityOptions;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.Pair;
-import android.view.View;
 
 import java.util.concurrent.TimeUnit;
 
@@ -41,16 +38,22 @@ public class WelcomeActivity extends BaseDelegateActivity {
         ;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
     private void handleResponse(Boolean aBoolean) {
             Log.d(TAG, "handleResponse: ");
             if (aBoolean) {
                 startActivity(MainActivity.getIntentNewTask(WelcomeActivity.this));
             } else {
-                View ivLogo = WelcomeActivity.this.findViewById(R.id.ivLogo);
-                ActivityOptions ops = ActivityOptions.makeSceneTransitionAnimation(WelcomeActivity.this,
-                        Pair.create(ivLogo, WelcomeActivity.this.getString(R.string.viewWrap_share_element))
-                );
-                startActivity(LoginActivity.getIntentNewTask(WelcomeActivity.this), ops.toBundle());
+//                View ivLogo = WelcomeActivity.this.findViewById(R.id.ivLogo);
+//                ActivityOptions ops = ActivityOptions.makeSceneTransitionAnimation(WelcomeActivity.this,
+//                        Pair.create(ivLogo, WelcomeActivity.this.getString(R.string.viewWrap_share_element))
+//                );
+//                startActivity(LoginActivity.getIntentNewTask(WelcomeActivity.this), ops.toBundle());
+                startActivity(LoginActivity.getIntentNewTask(WelcomeActivity.this));
             }
     }
 

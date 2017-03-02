@@ -28,16 +28,18 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import ngohoanglong.com.dacsan.DacsanApplication;
 import ngohoanglong.com.dacsan.R;
 import ngohoanglong.com.dacsan.utils.GuideFragment;
 import ngohoanglong.com.dacsan.view.BaseDelegateActivity;
+import ngohoanglong.com.dacsan.view.camera.CameraActivity;
 import ngohoanglong.com.dacsan.view.delegate.RxDelegate;
 import ngohoanglong.com.dacsan.view.login.LoginActivity;
 
 public class MainActivity extends BaseDelegateActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "CameraActivity";
     private static final String SHOW_TITLE = "SHOW_TITLE";
     @BindView(R.id.view_pager)
     ScrollerViewPager viewPager;
@@ -55,6 +57,10 @@ public class MainActivity extends BaseDelegateActivity
         lifecycleDelegates.add(rxDelegate);
     }
 
+    @OnClick(R.id.fab)
+    public void onFabClick() {
+        startActivity(new Intent(this, CameraActivity.class));
+    }
     @Inject
     MainViewModel viewModel;
     @Override
@@ -124,11 +130,6 @@ public class MainActivity extends BaseDelegateActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 

@@ -18,13 +18,14 @@ import ngohoanglong.com.dacsan.manager.AuthManager;
 public class DacsanApplication extends Application {
     private static final String TAG = "DacsanApplication";
     private static Context mContext;
-    public static AuthManager authManager ;
+    public static AuthManager authManager;
 
     public static AppComponent getAppComponent() {
         return appComponent;
     }
 
     private static AppComponent appComponent;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -40,12 +41,14 @@ public class DacsanApplication extends Application {
         }
         refWatcher = LeakCanary.install(this);
     }
+
     public static RefWatcher getRefWatcher(Context context) {
         DacsanApplication application = (DacsanApplication) context.getApplicationContext();
         return application.refWatcher;
     }
 
     private RefWatcher refWatcher;
+
     public static Context getAppContext() {
         return mContext;
     }

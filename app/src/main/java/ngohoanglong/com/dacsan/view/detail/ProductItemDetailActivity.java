@@ -132,10 +132,11 @@ public class ProductItemDetailActivity extends BaseDelegateActivity {
         ProductItemHM productItemHM = (ProductItemHM) getIntent().getSerializableExtra("POST");
         PostVivmall postVivmall = productItemHM.getPostVivmall();
         tvName.setText(postVivmall.getProductName());
-        tvBuyTimes.setText("67");
-        tvWatchTimes.setText("134");
+
+        tvBuyTimes.setText(doubleToString(postVivmall.getNumBuy()));
+        tvWatchTimes.setText(doubleToString(postVivmall.getNumView()));
         tvPrice.setText(CurrencyUtil.convertCurrency(postVivmall.getProductPrice(),new Locale("vn", "VN")));
-        tvFavourite.setText("23");
+        tvFavourite.setText(doubleToString(postVivmall.getNumView()));
         tvStore.setText("VinhSang Commerce");
         tvProductDes.setText(Html.fromHtml(getResources().getString(R.string.product_dest)));
         Picasso.with(this)
@@ -144,7 +145,13 @@ public class ProductItemDetailActivity extends BaseDelegateActivity {
                 .into(ivCover);
 
     }
-
+    public String doubleToString(double d)
+    {
+        if(d == (long) d)
+            return String.format("%d",(long)d);
+        else
+            return String.format("%s",d);
+    }
     private void showToolbar() {
         if (toolBar.getVisibility() != View.GONE) {
             toolBar.setVisibility(View.GONE);
@@ -159,7 +166,7 @@ public class ProductItemDetailActivity extends BaseDelegateActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_home, menu);
+        getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 

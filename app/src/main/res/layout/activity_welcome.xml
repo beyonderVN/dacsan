@@ -12,15 +12,26 @@
     android:background="@color/white"
     tools:context="ngohoanglong.com.dacsan.view.welcome.WelcomeActivity">
 
-    <com.tuyenmonkey.mkloader.MKLoader
-        android:id="@+id/MKLoader"
-        android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:mk_type="Whirlpool"
-            app:mk_color="@color/colorAccent"
+    <!--<com.tuyenmonkey.mkloader.MKLoader-->
+        <!--android:id="@+id/MKLoader"-->
+        <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--app:mk_type="Whirlpool"-->
+            <!--app:mk_color="@color/colorAccent"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:layout_centerHorizontal="true" />-->
+    <ProgressBar
+        android:id="@+id/loading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/gray_alpha"
+        android:indeterminateTintMode="src_atop"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
-
+        android:layout_centerHorizontal="true"/>
     <ImageView
         android:id="@+id/ivLogo"
         android:layout_width="match_parent"
@@ -28,14 +39,14 @@
         android:src="@drawable/icon"
         android:layout_marginLeft="@dimen/medium_pad"
         android:layout_marginRight="@dimen/medium_pad"
-        android:layout_above="@+id/MKLoader"
+        android:layout_above="@+id/loading"
         android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Good time for shopping !"
-        android:layout_below="@+id/MKLoader"
+        android:layout_below="@+id/loading"
         android:layout_alignParentStart="true"
         android:layout_marginTop="29dp"
         android:textAlignment="center"

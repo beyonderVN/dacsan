@@ -98,7 +98,8 @@
                             android:textSize="12sp"
                             android:gravity="center"
                             android:text="Lượt mua"
-                            android:textColor="@color/black_54p" />
+                            android:textColor="@color/black_54p"
+                            android:drawableTop="@drawable/ic_shopping_cart_black_24dp"/>
 
                         <TextView
                             android:layout_width="match_parent"
@@ -107,7 +108,8 @@
                             android:textSize="12sp"
                             android:gravity="center"
                             android:text="Lượt xem"
-                            android:textColor="@color/black_54p" />
+                            android:textColor="@color/black_54p"
+                            android:drawableTop="@drawable/ic_remove_red_eye_black_24dp"/>
 
                         <TextView
                             android:layout_width="match_parent"
@@ -116,7 +118,8 @@
                             android:textSize="12sp"
                             android:gravity="center"
                             android:text="Giá"
-                            android:textColor="@color/black_54p" />
+                            android:textColor="@color/black_54p"
+                            android:drawableTop="@drawable/ic_local_offer_black_24dp"/>
 
                         <TextView
                             android:layout_width="match_parent"
@@ -125,7 +128,8 @@
                             android:textSize="12sp"
                             android:gravity="center"
                             android:text="Yêu thích"
-                            android:textColor="@color/black_54p" />
+                            android:textColor="@color/black_54p"
+                            android:drawableTop="@drawable/ic_thumb_up_black_24dp"/>
 
                     </LinearLayout>
 

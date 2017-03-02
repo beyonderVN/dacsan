@@ -37,13 +37,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
-
+        <activity
+            android:name=".view.camera.CameraActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".view.camera.PreviewActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".view.signup.SignupActivity"
             android:theme="@style/AppTheme.Translucent" />
         <activity
             android:name=".view.resetpassword.ResetPassword"
             android:theme="@style/AppTheme.Translucent" />
+
     </application>
 
 </manifest>
