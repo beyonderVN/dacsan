@@ -13,15 +13,15 @@ import ngohoanglong.com.dacsan.utils.recyclerview.viewholder.BaseViewHolder;
  * Created by Long on 10/5/2016.
  */
 
-public class EndlessPostsAdapter extends BaseRecyclerViewAdapter<BaseHM> {
+public class MumAdapter extends BaseRecyclerViewAdapter<BaseHM> {
 
     private Context context;
     public HolderFactory holderFactory ;
 
-    public EndlessPostsAdapter(Context context) {
+    public MumAdapter(Context context) {
         this.context = context;
     }
-    public EndlessPostsAdapter(Context context, HolderFactory holderFactory) {
+    public MumAdapter(Context context, HolderFactory holderFactory) {
         this(context);
         this.holderFactory = holderFactory;
     }

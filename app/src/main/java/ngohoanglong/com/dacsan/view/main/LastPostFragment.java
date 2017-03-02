@@ -25,7 +25,7 @@ import ngohoanglong.com.dacsan.DacsanApplication;
 import ngohoanglong.com.dacsan.R;
 import ngohoanglong.com.dacsan.databinding.FragmentLastPostBinding;
 import ngohoanglong.com.dacsan.dependencyinjection.module.PostModule;
-import ngohoanglong.com.dacsan.utils.recyclerview.EndlessPostsAdapter;
+import ngohoanglong.com.dacsan.utils.recyclerview.MumAdapter;
 import ngohoanglong.com.dacsan.utils.recyclerview.holderfactory.HolderFactoryImpl;
 import ngohoanglong.com.dacsan.view.BaseDelegateFragment;
 import ngohoanglong.com.dacsan.view.delegate.RxDelegate;
@@ -39,8 +39,20 @@ public class LastPostFragment extends BaseDelegateFragment {
     private static final String TAG = "LastPostFragment";
 
     private RxDelegate rxDelegate = new RxDelegate();
-    private StateDelegate stateDelegate = new StateDelegate() {
+    private StateDelegate productTypeStateDelegate = new StateDelegate() {
+        @NonNull
+        @Override
+        protected ProductTypeViewModel createViewModel() {
+            return productTypeViewModel;
+        }
 
+        @NonNull
+        @Override
+        protected ProductTypeViewModel.ProductTypeState createStateModel() {
+            return new ProductTypeViewModel.ProductTypeState(new ArrayList<>());
+        }
+    };
+    private StateDelegate stateDelegate = new StateDelegate() {
         @NonNull
         @Override
         protected LastPostsViewModel createViewModel() {
@@ -55,18 +67,24 @@ public class LastPostFragment extends BaseDelegateFragment {
     };
     {
         lifecycleDelegates.add(rxDelegate);
+        lifecycleDelegates.add(productTypeStateDelegate);
         lifecycleDelegates.add(stateDelegate);
     }
 
     @Inject
     LastPostsViewModel viewModel;
+    @Inject
+    ProductTypeViewModel productTypeViewModel;
 
     private FragmentLastPostBinding binding;
     @BindInt(R.integer.column_num)
     int columnNum;
     @BindView(R.id.rvPosts)
     RecyclerView rvPosts;
-    EndlessPostsAdapter baseAdapter;
+    @BindView(R.id.rvProductTypeList)
+    RecyclerView rvProductTypeList;
+    MumAdapter baseAdapter;
+    MumAdapter productTypeListAdapter;
     boolean isLoadingMore = false;
     @BindView(R.id.vaStateController)
     ViewAnimator vaStateController;
@@ -89,18 +107,19 @@ public class LastPostFragment extends BaseDelegateFragment {
         ButterKnife.bind(this, rootView);
         binding = DataBindingUtil.bind(rootView);
         binding.setViewModel(viewModel);
-        setUpViews();
+        binding.setProductTypeViewModel(productTypeViewModel);
+        setUpViews(rootView);
         return rootView;
     }
 
-    private void setUpViews() {
+    private void setUpViews(View v) {
         final StaggeredGridLayoutManager staggeredGridLayoutManagerVertical =
                 new StaggeredGridLayoutManager(
                         columnNum, //The number of Columns in the grid
                         LinearLayoutManager.VERTICAL);
         staggeredGridLayoutManagerVertical.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
         staggeredGridLayoutManagerVertical.invalidateSpanAssignments();
-        baseAdapter = new EndlessPostsAdapter(getActivity(), new HolderFactoryImpl());
+        baseAdapter = new MumAdapter(getActivity(), new HolderFactoryImpl());
         rvPosts.setAdapter(baseAdapter);
         rvPosts.setLayoutManager(staggeredGridLayoutManagerVertical);
         rvPosts.setHasFixedSize(true);
@@ -128,8 +147,43 @@ public class LastPostFragment extends BaseDelegateFragment {
                 return false;
             }
         });
+        rvPosts.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 20) {
+                    hideCatalogue();
+                }
+                if (dy < -20) {
+                    showCatalogue();
+                }
+            }
+        });
+
+        LinearLayoutManager linearLayoutManager;
+        linearLayoutManager =
+                new LinearLayoutManager(v.getContext(), LinearLayoutManager.HORIZONTAL, false);
+        rvProductTypeList.setLayoutManager(linearLayoutManager);
+        productTypeListAdapter = new MumAdapter(getActivity(), new HolderFactoryImpl());
+        rvProductTypeList.setAdapter(productTypeListAdapter);
+    }
+    private void hideCatalogue() {
+        if (rvProductTypeList.getVisibility() != View.GONE) {
+            rvProductTypeList.setVisibility(View.GONE);
+        }
     }
 
+    private void showCatalogue() {
+        if (rvProductTypeList.getVisibility() != View.VISIBLE) {
+            rvProductTypeList.setVisibility(View.VISIBLE);
+        }
+    }
     @Override
     public void onStart() {
         super.onStart();
@@ -137,6 +191,14 @@ public class LastPostFragment extends BaseDelegateFragment {
     }
 
     protected void bindViewModel() {
+        productTypeViewModel.bindViewModel();
+        productTypeViewModel.loadProductTypes()
+                .takeUntil(rxDelegate.stopEvent())
+                .doOnTerminate(() -> {
+                })
+                .subscribe(baseHMs -> {
+                }) ;
+
         viewModel.bindViewModel();
         viewModel.getViewState()
                 .takeUntil(rxDelegate.stopEvent())

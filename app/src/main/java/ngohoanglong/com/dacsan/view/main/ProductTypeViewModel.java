@@ -6,17 +6,16 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 import ngohoanglong.com.dacsan.data.repo.PostVivmallRepo;
-import ngohoanglong.com.dacsan.data.request.LatestRequest;
+import ngohoanglong.com.dacsan.data.repuest.ProductTypeRequest;
 import ngohoanglong.com.dacsan.dependencyinjection.ActivityScope;
-import ngohoanglong.com.dacsan.model.PostVivmall;
+import ngohoanglong.com.dacsan.model.ProductType;
 import ngohoanglong.com.dacsan.utils.ThreadScheduler;
 import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.BaseHM;
-import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.ProductItemHM;
+import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.ProductTypeHM;
 import ngohoanglong.com.dacsan.view.BaseState;
 import ngohoanglong.com.dacsan.view.PostViewModel;
 import rx.Observable;
@@ -25,16 +24,15 @@ import rx.Observable;
  * Created by Long on 2/13/2017.
  */
 @ActivityScope
-public class ProductsByTypeViewModel extends PostViewModel {
-    private static final String TAG = "ProductsByTypeViewModel";
-    int page = 0;
+public class ProductTypeViewModel extends PostViewModel {
+    private static final String TAG = "ProductTypeViewModel";
 
     PostVivmallRepo postRepo;
 
     @Inject
-    public ProductsByTypeViewModel(ThreadScheduler threadScheduler,
-                                   Resources resources,
-                                   PostVivmallRepo postRepo
+    public ProductTypeViewModel(ThreadScheduler threadScheduler,
+                                Resources resources,
+                                PostVivmallRepo postRepo
                               ) {
         super(threadScheduler, resources);
         this.postRepo = postRepo;
@@ -46,16 +44,16 @@ public class ProductsByTypeViewModel extends PostViewModel {
         return posts.isEmpty() || posts == null ? true : false;
     }
 
-    public Observable<List<BaseHM>> loadFirstPosts() {
+    public Observable<List<BaseHM>> loadProductTypes() {
         Observable<List<BaseHM>> listObservable;
         if (isNeedLoadFirst()) {
-            listObservable = postRepo.getLatest(new LatestRequest(0))
+            listObservable = postRepo.getProductsType(new ProductTypeRequest())
                     .compose(withScheduler())
-                    .map(postVivmalls -> {
+                    .map((List<ProductType> productTypeList) -> {
                         List<BaseHM> baseHMs = new ArrayList<BaseHM>();
-                        for (PostVivmall baseHM : postVivmalls
+                        for (ProductType baseHM : productTypeList
                                 ) {
-                            baseHMs.add(new ProductItemHM(baseHM));
+                            baseHMs.add(new ProductTypeHM(baseHM));
                         }
                         return baseHMs;
                     });
@@ -74,11 +72,11 @@ public class ProductsByTypeViewModel extends PostViewModel {
         }
             return listObservable
                     .doOnSubscribe(() -> {
-                        Log.d(TAG, "loadFirstPosts: doOnSubscribe");
+                        Log.d(TAG, "loadProductTypes: doOnSubscribe");
                         showLoadingPage();
                     })
                     .doOnNext(posts -> {
-                        this.page = 0;
+                        Log.d(TAG, "loadProductTypes: "+posts.size());
                         if (posts.size() > 0) {
                             updatePosts(posts);
                             showContentPage();
@@ -89,44 +87,20 @@ public class ProductsByTypeViewModel extends PostViewModel {
 
     }
 
-    public Observable<List<BaseHM>> loadMorePosts() {
-        return postRepo.getLatest(new LatestRequest(page + 1))
-                .delay(2, TimeUnit.SECONDS)
-                .compose(withScheduler())
-                .map(postVivmalls -> {
-                    List<BaseHM> baseHMs = new ArrayList<BaseHM>();
-                    for (PostVivmall baseHM : postVivmalls
-                            ) {
-                        baseHMs.add(new ProductItemHM(baseHM));
-                    }
-                    return baseHMs;
-                })
-                .doOnSubscribe(() -> {
-                    showLoadingMore();
-                })
-                .doOnNext(posts -> {
-                    Log.d(TAG, "loadMorePosts: ");
-                    hideLoadingMore();
-                    this.posts.addAll(posts);
-                    this.page += 1;
-                })
-                ;
-    }
-
     @Override
     public BaseState saveInstanceState() {
         hideLoadingMore();
-        return new LastPostsState(posts);
+        return new ProductTypeState(posts);
     }
     @Override
     public void returnInstanceState(BaseState instanceState) {
-        updatePosts(((LastPostsState)instanceState).getBaseHMs());
+        updatePosts(((ProductTypeState)instanceState).getBaseHMs());
     }
 
-    public static class LastPostsState extends BaseState {
+    public static class ProductTypeState extends BaseState {
         List<BaseHM> baseHMs;
 
-        public LastPostsState(List<BaseHM> baseHMs) {
+        public ProductTypeState(List<BaseHM> baseHMs) {
             this.baseHMs = baseHMs;
         }
 

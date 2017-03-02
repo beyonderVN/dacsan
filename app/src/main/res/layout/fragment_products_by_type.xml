@@ -10,6 +10,9 @@
         <variable
             name="viewModel"
             type="PostViewModel" />
+        <variable
+            name="viewModel2"
+            type="PostViewModel" />
     </data>
 
     <FrameLayout

@@ -3,6 +3,7 @@ package ngohoanglong.com.dacsan.utils.recyclerview.holderfactory;
 
 import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.LoadMoreHM;
 import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.ProductItemHM;
+import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.ProductTypeHM;
 import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.SimpleVerticalHM;
 
 /**
@@ -14,4 +15,5 @@ public interface ViewTypeFactory {
     int getType(ProductItemHM productItemHM);
     int getType(LoadMoreHM loadMoreHM);
 
+    int getType(ProductTypeHM productTypeHM);
 }

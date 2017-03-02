@@ -14,7 +14,7 @@ import ngohoanglong.com.dacsan.view.BaseStateViewModel;
  * Created by Long on 2/27/2017.
  */
 
-public abstract class StateDelegate<M extends BaseStateViewModel,S extends BaseState> extends BaseDelegate {
+public abstract class StateDelegate<M extends BaseStateViewModel, S extends BaseState> extends BaseDelegate {
     private static final String TAG = "StateDelegate";
     private M viewModel;
     private S state;
@@ -22,7 +22,7 @@ public abstract class StateDelegate<M extends BaseStateViewModel,S extends BaseS
     private static final String EXTRA_VIEW_MODEL_STATE = "viewModelState";
 
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        presentationModelKey = EXTRA_VIEW_MODEL_STATE;
+
         state = restorePresentationModel(getClass(), savedInstanceState);
         if (state == null) {
             state = createStateModel();
@@ -37,16 +37,23 @@ public abstract class StateDelegate<M extends BaseStateViewModel,S extends BaseS
      * @param outState
      */
     public void onSaveInstanceState(Bundle outState) {
+        setModelKey();
         state = (S) viewModel.saveInstanceState();
         outState.putSerializable(presentationModelKey, state);
+    }
+
+    protected void setModelKey() {
+        presentationModelKey = viewModel.getClass().getCanonicalName() + EXTRA_VIEW_MODEL_STATE;
     }
 
     public M getViewModel() {
         return viewModel;
     }
+
     public S getState() {
         return state;
     }
+
     @NonNull
     protected abstract M createViewModel();
 

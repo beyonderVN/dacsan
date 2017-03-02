@@ -25,7 +25,7 @@ import ngohoanglong.com.dacsan.DacsanApplication;
 import ngohoanglong.com.dacsan.R;
 import ngohoanglong.com.dacsan.databinding.FragmentLastPostBinding;
 import ngohoanglong.com.dacsan.dependencyinjection.module.PostModule;
-import ngohoanglong.com.dacsan.utils.recyclerview.EndlessPostsAdapter;
+import ngohoanglong.com.dacsan.utils.recyclerview.MumAdapter;
 import ngohoanglong.com.dacsan.utils.recyclerview.holderfactory.HolderFactoryImpl;
 import ngohoanglong.com.dacsan.view.BaseDelegateFragment;
 import ngohoanglong.com.dacsan.view.delegate.RxDelegate;
@@ -66,7 +66,7 @@ public class ProductsByTypeFragment extends BaseDelegateFragment {
     int columnNum;
     @BindView(R.id.rvPosts)
     RecyclerView rvPosts;
-    EndlessPostsAdapter baseAdapter;
+    MumAdapter baseAdapter;
     boolean isLoadingMore = false;
     @BindView(R.id.vaStateController)
     ViewAnimator vaStateController;
@@ -100,7 +100,7 @@ public class ProductsByTypeFragment extends BaseDelegateFragment {
                         LinearLayoutManager.VERTICAL);
         staggeredGridLayoutManagerVertical.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
         staggeredGridLayoutManagerVertical.invalidateSpanAssignments();
-        baseAdapter = new EndlessPostsAdapter(getActivity(), new HolderFactoryImpl());
+        baseAdapter = new MumAdapter(getActivity(), new HolderFactoryImpl());
         rvPosts.setAdapter(baseAdapter);
         rvPosts.setLayoutManager(staggeredGridLayoutManagerVertical);
         rvPosts.setHasFixedSize(true);

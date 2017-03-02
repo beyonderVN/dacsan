@@ -10,13 +10,17 @@
         <variable
             name="viewModel"
             type="PostViewModel" />
+        <variable
+            name="productTypeViewModel"
+            type="PostViewModel" />
     </data>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="ngohoanglong.com.dacsan.view.main.LastPostFragment"
-        android:background="#d7d7d7">
+        android:background="#d7d7d7"
+        android:animateLayoutChanges="true">
 
         <ViewAnimator
             android:id="@+id/vaStateController"
@@ -24,13 +28,6 @@
             android:layout_height="match_parent"
             android:inAnimation="@android:anim/fade_in"
             android:outAnimation="@android:anim/fade_out">
-            <!--<com.tuyenmonkey.mkloader.MKLoader-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_gravity="center_horizontal"-->
-                <!--android:layout_marginTop="100dp"-->
-                <!--app:mk_color="@color/gray_alpha"-->
-                <!--app:mk_type="Whirlpool" />-->
             <ProgressBar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -42,6 +39,10 @@
                 android:id="@+id/rvPosts"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingBottom="50dp"
+                android:paddingTop="56dp"
+                android:scrollbars="none"
                 app:items="@{viewModel.posts}" />
 
             <TextView
@@ -52,5 +53,14 @@
                 android:textColor="@color/dark_red"/>
 
         </ViewAnimator>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvProductTypeList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#719b9b9b"
+            android:layout_gravity="top"
+            android:scrollbarAlwaysDrawHorizontalTrack="true"
+            app:items="@{productTypeViewModel.posts}"
+            />
     </FrameLayout>
 </layout>
