@@ -119,6 +119,7 @@ public class LastPostFragment extends BaseDelegateFragment {
                         LinearLayoutManager.VERTICAL);
         staggeredGridLayoutManagerVertical.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
         staggeredGridLayoutManagerVertical.invalidateSpanAssignments();
+        staggeredGridLayoutManagerVertical.setItemPrefetchEnabled(false);
         baseAdapter = new MumAdapter(getActivity(), new HolderFactoryImpl());
         rvPosts.setAdapter(baseAdapter);
         rvPosts.setLayoutManager(staggeredGridLayoutManagerVertical);
