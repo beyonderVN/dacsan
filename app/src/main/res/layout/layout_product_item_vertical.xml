@@ -41,7 +41,7 @@
             android:textStyle="normal|bold" />
         <View
             android:layout_width="match_parent"
-            android:layout_height="1sp"
+            android:layout_height="0.5sp"
             android:background="@color/anh"
             android:layout_marginLeft="@dimen/large_margin"
             android:layout_marginRight="@dimen/large_margin"

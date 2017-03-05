@@ -93,6 +93,10 @@ public class MainActivity extends BaseDelegateActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         setupNavigationMenu();
+
+        CollapsingToolbarLayout.LayoutParams layoutParams = (CollapsingToolbarLayout.LayoutParams) mToolbar.getLayoutParams();
+        layoutParams.height = 120;
+        mToolbar.setLayoutParams(layoutParams);
     }
 
     @Override
