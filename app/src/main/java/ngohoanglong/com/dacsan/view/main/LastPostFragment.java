@@ -15,8 +15,6 @@ import android.widget.ViewAnimator;
 
 import com.vnwarriors.advancedui.appcore.common.recyclerviewhelper.InfiniteScrollListener;
 
-import java.util.ArrayList;
-
 import javax.inject.Inject;
 
 import butterknife.BindInt;
@@ -29,6 +27,7 @@ import ngohoanglong.com.dacsan.dependencyinjection.module.PostModule;
 import ngohoanglong.com.dacsan.utils.recyclerview.MumAdapter;
 import ngohoanglong.com.dacsan.utils.recyclerview.SingleSelectedMumAdapter;
 import ngohoanglong.com.dacsan.utils.recyclerview.holderfactory.HolderFactoryImpl;
+import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.BaseHM;
 import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.ProductTypeHM;
 import ngohoanglong.com.dacsan.view.BaseDelegateFragment;
 import ngohoanglong.com.dacsan.view.delegate.RxDelegate;
@@ -52,7 +51,9 @@ public class LastPostFragment extends BaseDelegateFragment {
         @NonNull
         @Override
         protected ProductTypeViewModel.ProductTypeState createStateModel() {
-            return new ProductTypeViewModel.ProductTypeState(new ArrayList<>());
+            return new ProductTypeViewModel.ProductTypeState(
+                    0,
+                    productTypeViewModel.getPosts());
         }
     };
     private StateDelegate stateDelegate = new StateDelegate() {
@@ -65,7 +66,7 @@ public class LastPostFragment extends BaseDelegateFragment {
         @NonNull
         @Override
         protected LastPostsViewModel.LastPostsState createStateModel() {
-            return new LastPostsViewModel.LastPostsState(new ArrayList<>());
+            return new LastPostsViewModel.LastPostsState(viewModel.getPosts());
         }
     };
 
@@ -177,11 +178,17 @@ public class LastPostFragment extends BaseDelegateFragment {
         rvProductTypeList.setLayoutManager(linearLayoutManager);
         productTypeListAdapter = new SingleSelectedMumAdapter(getActivity(),
                 new HolderFactoryImpl(),
-                baseHM -> {
-                    Log.d(TAG, "setUpViews: ");
-                    viewModel.onChangeProductType(((ProductTypeHM) baseHM).getProductType())
-                           ;
+                new SingleSelectedMumAdapter.OnSelectItemClickEvent() {
+                    @Override
+                    public void onItemClick(int pos, BaseHM baseHM) {
+                        Log.d(TAG, "setUpViews: ");
+                        ((ProductTypeViewModel.ProductTypeState)productTypeViewModel.getState()).setSelectedPosition(pos);
+                        viewModel.onChangeProductType(((ProductTypeHM) baseHM).getProductType())
+                        ;
+                    }
                 });
+        productTypeListAdapter.setSelectedPosition(((ProductTypeViewModel.ProductTypeState)productTypeViewModel.getState()).getSelectedPosition());
+
         rvProductTypeList.setAdapter(productTypeListAdapter);
     }
 
@@ -201,6 +208,7 @@ public class LastPostFragment extends BaseDelegateFragment {
     public void onStart() {
         super.onStart();
         bindViewModel();
+        rvProductTypeList.scrollToPosition(((ProductTypeViewModel.ProductTypeState)productTypeViewModel.getState()).getSelectedPosition());
     }
 
     protected void bindViewModel() {

@@ -84,13 +84,13 @@ public class ProductTypeViewModel extends PostViewModel {
                             showEmpty();
                         }
                     });
-
     }
+
 
     @Override
     public BaseState saveInstanceState() {
         hideLoadingMore();
-        return new ProductTypeState(posts);
+        return getState();
     }
     @Override
     public void returnInstanceState(BaseState instanceState) {
@@ -99,8 +99,20 @@ public class ProductTypeViewModel extends PostViewModel {
 
     public static class ProductTypeState extends BaseState {
         List<BaseHM> baseHMs;
+        int selectedPosition;
+        public int getSelectedPosition() {
+            return selectedPosition;
+        }
 
+        public void setSelectedPosition(int selectedPosition) {
+            this.selectedPosition = selectedPosition;
+        }
         public ProductTypeState(List<BaseHM> baseHMs) {
+            this.baseHMs = baseHMs;
+        }
+
+        public ProductTypeState(int selectedPosition, List<BaseHM> baseHMs) {
+            this.selectedPosition = selectedPosition;
             this.baseHMs = baseHMs;
         }
 

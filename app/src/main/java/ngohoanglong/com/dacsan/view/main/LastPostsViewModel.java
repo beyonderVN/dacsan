@@ -129,7 +129,7 @@ public class LastPostsViewModel extends PostViewModel {
     @Override
     public BaseState saveInstanceState() {
         hideLoadingMore();
-        return new LastPostsState(posts);
+        return getState();
     }
 
     @Override
@@ -141,10 +141,11 @@ public class LastPostsViewModel extends PostViewModel {
     public static class LastPostsState extends BaseState {
         List<BaseHM> baseHMs;
 
+
+
         public LastPostsState(List<BaseHM> baseHMs) {
             this.baseHMs = baseHMs;
         }
-
         public List<BaseHM> getBaseHMs() {
             return baseHMs;
         }
@@ -152,5 +153,6 @@ public class LastPostsViewModel extends PostViewModel {
         public void setBaseHMs(ObservableList<BaseHM> baseHMs) {
             this.baseHMs = baseHMs;
         }
+
     }
 }

@@ -88,6 +88,7 @@ public abstract class PostViewModel extends BaseStateViewModel {
     }
 
     protected void hideLoadingMore() {
+        if(posts.size()==0)return;
         if (posts.get(posts.size() - 1) instanceof LoadMoreHM) {
             this.posts.remove(posts.size() - 1);
         }
