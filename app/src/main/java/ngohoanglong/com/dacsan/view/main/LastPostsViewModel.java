@@ -20,6 +20,7 @@ import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.ProductItemHM;
 import ngohoanglong.com.dacsan.view.BaseState;
 import ngohoanglong.com.dacsan.view.PostViewModel;
 import rx.Observable;
+import rx.subjects.PublishSubject;
 
 /**
  * Created by Long on 2/13/2017.
@@ -46,6 +47,8 @@ public class LastPostsViewModel extends PostViewModel {
         Log.d(TAG, "isNeedLoadFirst: " + posts.size());
         return posts.isEmpty() || posts == null;
     }
+
+    protected PublishSubject<Boolean> refresh = PublishSubject.create();
 
     public Observable<List<BaseHM>> loadFirstPosts() {
         Observable<List<BaseHM>> listObservable;
@@ -93,12 +96,15 @@ public class LastPostsViewModel extends PostViewModel {
 
     public void onChangeProductType(ProductType productType) {
         this.productType = productType;
+        refresh.onNext(true);
         isLoadingMore.onNext(false);
         posts.clear();
+
     }
 
     public Observable<List<BaseHM>> loadMorePosts() {
         return postRepo.getLatest(new ProductsByTypeRequest(productType, page + 1))
+                .takeUntil(refresh)
                 .compose(withScheduler())
                 .map(postVivmalls -> {
                     List<BaseHM> baseHMs = new ArrayList<BaseHM>();
