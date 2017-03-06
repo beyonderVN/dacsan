@@ -50,24 +50,34 @@ public class DynamicHeightImageView extends ImageView {
 //
 //
 //		}
-        if (whRatio != 0) {
-            int width = getMeasuredWidth();
-            int height = (int) (whRatio * width);
-            setMeasuredDimension(width, height);
-//			Log.d(TAG, "onMeasure: "+whRatio);
-        } else {
-
-            if (!(getDrawable() == null)) {
-
-                int width = getDrawable().getIntrinsicWidth();
-                int height = getDrawable().getIntrinsicHeight();
-                if (height > 0 && width > 0) {
-                    whRatio = (double) height / (double) width;
-                    setMeasuredDimension(getMeasuredWidth(), (int) (whRatio * getMeasuredWidth()));
-                }
-            }else {
-                super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+//        if (whRatio != 0) {
+//            int width = getMeasuredWidth();
+//            int height = (int) (whRatio * width);
+//            setMeasuredDimension(width, height);
+////			Log.d(TAG, "onMeasure: "+whRatio);
+//        } else {
+//            if (!(getDrawable() == null)) {
+//                int width = getDrawable().getIntrinsicWidth();
+//                int height = getDrawable().getIntrinsicHeight();
+//                Log.d(TAG, "onMeasure: "+width+"/"+height);
+//                if (height > 0 && width > 0) {
+//                    whRatio = (double) height / (double) width;
+//                    setMeasuredDimension(getMeasuredWidth(), (int) (whRatio * getMeasuredWidth()));
+//                }
+//            }else {
+//                super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+//            }
+//        }
+        if (!(getDrawable() == null)) {
+            int width = getDrawable().getIntrinsicWidth();
+            int height = getDrawable().getIntrinsicHeight();
+            Log.d(TAG, "onMeasure: "+width+"/"+height);
+            if (height > 0 && width > 0) {
+                whRatio = (double) height / (double) width;
+                setMeasuredDimension(getMeasuredWidth(), (int) (whRatio * getMeasuredWidth()));
             }
+        }else {
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         }
 
     }

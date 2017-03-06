@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scaleType="fitXY"
-            android:src="@drawable/vungtau" />
+            android:minHeight="200dp"/>
 
         <TextView
         android:text="IPHONE XYZ"
