@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,9 @@ import ngohoanglong.com.dacsan.R;
 import ngohoanglong.com.dacsan.databinding.FragmentLastPostBinding;
 import ngohoanglong.com.dacsan.dependencyinjection.module.PostModule;
 import ngohoanglong.com.dacsan.utils.recyclerview.MumAdapter;
+import ngohoanglong.com.dacsan.utils.recyclerview.SingleSelectedMumAdapter;
 import ngohoanglong.com.dacsan.utils.recyclerview.holderfactory.HolderFactoryImpl;
+import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.ProductTypeHM;
 import ngohoanglong.com.dacsan.view.BaseDelegateFragment;
 import ngohoanglong.com.dacsan.view.delegate.RxDelegate;
 import ngohoanglong.com.dacsan.view.delegate.StateDelegate;
@@ -65,6 +68,7 @@ public class LastPostFragment extends BaseDelegateFragment {
             return new LastPostsViewModel.LastPostsState(new ArrayList<>());
         }
     };
+
     {
         lifecycleDelegates.add(rxDelegate);
         lifecycleDelegates.add(productTypeStateDelegate);
@@ -84,7 +88,7 @@ public class LastPostFragment extends BaseDelegateFragment {
     @BindView(R.id.rvProductTypeList)
     RecyclerView rvProductTypeList;
     MumAdapter baseAdapter;
-    MumAdapter productTypeListAdapter;
+    SingleSelectedMumAdapter productTypeListAdapter;
     boolean isLoadingMore = false;
     @BindView(R.id.vaStateController)
     ViewAnimator vaStateController;
@@ -171,9 +175,16 @@ public class LastPostFragment extends BaseDelegateFragment {
         linearLayoutManager =
                 new LinearLayoutManager(v.getContext(), LinearLayoutManager.HORIZONTAL, false);
         rvProductTypeList.setLayoutManager(linearLayoutManager);
-        productTypeListAdapter = new MumAdapter(getActivity(), new HolderFactoryImpl());
+        productTypeListAdapter = new SingleSelectedMumAdapter(getActivity(),
+                new HolderFactoryImpl(),
+                baseHM -> {
+                    Log.d(TAG, "setUpViews: ");
+                    viewModel.onChangeProductType(((ProductTypeHM) baseHM).getProductType())
+                           ;
+                });
         rvProductTypeList.setAdapter(productTypeListAdapter);
     }
+
     private void hideCatalogue() {
         if (rvProductTypeList.getVisibility() != View.GONE) {
             rvProductTypeList.setVisibility(View.GONE);
@@ -185,6 +196,7 @@ public class LastPostFragment extends BaseDelegateFragment {
             rvProductTypeList.setVisibility(View.VISIBLE);
         }
     }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -198,7 +210,7 @@ public class LastPostFragment extends BaseDelegateFragment {
                 .doOnTerminate(() -> {
                 })
                 .subscribe(baseHMs -> {
-                }) ;
+                });
 
         viewModel.bindViewModel();
         viewModel.getViewState()
@@ -214,6 +226,6 @@ public class LastPostFragment extends BaseDelegateFragment {
                 .doOnTerminate(() -> {
                 })
                 .subscribe(baseHMs -> {
-                }) ;
+                });
     }
 }

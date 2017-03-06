@@ -18,6 +18,7 @@ public class ProductTypeHolder extends BaseViewHolder<ProductTypeHM> {
     CardView cvWrap;
     @BindView(R.id.tvCatalogue)
     TextView tvCatalogue;
+
     public ProductTypeHolder(View view) {
         super(view);
         ButterKnife.bind(this, view);
@@ -26,5 +27,15 @@ public class ProductTypeHolder extends BaseViewHolder<ProductTypeHM> {
     @Override
     public void bind(ProductTypeHM item) {
         tvCatalogue.setText(item.getProductType().getProductTypeName());
+        int color = item.getColor();
+        if(item.isCheck()){
+            cvWrap.setCardElevation(10);
+            cvWrap.setCardBackgroundColor(itemView.getResources().getColor(color));
+            tvCatalogue.setTextColor(itemView.getContext().getResources().getColor(R.color.white));
+        }else {
+            cvWrap.setCardElevation(0);
+            cvWrap.setCardBackgroundColor(itemView.getContext().getResources().getColor(R.color.white));
+            tvCatalogue.setTextColor(itemView.getResources().getColor(color));
+        }
     }
 }

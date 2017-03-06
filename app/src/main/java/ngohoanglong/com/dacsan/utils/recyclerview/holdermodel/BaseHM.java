@@ -10,12 +10,20 @@ import java.io.Serializable;
 
 public abstract class BaseHM implements Serializable, Visitable {
     private boolean fullSpan = false;
-
+    boolean isCheck = false;
     public boolean isFullSpan() {
         return fullSpan;
     }
 
     public void setFullSpan(boolean fullSpan) {
         this.fullSpan = fullSpan;
+    }
+
+    public boolean isCheck() {
+        return isCheck;
+    }
+
+    public void setCheck(boolean check) {
+        isCheck = check;
     }
 }

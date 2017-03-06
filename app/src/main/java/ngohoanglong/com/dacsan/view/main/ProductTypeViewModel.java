@@ -10,7 +10,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import ngohoanglong.com.dacsan.data.repo.PostVivmallRepo;
-import ngohoanglong.com.dacsan.data.repuest.ProductTypeRequest;
+import ngohoanglong.com.dacsan.data.request.ProductTypeRequest;
 import ngohoanglong.com.dacsan.dependencyinjection.ActivityScope;
 import ngohoanglong.com.dacsan.model.ProductType;
 import ngohoanglong.com.dacsan.utils.ThreadScheduler;

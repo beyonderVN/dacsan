@@ -1,6 +1,7 @@
 package ngohoanglong.com.dacsan.utils.recyclerview.holdermodel;
 
 
+import ngohoanglong.com.dacsan.R;
 import ngohoanglong.com.dacsan.model.ProductType;
 import ngohoanglong.com.dacsan.utils.recyclerview.holderfactory.ViewTypeFactory;
 
@@ -10,7 +11,7 @@ import ngohoanglong.com.dacsan.utils.recyclerview.holderfactory.ViewTypeFactory;
 public class ProductTypeHM extends BaseHM {
     boolean selected = false;
     ProductType productType;
-
+    int color = R.color.aqua;
     public ProductTypeHM(ProductType productType) {
         this.productType = productType;
     }
@@ -29,6 +30,14 @@ public class ProductTypeHM extends BaseHM {
 
     public void setSelected(boolean selected) {
         this.selected = selected;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
     }
 
     @Override

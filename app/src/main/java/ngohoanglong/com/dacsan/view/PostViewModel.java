@@ -21,8 +21,8 @@ public abstract class PostViewModel extends BaseStateViewModel {
     public final int SHOW_STATE = 1;
     public final int EMPTY_STATE = 2;
     protected ObservableList<BaseHM> posts = new ObservableArrayList<>();
-    private BehaviorSubject<Integer> viewState = BehaviorSubject.create(LOADING_STATE);
-    private PublishSubject<Boolean> isLoadingMore = PublishSubject.create();
+    protected BehaviorSubject<Integer> viewState = BehaviorSubject.create(LOADING_STATE);
+    protected PublishSubject<Boolean> isLoadingMore = PublishSubject.create();
 
     public PostViewModel(ThreadScheduler threadScheduler,
                          Resources resources) {
@@ -37,7 +37,14 @@ public abstract class PostViewModel extends BaseStateViewModel {
                 .doOnNext(integer -> Log.d(TAG, "getViewState: "+integer));
     }
     public Observable<Boolean> getIsLoadingMore() {
-        return isLoadingMore.asObservable().distinctUntilChanged();
+        return isLoadingMore.asObservable().distinctUntilChanged()
+                .doOnNext(aBoolean -> {
+                    if (aBoolean){
+                        showLoadingMore();
+                    }else {
+                        hideLoadingMore();
+                    }
+                });
     }
     public ObservableList<BaseHM> getPosts() {
         return posts;
@@ -78,11 +85,9 @@ public abstract class PostViewModel extends BaseStateViewModel {
 
     protected void showLoadingMore() {
         this.posts.add(new LoadMoreHM());
-        isLoadingMore.onNext(true);
     }
 
     protected void hideLoadingMore() {
-        isLoadingMore.onNext(false);
         if (posts.get(posts.size() - 1) instanceof LoadMoreHM) {
             this.posts.remove(posts.size() - 1);
         }

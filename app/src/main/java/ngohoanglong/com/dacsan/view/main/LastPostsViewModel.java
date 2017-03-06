@@ -6,14 +6,14 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 import ngohoanglong.com.dacsan.data.repo.PostVivmallRepo;
-import ngohoanglong.com.dacsan.data.request.LatestRequest;
+import ngohoanglong.com.dacsan.data.request.ProductsByTypeRequest;
 import ngohoanglong.com.dacsan.dependencyinjection.ActivityScope;
 import ngohoanglong.com.dacsan.model.PostVivmall;
+import ngohoanglong.com.dacsan.model.ProductType;
 import ngohoanglong.com.dacsan.utils.ThreadScheduler;
 import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.BaseHM;
 import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.ProductItemHM;
@@ -35,21 +35,23 @@ public class LastPostsViewModel extends PostViewModel {
     public LastPostsViewModel(ThreadScheduler threadScheduler,
                               Resources resources,
                               PostVivmallRepo postRepo
-                              ) {
+    ) {
         super(threadScheduler, resources);
         this.postRepo = postRepo;
     }
 
+    ProductType productType = new ProductType();
 
     public boolean isNeedLoadFirst() {
         Log.d(TAG, "isNeedLoadFirst: " + posts.size());
-        return posts.isEmpty() || posts == null ? true : false;
+        return posts.isEmpty() || posts == null;
     }
 
     public Observable<List<BaseHM>> loadFirstPosts() {
         Observable<List<BaseHM>> listObservable;
         if (isNeedLoadFirst()) {
-            listObservable = postRepo.getLatest(new LatestRequest(0))
+
+            listObservable = postRepo.getLatest(new ProductsByTypeRequest(productType, 0))
                     .compose(withScheduler())
                     .map(postVivmalls -> {
                         List<BaseHM> baseHMs = new ArrayList<BaseHM>();
@@ -72,26 +74,31 @@ public class LastPostsViewModel extends PostViewModel {
                         return baseHMs;
                     });
         }
-            return listObservable
-                    .doOnSubscribe(() -> {
-                        Log.d(TAG, "loadFirstPosts: doOnSubscribe");
-                        showLoadingPage();
-                    })
-                    .doOnNext(posts -> {
-                        this.page = 0;
-                        if (posts.size() > 0) {
-                            updatePosts(posts);
-                            showContentPage();
-                        } else {
-                            showEmpty();
-                        }
-                    });
+        return listObservable
+                .doOnSubscribe(() -> {
+                    Log.d(TAG, "loadFirstPosts: doOnSubscribe");
+                    showLoadingPage();
+                })
+                .doOnNext(posts -> {
+                    this.page = 0;
+                    if (posts.size() > 0) {
+                        updatePosts(posts);
+                        showContentPage();
+                    } else {
+                        showEmpty();
+                    }
+                });
 
     }
 
+    public void onChangeProductType(ProductType productType) {
+        this.productType = productType;
+        isLoadingMore.onNext(false);
+        posts.clear();
+    }
+
     public Observable<List<BaseHM>> loadMorePosts() {
-        return postRepo.getLatest(new LatestRequest(page + 1))
-                .delay(2, TimeUnit.SECONDS)
+        return postRepo.getLatest(new ProductsByTypeRequest(productType, page + 1))
                 .compose(withScheduler())
                 .map(postVivmalls -> {
                     List<BaseHM> baseHMs = new ArrayList<BaseHM>();
@@ -102,11 +109,11 @@ public class LastPostsViewModel extends PostViewModel {
                     return baseHMs;
                 })
                 .doOnSubscribe(() -> {
-                    showLoadingMore();
+                    isLoadingMore.onNext(true);
                 })
                 .doOnNext(posts -> {
                     Log.d(TAG, "loadMorePosts: ");
-                    hideLoadingMore();
+                    isLoadingMore.onNext(false);
                     this.posts.addAll(posts);
                     this.page += 1;
                 })
@@ -118,9 +125,10 @@ public class LastPostsViewModel extends PostViewModel {
         hideLoadingMore();
         return new LastPostsState(posts);
     }
+
     @Override
     public void returnInstanceState(BaseState instanceState) {
-        updatePosts(((LastPostsState)instanceState).getBaseHMs());
+        updatePosts(((LastPostsState) instanceState).getBaseHMs());
     }
 
     public static class LastPostsState extends BaseState {
