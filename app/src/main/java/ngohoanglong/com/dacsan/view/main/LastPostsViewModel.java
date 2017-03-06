@@ -135,6 +135,7 @@ public class LastPostsViewModel extends PostViewModel {
     @Override
     public void returnInstanceState(BaseState instanceState) {
         updatePosts(((LastPostsState) instanceState).getBaseHMs());
+        Log.d(TAG, "returnInstanceState: "+((LastPostsState) instanceState).getBaseHMs().size());
     }
 
     public static class LastPostsState extends BaseState {

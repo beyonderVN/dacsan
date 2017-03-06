@@ -3,6 +3,7 @@ package ngohoanglong.com.dacsan.view.delegate;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import java.io.Serializable;
 
@@ -22,12 +23,13 @@ public abstract class StateDelegate<M extends BaseStateViewModel, S extends Base
     private static final String EXTRA_VIEW_MODEL_STATE = "viewModelState";
 
     public void onCreate(@Nullable Bundle savedInstanceState) {
-
+        this.viewModel = createViewModel();
+        presentationModelKey = viewModel.getClass().getCanonicalName() + EXTRA_VIEW_MODEL_STATE;
         state = restorePresentationModel(getClass(), savedInstanceState);
         if (state == null) {
             state = createStateModel();
         }
-        this.viewModel = createViewModel();
+
         viewModel.setState(state);
     }
 
@@ -37,14 +39,12 @@ public abstract class StateDelegate<M extends BaseStateViewModel, S extends Base
      * @param outState
      */
     public void onSaveInstanceState(Bundle outState) {
-        setModelKey();
         state = (S) viewModel.saveInstanceState();
         outState.putSerializable(presentationModelKey, state);
+        Log.d(TAG, "onSaveInstanceState: "+presentationModelKey+": "+state.getClass());
     }
 
-    protected void setModelKey() {
-        presentationModelKey = viewModel.getClass().getCanonicalName() + EXTRA_VIEW_MODEL_STATE;
-    }
+
 
     public M getViewModel() {
         return viewModel;
