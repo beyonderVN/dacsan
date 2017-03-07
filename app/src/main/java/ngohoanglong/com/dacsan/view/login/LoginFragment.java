@@ -84,10 +84,6 @@ public class LoginFragment extends BaseDelegateFragment {
         rxDelegate.getCompositeSubscription().add(viewModel.toast()
                 .takeUntil(rxDelegate.stopEvent())
                 .subscribe(this::showMessage));
-        rxDelegate.getCompositeSubscription().add(viewModel.loadingState()
-                .takeUntil(rxDelegate.stopEvent())
-                .startWith(1)
-                .subscribe(this::setLoadingState));
         rxDelegate.getCompositeSubscription().add(viewModel.loginIsSuccess()
                 .takeUntil(rxDelegate.stopEvent())
                 .subscribe(this::handleResponse));

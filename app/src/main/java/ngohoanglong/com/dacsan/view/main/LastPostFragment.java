@@ -1,6 +1,7 @@
 package ngohoanglong.com.dacsan.view.main;
 
 import android.databinding.DataBindingUtil;
+import android.databinding.ObservableArrayList;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,9 +12,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ViewAnimator;
 
 import com.vnwarriors.advancedui.appcore.common.recyclerviewhelper.InfiniteScrollListener;
+
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -24,6 +26,7 @@ import ngohoanglong.com.dacsan.DacsanApplication;
 import ngohoanglong.com.dacsan.R;
 import ngohoanglong.com.dacsan.databinding.FragmentLastPostBinding;
 import ngohoanglong.com.dacsan.dependencyinjection.module.PostModule;
+import ngohoanglong.com.dacsan.model.ProductType;
 import ngohoanglong.com.dacsan.utils.recyclerview.MumAdapter;
 import ngohoanglong.com.dacsan.utils.recyclerview.SingleSelectedMumAdapter;
 import ngohoanglong.com.dacsan.utils.recyclerview.holderfactory.HolderFactoryImpl;
@@ -53,7 +56,7 @@ public class LastPostFragment extends BaseDelegateFragment {
         protected ProductTypeViewModel.ProductTypeState createStateModel() {
             return new ProductTypeViewModel.ProductTypeState(
                     0,
-                    productTypeViewModel.getPosts());
+                    new ArrayList<>());
         }
     };
     private StateDelegate stateDelegate = new StateDelegate() {
@@ -66,7 +69,7 @@ public class LastPostFragment extends BaseDelegateFragment {
         @NonNull
         @Override
         protected LastPostsViewModel.LastPostsState createStateModel() {
-            return new LastPostsViewModel.LastPostsState(viewModel.getPosts());
+            return new LastPostsViewModel.LastPostsState(new ObservableArrayList<>(),new ProductType());
         }
     };
 
@@ -91,8 +94,7 @@ public class LastPostFragment extends BaseDelegateFragment {
     MumAdapter baseAdapter;
     SingleSelectedMumAdapter productTypeListAdapter;
     boolean isLoadingMore = false;
-    @BindView(R.id.vaStateController)
-    ViewAnimator vaStateController;
+
 
 
     @Override
@@ -187,7 +189,7 @@ public class LastPostFragment extends BaseDelegateFragment {
                         ;
                     }
                 });
-        productTypeListAdapter.setSelectedPosition(((ProductTypeViewModel.ProductTypeState)productTypeViewModel.getState()).getSelectedPosition());
+
 
         rvProductTypeList.setAdapter(productTypeListAdapter);
     }
@@ -209,6 +211,7 @@ public class LastPostFragment extends BaseDelegateFragment {
         super.onStart();
         bindViewModel();
         rvProductTypeList.scrollToPosition(((ProductTypeViewModel.ProductTypeState)productTypeViewModel.getState()).getSelectedPosition());
+        productTypeListAdapter.setSelectedPosition(((ProductTypeViewModel.ProductTypeState)productTypeViewModel.getState()).getSelectedPosition());
     }
 
     protected void bindViewModel() {
@@ -221,14 +224,10 @@ public class LastPostFragment extends BaseDelegateFragment {
                 });
 
         viewModel.bindViewModel();
-        viewModel.getViewState()
-                .takeUntil(rxDelegate.stopEvent())
-                .subscribe(integer -> {
-                    vaStateController.setDisplayedChild(integer);
-                });
         viewModel.getIsLoadingMore()
                 .takeUntil(rxDelegate.stopEvent())
                 .subscribe(aBoolean -> isLoadingMore = aBoolean);
+
         viewModel.loadFirstPosts()
                 .takeUntil(rxDelegate.stopEvent())
                 .doOnTerminate(() -> {

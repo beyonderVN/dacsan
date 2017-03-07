@@ -26,6 +26,8 @@ import ngohoanglong.com.dacsan.view.detail.ProductItemDetailActivity;
  * Created by Long on 11/10/2016.
  */
 public class ProductItemHolder extends BaseViewHolder<ProductItemHM> {
+
+
     @BindView(R.id.ivProductImage)
     DynamicHeightImageView ivProductImage;
     @BindView(R.id.tvProductName)
@@ -42,6 +44,7 @@ public class ProductItemHolder extends BaseViewHolder<ProductItemHM> {
 
     @Override
     public void bind(ProductItemHM item) {
+        itemView.setId(item.id);
         PostVivmall postVivmall = item.getPostVivmall();
         Picasso.with(itemView.getContext())
                 .load(postVivmall.getProductImage())

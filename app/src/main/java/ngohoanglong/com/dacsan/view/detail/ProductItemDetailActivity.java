@@ -69,13 +69,16 @@ public class ProductItemDetailActivity extends BaseDelegateActivity {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
         setupUI();
+        if (savedInstanceState == null) {
+            setupAnimation();
+        }
     }
 
 
     @Override
     protected void onStart() {
         super.onStart();
-        setupAnimation();
+
     }
 
     private void setupAnimation() {

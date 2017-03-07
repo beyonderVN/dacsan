@@ -9,25 +9,24 @@ import ngohoanglong.com.dacsan.utils.ThreadScheduler;
  * Created by Long on 2/27/2017.
  */
 
-public abstract class BaseStateViewModel extends BaseViewModel {
+public abstract class BaseStateViewModel<S extends BaseState> extends BaseViewModel {
     public BaseStateViewModel(@NonNull ThreadScheduler threadScheduler, @NonNull Resources resources) {
         super(threadScheduler, resources);
     }
-    protected BaseState state;
+    protected S state;
 
-    public BaseState getState() {
+    public S getState() {
         return state;
     }
 
-    public void setState(BaseState state) {
+    public void setState(S state) {
         this.state = state;
     }
 
-    public abstract BaseState saveInstanceState();
+    public abstract S saveInstanceState();
 
-    public abstract void returnInstanceState(BaseState instanceState);
-    @Override
-    public void bindViewModel() {
-        returnInstanceState(state);
-    }
+    public  void returnInstanceState(S instanceState){
+        state = instanceState;
+    };
+
 }

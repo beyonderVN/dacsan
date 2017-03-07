@@ -27,14 +27,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inAnimation="@android:anim/fade_in"
-            android:outAnimation="@android:anim/fade_out">
-            <ProgressBar
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:indeterminate="true"
-                android:indeterminateTint="@color/gray_alpha"
-                android:indeterminateTintMode="src_atop" />
+            android:outAnimation="@android:anim/fade_out"
+            >
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rvPosts"
                 android:layout_width="match_parent"
@@ -42,14 +37,8 @@
                 android:clipToPadding="false"
                 android:paddingTop="38dp"
                 android:scrollbars="none"
-                app:items="@{viewModel.posts}" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="No Item Found"
-                android:textAlignment="center"
-                android:textColor="@color/dark_red"/>
+                app:items="@{viewModel.posts}"
+                android:saveEnabled="true"/>
 
         </ViewAnimator>
         <android.support.v7.widget.RecyclerView

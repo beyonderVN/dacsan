@@ -10,6 +10,7 @@ import java.io.Serializable;
 import ngohoanglong.com.dacsan.utils.BaseDelegate;
 import ngohoanglong.com.dacsan.view.BaseState;
 import ngohoanglong.com.dacsan.view.BaseStateViewModel;
+import ngohoanglong.com.dacsan.view.main.LastPostsViewModel;
 
 /**
  * Created by Long on 2/27/2017.
@@ -29,7 +30,7 @@ public abstract class StateDelegate<M extends BaseStateViewModel, S extends Base
         if (state == null) {
             state = createStateModel();
         }
-        viewModel.setState(state);
+        viewModel.returnInstanceState(state);
     }
 
     /**
@@ -39,8 +40,14 @@ public abstract class StateDelegate<M extends BaseStateViewModel, S extends Base
      */
     public void onSaveInstanceState(Bundle outState) {
         state = (S) viewModel.saveInstanceState();
+//        Serializable potentialPresentationModel =
+//                outState.getSerializable(presentationModelKey);
+//        Log.d(TAG, "onSaveInstanceState: "+potentialPresentationModel);
         outState.putSerializable(presentationModelKey, state);
-        Log.d(TAG, "onSaveInstanceState: "+presentationModelKey+": "+state.getClass());
+        if(state instanceof LastPostsViewModel.LastPostsState) {
+            Log.d(TAG, "onSaveInstanceState: "+presentationModelKey+": "+((LastPostsViewModel.LastPostsState) state).getBaseHMs().size());
+        }
+
     }
 
 

@@ -3,6 +3,7 @@ package ngohoanglong.com.dacsan.utils;
 import android.databinding.BindingAdapter;
 import android.support.v7.widget.RecyclerView;
 import android.widget.EditText;
+import android.widget.ViewAnimator;
 
 import java.util.List;
 
@@ -31,5 +32,9 @@ public class BindingUtils {
     public static <T> void setItems(RecyclerView recyclerView, List<T> items) {
         BaseRecyclerViewAdapter<T> adapter = (BaseRecyclerViewAdapter<T>) recyclerView.getAdapter();
         if (adapter != null) adapter.setItems(items);
+    }
+    @BindingAdapter("pageState")
+    public static void setStateViewAnimator(final ViewAnimator viewAnimator, final int state) {
+        viewAnimator.setDisplayedChild(state);
     }
 }

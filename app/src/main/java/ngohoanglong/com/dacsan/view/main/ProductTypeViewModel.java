@@ -73,15 +73,13 @@ public class ProductTypeViewModel extends PostViewModel {
             return listObservable
                     .doOnSubscribe(() -> {
                         Log.d(TAG, "loadProductTypes: doOnSubscribe");
-                        showLoadingPage();
+
                     })
                     .doOnNext(posts -> {
                         Log.d(TAG, "loadProductTypes: "+posts.size());
                         if (posts.size() > 0) {
                             updatePosts(posts);
-                            showContentPage();
                         } else {
-                            showEmpty();
                         }
                     });
     }
@@ -94,7 +92,13 @@ public class ProductTypeViewModel extends PostViewModel {
     }
     @Override
     public void returnInstanceState(BaseState instanceState) {
-        updatePosts(((ProductTypeState)instanceState).getBaseHMs());
+        super.returnInstanceState(instanceState);
+        updatePosts(((ProductTypeState) instanceState).getBaseHMs());
+    }
+
+    @Override
+    public void bindViewModel() {
+
     }
 
     public static class ProductTypeState extends BaseState {

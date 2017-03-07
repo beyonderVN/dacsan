@@ -18,7 +18,6 @@ import ngohoanglong.com.dacsan.utils.rxview.TextChange;
 import ngohoanglong.com.dacsan.view.BaseViewModel;
 import rx.Observable;
 import rx.subjects.BehaviorSubject;
-import rx.subjects.PublishSubject;
 
 /**
  * Created by Long on 12/1/2016.
@@ -35,8 +34,8 @@ public class LoginViewModel extends BaseViewModel {
     public ObservableField<String> passwordError = new ObservableField<>();
     public ObservableBoolean loginBtnState = new ObservableBoolean(false);
     private BehaviorSubject<String> toast = BehaviorSubject.create();
-    private PublishSubject<Integer> loadingState = PublishSubject.create();
 
+    public ObservableField<Integer> pageState = new ObservableField<Integer>(1);
     @Inject
     public LoginViewModel(@NonNull ThreadScheduler threadScheduler,
                           @NonNull Resources resources,
@@ -50,13 +49,8 @@ public class LoginViewModel extends BaseViewModel {
     public void bindViewModel() {
 
     }
-
     public Observable<String> toast() {
         return toast.asObservable();
-    }
-
-    public Observable<Integer> loadingState() {
-        return loadingState.asObservable();
     }
 
     public Observable<Boolean> loginIsSuccess() {
@@ -110,7 +104,7 @@ public class LoginViewModel extends BaseViewModel {
         return userRepo
                 .login(new LoginRequest(email, password))
                 .compose(withScheduler())
-                .doOnSubscribe(() -> loadingState.onNext(0))
+                .doOnSubscribe(() -> pageState.set(0))
                 .doOnNext(loginResponse -> handleResponse(loginResponse))
                 ;
     }
@@ -120,7 +114,7 @@ public class LoginViewModel extends BaseViewModel {
             DacsanApplication.authManager.login(loginResponse.getUser());
             Log.d(TAG, "handleResponse: authentication.isSuccess()");
         } else {
-            loadingState.onNext(1);
+            pageState.set(1);
             toast.onNext("Failed!");
         }
     }
