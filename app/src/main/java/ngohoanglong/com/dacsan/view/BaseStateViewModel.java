@@ -23,7 +23,9 @@ public abstract class BaseStateViewModel<S extends BaseState> extends BaseViewMo
         this.state = state;
     }
 
-    public abstract S saveInstanceState();
+    public S saveInstanceState(){
+        return state;
+    }
 
     public  void returnInstanceState(S instanceState){
         state = instanceState;

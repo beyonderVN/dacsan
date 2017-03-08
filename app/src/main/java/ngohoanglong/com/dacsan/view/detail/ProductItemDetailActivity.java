@@ -146,6 +146,7 @@ public class ProductItemDetailActivity extends BaseDelegateActivity {
                 .load(postVivmall.getProductImage())
                 .placeholder(PlaceHolderDrawableHelper.getBackgroundDrawable())
                 .into(ivCover);
+        ivCover.setTransitionName(postVivmall.getProductName());
 
     }
     public String doubleToString(double d)

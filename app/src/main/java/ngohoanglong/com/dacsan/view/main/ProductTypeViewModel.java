@@ -1,7 +1,7 @@
 package ngohoanglong.com.dacsan.view.main;
 
 import android.content.res.Resources;
-import android.databinding.ObservableList;
+import android.databinding.ObservableArrayList;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -16,7 +16,6 @@ import ngohoanglong.com.dacsan.model.ProductType;
 import ngohoanglong.com.dacsan.utils.ThreadScheduler;
 import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.BaseHM;
 import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.ProductTypeHM;
-import ngohoanglong.com.dacsan.view.BaseState;
 import ngohoanglong.com.dacsan.view.PostViewModel;
 import rx.Observable;
 
@@ -86,23 +85,12 @@ public class ProductTypeViewModel extends PostViewModel {
 
 
     @Override
-    public BaseState saveInstanceState() {
-        hideLoadingMore();
-        return getState();
-    }
-    @Override
-    public void returnInstanceState(BaseState instanceState) {
-        super.returnInstanceState(instanceState);
-        updatePosts(((ProductTypeState) instanceState).getBaseHMs());
-    }
-
-    @Override
     public void bindViewModel() {
 
     }
 
-    public static class ProductTypeState extends BaseState {
-        List<BaseHM> baseHMs;
+    public static class ProductTypeState extends PostsState {
+
         int selectedPosition;
         public int getSelectedPosition() {
             return selectedPosition;
@@ -111,21 +99,13 @@ public class ProductTypeViewModel extends PostViewModel {
         public void setSelectedPosition(int selectedPosition) {
             this.selectedPosition = selectedPosition;
         }
-        public ProductTypeState(List<BaseHM> baseHMs) {
-            this.baseHMs = baseHMs;
-        }
 
-        public ProductTypeState(int selectedPosition, List<BaseHM> baseHMs) {
+        public ProductTypeState(int selectedPosition, ObservableArrayList<BaseHM> baseHMs) {
+            super(baseHMs);
             this.selectedPosition = selectedPosition;
-            this.baseHMs = baseHMs;
+
         }
 
-        public List<BaseHM> getBaseHMs() {
-            return baseHMs;
-        }
 
-        public void setBaseHMs(ObservableList<BaseHM> baseHMs) {
-            this.baseHMs = baseHMs;
-        }
     }
 }

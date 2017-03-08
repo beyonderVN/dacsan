@@ -54,6 +54,7 @@ public class PostVivmallRepoImpl implements PostVivmallRepo {
                 ;
     }
 
+    static int count=0;
     private void fillPostVivmall(PostVivmall postVivmall) {
         Random random = new Random();
         double  v = random.nextInt(100) + 100;
@@ -62,6 +63,7 @@ public class PostVivmallRepoImpl implements PostVivmallRepo {
         postVivmall.setNumBuy(b);
         postVivmall.setNumView(v);
         postVivmall.setProductPrice(p);
+        postVivmall.setProductName(postVivmall.getProductName()+" "+(++count));
     }
 
     @Override

@@ -1,6 +1,7 @@
 package ngohoanglong.com.dacsan.utils.recyclerview;
 
 import android.content.Context;
+import android.databinding.ObservableArrayList;
 
 import ngohoanglong.com.dacsan.utils.recyclerview.holderfactory.HolderFactory;
 import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.BaseHM;
@@ -16,8 +17,11 @@ public class SingleSelectedMumAdapter extends MumAdapter {
 
     private int selectedPosition = -1;
     OnSelectItemClickEvent onSelectItemClickEvent;
-    public SingleSelectedMumAdapter(Context context, HolderFactory holderFactory, OnSelectItemClickEvent onSelectItemClickEvent) {
-        super(context, holderFactory);
+    public SingleSelectedMumAdapter(Context context,
+                                    HolderFactory holderFactory,
+                                    ObservableArrayList<BaseHM> observableArrayList,
+                                    OnSelectItemClickEvent onSelectItemClickEvent) {
+        super(context, holderFactory,observableArrayList);
         this.onSelectItemClickEvent = onSelectItemClickEvent;
     }
     @Override

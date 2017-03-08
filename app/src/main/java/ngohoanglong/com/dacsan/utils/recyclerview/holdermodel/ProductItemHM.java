@@ -9,8 +9,7 @@ import ngohoanglong.com.dacsan.utils.recyclerview.holderfactory.ViewTypeFactory;
  */
 public class ProductItemHM extends BaseHM {
     PostVivmall postVivmall;
-    static int count = 0;
-    public int id = ++count;
+
     public ProductItemHM(PostVivmall postVivmall) {
         this.postVivmall = postVivmall;
     }

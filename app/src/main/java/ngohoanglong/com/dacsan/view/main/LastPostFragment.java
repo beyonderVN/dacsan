@@ -15,8 +15,6 @@ import android.view.ViewGroup;
 
 import com.vnwarriors.advancedui.appcore.common.recyclerviewhelper.InfiniteScrollListener;
 
-import java.util.ArrayList;
-
 import javax.inject.Inject;
 
 import butterknife.BindInt;
@@ -27,6 +25,7 @@ import ngohoanglong.com.dacsan.R;
 import ngohoanglong.com.dacsan.databinding.FragmentLastPostBinding;
 import ngohoanglong.com.dacsan.dependencyinjection.module.PostModule;
 import ngohoanglong.com.dacsan.model.ProductType;
+import ngohoanglong.com.dacsan.utils.recyclerview.CenterLayoutManager;
 import ngohoanglong.com.dacsan.utils.recyclerview.MumAdapter;
 import ngohoanglong.com.dacsan.utils.recyclerview.SingleSelectedMumAdapter;
 import ngohoanglong.com.dacsan.utils.recyclerview.holderfactory.HolderFactoryImpl;
@@ -44,6 +43,8 @@ public class LastPostFragment extends BaseDelegateFragment {
     private static final String TAG = "LastPostFragment";
 
     private RxDelegate rxDelegate = new RxDelegate();
+    ObservableArrayList<BaseHM> baseHMs2 = new ObservableArrayList<>();
+    int selectedPosition =0;
     private StateDelegate productTypeStateDelegate = new StateDelegate() {
         @NonNull
         @Override
@@ -55,8 +56,8 @@ public class LastPostFragment extends BaseDelegateFragment {
         @Override
         protected ProductTypeViewModel.ProductTypeState createStateModel() {
             return new ProductTypeViewModel.ProductTypeState(
-                    0,
-                    new ArrayList<>());
+                    selectedPosition,
+                    baseHMs2);
         }
     };
     private StateDelegate stateDelegate = new StateDelegate() {
@@ -69,10 +70,11 @@ public class LastPostFragment extends BaseDelegateFragment {
         @NonNull
         @Override
         protected LastPostsViewModel.LastPostsState createStateModel() {
-            return new LastPostsViewModel.LastPostsState(new ObservableArrayList<>(),new ProductType());
+            return new LastPostsViewModel.LastPostsState(baseHMs,productType);
         }
     };
-
+    ObservableArrayList<BaseHM> baseHMs = new ObservableArrayList<>();
+    ProductType productType = new ProductType();
     {
         lifecycleDelegates.add(rxDelegate);
         lifecycleDelegates.add(productTypeStateDelegate);
@@ -105,12 +107,12 @@ public class LastPostFragment extends BaseDelegateFragment {
         super.onCreate(savedInstanceState);
 
     }
-
+    View rootView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View rootView = inflater.inflate(R.layout.fragment_last_post, container, false);
+        rootView = inflater.inflate(R.layout.fragment_last_post, container, false);
         ButterKnife.bind(this, rootView);
         binding = DataBindingUtil.bind(rootView);
         binding.setViewModel(viewModel);
@@ -127,7 +129,7 @@ public class LastPostFragment extends BaseDelegateFragment {
         staggeredGridLayoutManagerVertical.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
         staggeredGridLayoutManagerVertical.invalidateSpanAssignments();
         staggeredGridLayoutManagerVertical.setItemPrefetchEnabled(false);
-        baseAdapter = new MumAdapter(getActivity(), new HolderFactoryImpl());
+        baseAdapter = new MumAdapter(getActivity(), new HolderFactoryImpl(),viewModel.getPosts());
         rvPosts.setAdapter(baseAdapter);
         rvPosts.setLayoutManager(staggeredGridLayoutManagerVertical);
         rvPosts.setHasFixedSize(true);
@@ -165,31 +167,32 @@ public class LastPostFragment extends BaseDelegateFragment {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if (dy > 20) {
+                if (dy > 10) {
                     hideCatalogue();
                 }
-                if (dy < -20) {
+                if (dy < -10) {
                     showCatalogue();
                 }
             }
         });
 
+
+
         LinearLayoutManager linearLayoutManager;
         linearLayoutManager =
-                new LinearLayoutManager(v.getContext(), LinearLayoutManager.HORIZONTAL, false);
+                new CenterLayoutManager(v.getContext(), LinearLayoutManager.HORIZONTAL, false);
         rvProductTypeList.setLayoutManager(linearLayoutManager);
         productTypeListAdapter = new SingleSelectedMumAdapter(getActivity(),
                 new HolderFactoryImpl(),
-                new SingleSelectedMumAdapter.OnSelectItemClickEvent() {
-                    @Override
-                    public void onItemClick(int pos, BaseHM baseHM) {
-                        Log.d(TAG, "setUpViews: ");
-                        ((ProductTypeViewModel.ProductTypeState)productTypeViewModel.getState()).setSelectedPosition(pos);
-                        viewModel.onChangeProductType(((ProductTypeHM) baseHM).getProductType())
-                        ;
-                    }
-                });
+                productTypeViewModel.getPosts(),
+                (pos, baseHM) -> {
+                    Log.d(TAG, "setUpViews: ");
+                    ((ProductTypeViewModel.ProductTypeState)productTypeViewModel.getState()).setSelectedPosition(pos);
+                    viewModel.onChangeProductType(((ProductTypeHM) baseHM).getProductType());
+                    rvProductTypeList.smoothScrollToPosition(((ProductTypeViewModel.ProductTypeState)productTypeViewModel.getState()).getSelectedPosition());
 
+                    ;
+                });
 
         rvProductTypeList.setAdapter(productTypeListAdapter);
     }
@@ -210,7 +213,6 @@ public class LastPostFragment extends BaseDelegateFragment {
     public void onStart() {
         super.onStart();
         bindViewModel();
-        rvProductTypeList.scrollToPosition(((ProductTypeViewModel.ProductTypeState)productTypeViewModel.getState()).getSelectedPosition());
         productTypeListAdapter.setSelectedPosition(((ProductTypeViewModel.ProductTypeState)productTypeViewModel.getState()).getSelectedPosition());
     }
 

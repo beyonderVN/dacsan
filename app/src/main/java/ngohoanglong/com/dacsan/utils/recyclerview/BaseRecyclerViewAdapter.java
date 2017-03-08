@@ -4,7 +4,6 @@ import android.databinding.ObservableList;
 import android.support.v7.widget.RecyclerView;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.List;
 
 import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.BaseHM;
@@ -15,24 +14,28 @@ import ngohoanglong.com.dacsan.utils.recyclerview.viewholder.BaseViewHolder;
  */
 
 public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<BaseViewHolder<BaseHM>> {
-    protected List<T> items = new ArrayList<>();
+    protected ObservableList<T> items ;
     private int recyclerViewRefCount = 0;
     private final WeakReferenceOnListChangedCallback<T> callback = new WeakReferenceOnListChangedCallback<>(this);
 
-    public void setItems(List<T> items) {
-        if (this.items == items) {
-            return;
-        }
-        if (recyclerViewRefCount > 0) {
-            if (this.items instanceof ObservableList) {
-                ((ObservableList<T>) this.items).removeOnListChangedCallback(callback);
-            }
-            if (items instanceof ObservableList) {
-                ((ObservableList<T>) items).addOnListChangedCallback(callback);
-            }
-        }
+    public BaseRecyclerViewAdapter(ObservableList<T> items) {
         this.items = items;
-        notifyDataSetChanged();
+    }
+
+    public void setItems(List<T> items) {
+//        if (this.items == items) {
+//            return;
+//        }
+//        if (recyclerViewRefCount > 0) {
+//            if (this.items instanceof ObservableList) {
+//                ((ObservableList<T>) this.items).removeOnListChangedCallback(callback);
+//            }
+//            if (items instanceof ObservableList) {
+//                ((ObservableList<T>) items).addOnListChangedCallback(callback);
+//            }
+//        }
+//        this.items = items;
+//        notifyDataSetChanged();
     }
 
     protected int indexOf(T item) {

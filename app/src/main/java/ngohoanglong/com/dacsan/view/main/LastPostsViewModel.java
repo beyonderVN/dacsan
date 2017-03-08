@@ -17,7 +17,6 @@ import ngohoanglong.com.dacsan.model.ProductType;
 import ngohoanglong.com.dacsan.utils.ThreadScheduler;
 import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.BaseHM;
 import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.ProductItemHM;
-import ngohoanglong.com.dacsan.view.BaseState;
 import ngohoanglong.com.dacsan.view.PostViewModel;
 import rx.Observable;
 import rx.subjects.PublishSubject;
@@ -32,6 +31,7 @@ public class LastPostsViewModel extends PostViewModel {
 
     PostVivmallRepo postRepo;
 
+
     @Inject
     public LastPostsViewModel(ThreadScheduler threadScheduler,
                               Resources resources,
@@ -42,10 +42,9 @@ public class LastPostsViewModel extends PostViewModel {
     }
 
 
-
     public boolean isNeedLoadFirst() {
         Log.d(TAG, "isNeedLoadFirst: " + posts.size());
-        return  posts == null||posts.isEmpty();
+        return posts == null || posts.isEmpty();
     }
 
     protected PublishSubject<Boolean> refresh = PublishSubject.create();
@@ -53,7 +52,6 @@ public class LastPostsViewModel extends PostViewModel {
     public Observable<List<BaseHM>> loadFirstPosts() {
         Observable<List<BaseHM>> listObservable;
         if (isNeedLoadFirst()) {
-
             listObservable = postRepo.getLatest(new ProductsByTypeRequest(((LastPostsState) getState()).getProductType(), 0))
                     .takeUntil(refresh)
                     .compose(withScheduler())
@@ -64,7 +62,20 @@ public class LastPostsViewModel extends PostViewModel {
                             baseHMs.add(new ProductItemHM(baseHM));
                         }
                         return baseHMs;
+                    })
+                    .doOnSubscribe(() -> {
+                        Log.d(TAG, "loadFirstPosts: doOnSubscribe");
+                    })
+                    .doOnNext(posts -> {
+                        this.page = 0;
+                        if (posts.size() > 0) {
+                            updatePosts(posts);
+
+                        } else {
+
+                        }
                     });
+            ;
 
         } else {
             listObservable = Observable.just(posts)
@@ -77,21 +88,12 @@ public class LastPostsViewModel extends PostViewModel {
                             baseHMs.add(baseHM);
                         }
                         return baseHMs;
+                    })
+                    .doOnNext(baseHMs -> {
+
                     });
         }
-        return listObservable
-                .doOnSubscribe(() -> {
-                    Log.d(TAG, "loadFirstPosts: doOnSubscribe");
-                })
-                .doOnNext(posts -> {
-                    this.page = 0;
-                    if (posts.size() > 0) {
-                        updatePosts(posts);
-
-                    } else {
-
-                    }
-                });
+        return listObservable;
 
     }
 
@@ -100,7 +102,6 @@ public class LastPostsViewModel extends PostViewModel {
         refresh.onNext(true);
         isLoadingMore.onNext(false);
         posts.clear();
-
     }
 
     public Observable<List<BaseHM>> loadMorePosts() {
@@ -127,28 +128,19 @@ public class LastPostsViewModel extends PostViewModel {
                 ;
     }
 
-    @Override
-    public BaseState saveInstanceState() {
-        hideLoadingMore();
-        return state;
-    }
-
-    @Override
-    public void returnInstanceState(BaseState instanceState) {
-        super.returnInstanceState(instanceState);
-        updatePosts(((LastPostsState) instanceState).getBaseHMs());
-//        posts = (ObservableArrayList<BaseHM>) ((LastPostsState) instanceState).getBaseHMs();
-        ((LastPostsState) instanceState).setBaseHMs(posts);
-    }
 
     @Override
     public void bindViewModel() {
 
     }
 
-    public static class LastPostsState extends BaseState {
-        ObservableArrayList<BaseHM> baseHMs;
+    public static class LastPostsState extends PostsState {
         ProductType productType;
+
+        public LastPostsState(ObservableArrayList<BaseHM> baseHMs, ProductType productType) {
+            super(baseHMs);
+            this.productType = productType;
+        }
 
         public ProductType getProductType() {
             return productType;
@@ -156,23 +148,6 @@ public class LastPostsViewModel extends PostViewModel {
 
         public void setProductType(ProductType productType) {
             this.productType = productType;
-        }
-
-        public LastPostsState(ObservableArrayList<BaseHM> baseHMs) {
-            this.baseHMs = baseHMs;
-        }
-
-        public LastPostsState(ObservableArrayList<BaseHM> baseHMs, ProductType productType) {
-            this.baseHMs = baseHMs;
-            this.productType = productType;
-        }
-
-        public List<BaseHM> getBaseHMs() {
-            return baseHMs;
-        }
-
-        public void setBaseHMs(ObservableArrayList<BaseHM> baseHMs) {
-            this.baseHMs = baseHMs;
         }
 
     }

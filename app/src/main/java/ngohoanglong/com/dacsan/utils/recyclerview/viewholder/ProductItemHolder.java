@@ -41,10 +41,9 @@ public class ProductItemHolder extends BaseViewHolder<ProductItemHM> {
         ButterKnife.bind(this, view);
 
     }
-
+static int count =0;
     @Override
     public void bind(ProductItemHM item) {
-        itemView.setId(item.id);
         PostVivmall postVivmall = item.getPostVivmall();
         Picasso.with(itemView.getContext())
                 .load(postVivmall.getProductImage())
@@ -54,12 +53,12 @@ public class ProductItemHolder extends BaseViewHolder<ProductItemHM> {
         tvProductName.setText(postVivmall.getProductName());
         tvProductPrice.setText(CurrencyUtil.convertCurrency(postVivmall.getProductPrice(),new Locale("vn", "VN")));
         tvProductStore.setText("VinhSangCommerce");
-
+        ivProductImage.setTransitionName(postVivmall.getProductName());
         Intent intent = new Intent(itemView.getContext(), ProductItemDetailActivity.class);
         intent.putExtra("POST", item);
         itemView.setOnClickListener(view -> {
             ActivityOptions ops = ActivityOptions.makeSceneTransitionAnimation((Activity) view.getContext(),
-                    Pair.create(ivProductImage, view.getContext().getString(R.string.detail_image))
+                    Pair.create(ivProductImage, postVivmall.getProductName())
             );
             view.getContext().startActivity(intent, ops.toBundle());
         });

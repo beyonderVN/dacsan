@@ -37,7 +37,6 @@
                 android:clipToPadding="false"
                 android:paddingTop="38dp"
                 android:scrollbars="none"
-                app:items="@{viewModel.posts}"
                 android:saveEnabled="true"/>
 
         </ViewAnimator>
@@ -48,7 +47,6 @@
             android:background="#719b9b9b"
             android:layout_gravity="top"
             android:scrollbarAlwaysDrawHorizontalTrack="true"
-            app:items="@{productTypeViewModel.posts}"
             />
     </FrameLayout>
 </layout>

@@ -1,6 +1,7 @@
 package ngohoanglong.com.dacsan.utils.recyclerview;
 
 import android.content.Context;
+import android.databinding.ObservableArrayList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +19,12 @@ public class MumAdapter extends BaseRecyclerViewAdapter<BaseHM> {
     private Context context;
     public HolderFactory holderFactory ;
 
-    public MumAdapter(Context context) {
+    public MumAdapter(Context context,ObservableArrayList<BaseHM> observableArrayList) {
+        super(observableArrayList);
         this.context = context;
     }
-    public MumAdapter(Context context, HolderFactory holderFactory) {
-        this(context);
+    public MumAdapter(Context context, HolderFactory holderFactory, ObservableArrayList<BaseHM>  observableArrayList) {
+        this(context,observableArrayList);
         this.holderFactory = holderFactory;
     }
 
