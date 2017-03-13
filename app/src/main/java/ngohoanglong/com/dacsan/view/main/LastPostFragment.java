@@ -198,8 +198,8 @@ public class LastPostFragment extends BaseDelegateFragment {
         rvProductTypeList.setAdapter(productTypeListAdapter);
 
         //fix no work well nest
-//        LayoutTransition layoutTransition = layout.getLayoutTransition();
-//        layoutTransition.setAnimateParentHierarchy(false);
+        LayoutTransition layoutTransition = layout.getLayoutTransition();
+        layoutTransition.setAnimateParentHierarchy(false);
 //        layoutTransition.enableTransitionType(LayoutTransition.CHANGE_DISAPPEARING);
     }
     @BindView(R.id.layoutWrap)
