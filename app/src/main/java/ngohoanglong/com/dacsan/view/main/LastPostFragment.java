@@ -1,5 +1,6 @@
 package ngohoanglong.com.dacsan.view.main;
 
+import android.animation.LayoutTransition;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableArrayList;
 import android.os.Bundle;
@@ -195,8 +196,14 @@ public class LastPostFragment extends BaseDelegateFragment {
                 });
 
         rvProductTypeList.setAdapter(productTypeListAdapter);
-    }
 
+        //fix no work well nest
+//        LayoutTransition layoutTransition = layout.getLayoutTransition();
+//        layoutTransition.setAnimateParentHierarchy(false);
+//        layoutTransition.enableTransitionType(LayoutTransition.CHANGE_DISAPPEARING);
+    }
+    @BindView(R.id.layoutWrap)
+    ViewGroup layout;
     private void hideCatalogue() {
         if (rvProductTypeList.getVisibility() != View.GONE) {
             rvProductTypeList.setVisibility(View.GONE);

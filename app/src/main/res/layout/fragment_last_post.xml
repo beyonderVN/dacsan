@@ -16,11 +16,12 @@
     </data>
 
     <FrameLayout
+        android:id="@+id/layoutWrap"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="ngohoanglong.com.dacsan.view.main.LastPostFragment"
         android:background="#d2d2d2"
-        android:animateLayoutChanges="true">
+        >
 
         <ViewAnimator
             android:id="@+id/vaStateController"
@@ -37,7 +38,7 @@
                 android:clipToPadding="false"
                 android:paddingTop="38dp"
                 android:scrollbars="none"
-                android:saveEnabled="true"/>
+                />
 
         </ViewAnimator>
         <android.support.v7.widget.RecyclerView
@@ -46,7 +47,6 @@
             android:layout_height="wrap_content"
             android:background="#719b9b9b"
             android:layout_gravity="top"
-            android:scrollbarAlwaysDrawHorizontalTrack="true"
             />
     </FrameLayout>
 </layout>

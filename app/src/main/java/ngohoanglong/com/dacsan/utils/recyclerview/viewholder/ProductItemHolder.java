@@ -62,7 +62,5 @@ static int count =0;
             );
             view.getContext().startActivity(intent, ops.toBundle());
         });
-
-
     }
 }

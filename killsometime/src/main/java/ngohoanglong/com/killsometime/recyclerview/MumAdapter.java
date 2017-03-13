@@ -52,4 +52,9 @@ public class MumAdapter extends BaseRecyclerViewAdapter<BaseHM> {
     public int getItemViewType(int position) {
         return items.get(position).getVMType(holderFactory);
     }
+
+    @Override
+    public void onViewRecycled(BaseViewHolder<BaseHM> holder) {
+        super.onViewRecycled(holder);
+    }
 }
