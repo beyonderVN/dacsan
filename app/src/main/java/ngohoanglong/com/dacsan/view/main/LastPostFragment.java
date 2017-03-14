@@ -46,6 +46,7 @@ public class LastPostFragment extends BaseDelegateFragment {
     private RxDelegate rxDelegate = new RxDelegate();
     ObservableArrayList<BaseHM> baseHMs2 = new ObservableArrayList<>();
     int selectedPosition =0;
+
     private StateDelegate productTypeStateDelegate = new StateDelegate() {
         @NonNull
         @Override
@@ -61,6 +62,7 @@ public class LastPostFragment extends BaseDelegateFragment {
                     baseHMs2);
         }
     };
+
     private StateDelegate stateDelegate = new StateDelegate() {
         @NonNull
         @Override
@@ -74,6 +76,7 @@ public class LastPostFragment extends BaseDelegateFragment {
             return new LastPostsViewModel.LastPostsState(baseHMs,productType);
         }
     };
+
     ObservableArrayList<BaseHM> baseHMs = new ObservableArrayList<>();
     ProductType productType = new ProductType();
     {
