@@ -16,13 +16,11 @@ public class SingleSelectedMumAdapter extends MumAdapter {
 
 
     private int selectedPosition = -1;
-    OnSelectItemClickEvent onSelectItemClickEvent;
     public SingleSelectedMumAdapter(Context context,
                                     HolderFactory holderFactory,
                                     ObservableArrayList<BaseHM> observableArrayList,
                                     OnSelectItemClickEvent onSelectItemClickEvent) {
-        super(context, holderFactory,observableArrayList);
-        this.onSelectItemClickEvent = onSelectItemClickEvent;
+        super(context, holderFactory,observableArrayList,onSelectItemClickEvent);
     }
     @Override
     public void onBindViewHolder(BaseViewHolder<BaseHM> holder, int position) {
@@ -31,10 +29,9 @@ public class SingleSelectedMumAdapter extends MumAdapter {
             baseHM.setCheck(position == selectedPosition);
             holder.bind(baseHM);
             holder.itemView.setOnClickListener(v -> {
-                selectedPosition=position;
+                selectedPosition = position;
                 onSelectItemClickEvent.onItemClick(position, baseHM);
                 notifyDataSetChanged();
-
             });
         }
     }
@@ -47,7 +44,4 @@ public class SingleSelectedMumAdapter extends MumAdapter {
         this.selectedPosition = selectedPosition;
     }
 
-    public interface OnSelectItemClickEvent {
-        void onItemClick(int pos, BaseHM baseHM);
-    }
 }

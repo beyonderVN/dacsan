@@ -18,14 +18,19 @@ public class MumAdapter extends BaseRecyclerViewAdapter<BaseHM> {
 
     private Context context;
     public HolderFactory holderFactory ;
+    OnSelectItemClickEvent onSelectItemClickEvent;
+
 
     public MumAdapter(Context context,ObservableArrayList<BaseHM> observableArrayList) {
         super(observableArrayList);
         this.context = context;
     }
-    public MumAdapter(Context context, HolderFactory holderFactory, ObservableArrayList<BaseHM>  observableArrayList) {
+    public MumAdapter(Context context, HolderFactory holderFactory,
+                      ObservableArrayList<BaseHM>  observableArrayList,
+                      OnSelectItemClickEvent onSelectItemClickEvent) {
         this(context,observableArrayList);
         this.holderFactory = holderFactory;
+        this.onSelectItemClickEvent = onSelectItemClickEvent;
     }
 
     @Override
@@ -40,7 +45,11 @@ public class MumAdapter extends BaseRecyclerViewAdapter<BaseHM> {
     @Override
     public void onBindViewHolder(BaseViewHolder<BaseHM> holder, int position) {
         if(holder!=null){
-            holder.bind(items.get(position));
+            BaseHM baseHM = items.get(position);
+            holder.bind(baseHM);
+            holder.itemView.setOnClickListener(v -> {
+                onSelectItemClickEvent.onItemClick(position, baseHM);
+            });
         }
     }
 
@@ -52,5 +61,9 @@ public class MumAdapter extends BaseRecyclerViewAdapter<BaseHM> {
     @Override
     public int getItemViewType(int position) {
         return items.get(position).getVMType(holderFactory);
+    }
+
+    public interface OnSelectItemClickEvent {
+        void onItemClick(int pos, BaseHM baseHM);
     }
 }

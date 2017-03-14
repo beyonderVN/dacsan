@@ -133,7 +133,7 @@ public class LastPostFragment extends BaseDelegateFragment {
         staggeredGridLayoutManagerVertical.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
         staggeredGridLayoutManagerVertical.invalidateSpanAssignments();
         staggeredGridLayoutManagerVertical.setItemPrefetchEnabled(false);
-        baseAdapter = new MumAdapter(getActivity(), new HolderFactoryImpl(),viewModel.getPosts());
+        baseAdapter = new MumAdapter(getActivity(), new HolderFactoryImpl(),viewModel.getPosts(),null);
         rvPosts.setAdapter(baseAdapter);
         rvPosts.setLayoutManager(staggeredGridLayoutManagerVertical);
         rvPosts.setHasFixedSize(true);
