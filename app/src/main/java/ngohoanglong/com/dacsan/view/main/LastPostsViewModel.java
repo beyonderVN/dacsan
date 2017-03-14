@@ -67,8 +67,9 @@ public class LastPostsViewModel extends PostViewModel {
                         Log.d(TAG, "loadFirstPosts: doOnSubscribe");
                     })
                     .doOnNext(posts -> {
-                        this.page = 0;
+
                         if (posts.size() > 0) {
+                            this.page++;
                             updatePosts(posts);
 
                         } else {
