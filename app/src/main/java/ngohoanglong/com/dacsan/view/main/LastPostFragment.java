@@ -100,7 +100,8 @@ public class LastPostFragment extends BaseDelegateFragment {
     MumAdapter baseAdapter;
     SingleSelectedMumAdapter productTypeListAdapter;
     boolean isLoadingMore = false;
-
+    @BindView(R.id.layoutWrap)
+    ViewGroup layout;
 
 
     @Override
@@ -133,7 +134,10 @@ public class LastPostFragment extends BaseDelegateFragment {
         staggeredGridLayoutManagerVertical.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
         staggeredGridLayoutManagerVertical.invalidateSpanAssignments();
         staggeredGridLayoutManagerVertical.setItemPrefetchEnabled(false);
-        baseAdapter = new MumAdapter(getActivity(), new HolderFactoryImpl(),viewModel.getPosts(),null);
+        baseAdapter = new MumAdapter(getActivity(),
+                new HolderFactoryImpl(),
+                viewModel.getPosts(),
+                null);
         rvPosts.setAdapter(baseAdapter);
         rvPosts.setLayoutManager(staggeredGridLayoutManagerVertical);
         rvPosts.setHasFixedSize(true);
@@ -205,8 +209,7 @@ public class LastPostFragment extends BaseDelegateFragment {
         layoutTransition.setAnimateParentHierarchy(false);
 //        layoutTransition.enableTransitionType(LayoutTransition.CHANGE_DISAPPEARING);
     }
-    @BindView(R.id.layoutWrap)
-    ViewGroup layout;
+
     private void hideCatalogue() {
         if (rvProductTypeList.getVisibility() != View.GONE) {
             rvProductTypeList.setVisibility(View.GONE);

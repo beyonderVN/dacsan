@@ -45,10 +45,15 @@ static int count =0;
     @Override
     public void bind(ProductItemHM item) {
         PostVivmall postVivmall = item.getPostVivmall();
+
+        ivProductImage.setRatio(item.getImageRatio(),item);
+
+
         Picasso.with(itemView.getContext())
                 .load(postVivmall.getProductImage())
                 .placeholder(PlaceHolderDrawableHelper.getBackgroundDrawable())
 //                .resize(400, (int) (400 * model.getTipImageRatio()))
+
                 .into(ivProductImage);
         tvProductName.setText(postVivmall.getProductName());
         tvProductPrice.setText(CurrencyUtil.convertCurrency(postVivmall.getProductPrice(),new Locale("vn", "VN")));
