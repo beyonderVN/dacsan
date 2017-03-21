@@ -1,11 +1,24 @@
 package ngohoanglong.com.dacsan.utils.recyclerview;
 
+import android.animation.LayoutTransition;
 import android.content.Context;
 import android.databinding.ObservableArrayList;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
+import android.view.View;
+
+import com.vnwarriors.advancedui.appcore.common.recyclerviewhelper.InfiniteScrollListener;
 
 import ngohoanglong.com.dacsan.utils.recyclerview.holderfactory.HolderFactory;
+import ngohoanglong.com.dacsan.utils.recyclerview.holderfactory.HolderFactoryImpl;
 import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.BaseHM;
+import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.ProductTypeHM;
 import ngohoanglong.com.dacsan.utils.recyclerview.viewholder.BaseViewHolder;
+import ngohoanglong.com.dacsan.view.main.ProductTypeViewModel;
+
+import static ngohoanglong.com.dacsan.R.id.rvProductTypeList;
 
 
 /**
@@ -43,5 +56,7 @@ public class SingleSelectedMumAdapter extends MumAdapter {
     public void setSelectedPosition(int selectedPosition) {
         this.selectedPosition = selectedPosition;
     }
+
+
 
 }

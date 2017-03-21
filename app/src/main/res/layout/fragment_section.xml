@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="ngohoanglong.com.dacsan.view.PostViewModel" />
+
+        <variable
+            name="viewModel"
+            type="PostViewModel" />
+        <variable
+            name="productTypeViewModel"
+            type="PostViewModel" />
+    </data>
+
+    <FrameLayout
+        android:id="@+id/layoutWrap"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="ngohoanglong.com.dacsan.view.main.LastPostFragment"
+        android:background="#d2d2d2"
+        android:animateLayoutChanges="true"
+        >
+
+        <ViewAnimator
+            android:id="@+id/vaStateController"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inAnimation="@android:anim/fade_in"
+            android:outAnimation="@android:anim/fade_out"
+            >
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvPosts"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingTop="38dp"
+                android:scrollbars="none"
+                />
+
+        </ViewAnimator>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvProductTypeList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#719b9b9b"
+            android:layout_gravity="top"
+            android:paddingBottom="4dp"
+            />
+    </FrameLayout>
+</layout>
