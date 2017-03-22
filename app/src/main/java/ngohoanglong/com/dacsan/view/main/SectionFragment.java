@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SnapHelper;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -108,10 +110,15 @@ public class SectionFragment extends BaseDelegateFragment {
     }
 
     private void setUpViews(View v) {
-        final StaggeredGridLayoutManager staggeredGridLayoutManagerVertical =
+
+        LinearLayoutManager linearLayoutManager =
+                new CenterLayoutManager(v.getContext(), LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager linearLayoutManager2 =
+                new CenterLayoutManager(v.getContext(), LinearLayoutManager.HORIZONTAL, false);
+        StaggeredGridLayoutManager staggeredGridLayoutManagerVertical =
                 new StaggeredGridLayoutManager(
                         1, //The number of Columns in the grid
-                        LinearLayoutManager.VERTICAL);
+                        LinearLayoutManager.HORIZONTAL);
         staggeredGridLayoutManagerVertical.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
         staggeredGridLayoutManagerVertical.invalidateSpanAssignments();
         staggeredGridLayoutManagerVertical.setItemPrefetchEnabled(false);
@@ -150,7 +157,6 @@ public class SectionFragment extends BaseDelegateFragment {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-
             }
 
             @Override
@@ -164,12 +170,34 @@ public class SectionFragment extends BaseDelegateFragment {
                 }
             }
         });
+        rvPosts.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int lastVisibleItemPosition = 0;
+                RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+                int totalItemCount = layoutManager.getItemCount();
+                int[] lastVisibleItemPositions = ((StaggeredGridLayoutManager) layoutManager).findLastVisibleItemPositions(null);
+                lastVisibleItemPosition = getLastVisibleItem(lastVisibleItemPositions);
+                rvProductTypeList.smoothScrollToPosition(lastVisibleItemPosition);
+                productTypeListAdapter.setSelectedPosition(lastVisibleItemPosition);
+                productTypeListAdapter.notifyDataSetChanged();
+            }
+            public int getLastVisibleItem(int[] lastVisibleItemPositions) {
+                int maxSize = 0;
+                for (int i = 0; i < lastVisibleItemPositions.length; i++) {
+                    if (i == 0) {
+                        maxSize = lastVisibleItemPositions[i];
+                    } else if (lastVisibleItemPositions[i] > maxSize) {
+                        maxSize = lastVisibleItemPositions[i];
+                    }
+                }
+                return maxSize;
+            }
+        });
 
 
 
-        LinearLayoutManager linearLayoutManager;
-        linearLayoutManager =
-                new CenterLayoutManager(v.getContext(), LinearLayoutManager.HORIZONTAL, false);
         rvProductTypeList.setLayoutManager(linearLayoutManager);
         productTypeListAdapter = new SingleSelectedMumAdapter(getActivity(),
                 new HolderFactoryImpl() {
@@ -190,16 +218,22 @@ public class SectionFragment extends BaseDelegateFragment {
                 viewModel.getPosts(),
                 (pos, baseHM) -> {
                     rvProductTypeList.smoothScrollToPosition(pos);
-                    ((StaggeredGridLayoutManager) rvPosts.getLayoutManager()).scrollToPositionWithOffset(pos, 0);
-                    ;
+                    final RecyclerView.LayoutManager layoutManager = rvPosts.getLayoutManager();
+                    if(layoutManager instanceof StaggeredGridLayoutManager){
+                        ((StaggeredGridLayoutManager) rvPosts.getLayoutManager()).scrollToPositionWithOffset(pos, 0);
+                    }else {
+                        rvPosts.smoothScrollToPosition(pos);
+                    }
                 });
 
         rvProductTypeList.setAdapter(productTypeListAdapter);
-
         //fix no work well nest
         LayoutTransition layoutTransition = layout.getLayoutTransition();
         layoutTransition.setAnimateParentHierarchy(false);
 //        layoutTransition.enableTransitionType(LayoutTransition.CHANGE_DISAPPEARING);
+
+        SnapHelper helper = new LinearSnapHelper();
+        helper.attachToRecyclerView(rvPosts);
     }
 
     private void hideCatalogue() {

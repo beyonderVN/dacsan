@@ -19,7 +19,7 @@ public abstract class InfiniteScrollListener extends RecyclerView.OnScrollListen
     private int previousTotalItemCount = 0;
     // Sets the starting page index
     private int startingPageIndex = 0;
-    RecyclerView.LayoutManager mLayoutManager ;
+    protected RecyclerView.LayoutManager mLayoutManager ;
 
     public InfiniteScrollListener(@NonNull RecyclerView.LayoutManager mLayoutManager) {
         this.mLayoutManager = mLayoutManager;
@@ -44,6 +44,7 @@ public abstract class InfiniteScrollListener extends RecyclerView.OnScrollListen
         if (totalItemCount < previousTotalItemCount) {
             this.previousTotalItemCount = totalItemCount;
             if (totalItemCount == 0) {
+                return;
             }
         }
         // If it’s still loading, we check to see if the dataset count has

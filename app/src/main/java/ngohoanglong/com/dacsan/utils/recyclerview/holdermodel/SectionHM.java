@@ -67,4 +67,7 @@ public class SectionHM extends BaseHM {
         return vmTypeFactory.getType(this);
     }
 
+    public void upPage() {
+        page++;
+    }
 }

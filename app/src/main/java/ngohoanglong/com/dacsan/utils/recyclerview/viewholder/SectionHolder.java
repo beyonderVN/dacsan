@@ -3,8 +3,11 @@ package ngohoanglong.com.dacsan.utils.recyclerview.viewholder;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
+import com.vnwarriors.advancedui.appcore.common.recyclerviewhelper.InfiniteScrollListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +39,7 @@ import rx.functions.Func1;
  */
 
 public class SectionHolder extends BaseViewHolder<SectionHM> {
+    private static final String TAG = "SectionHolder";
     @BindView(R.id.tvTitle)
     TextView tvTitle;
     @BindView(R.id.rvListInSection)
@@ -44,12 +48,16 @@ public class SectionHolder extends BaseViewHolder<SectionHM> {
     @BindInt(R.integer.column_num)
     int columnNum;
 
+    static int count = 0;
+
+    int index ;
     public SectionHolder(View view) {
         super(view);
         ButterKnife.bind(this, view);
         DacsanApplication.getAppComponent()
                 .plus(new PostModule())
                 .inject(this);
+        index = count++;
     }
 
     @Inject
@@ -58,7 +66,7 @@ public class SectionHolder extends BaseViewHolder<SectionHM> {
     ThreadScheduler threadScheduler;
     @Override
     public void bind(SectionHM item) {
-
+        Log.d(TAG, "index: "+index);
         tvTitle.setText(item.getProductType().getProductTypeName());
         setUpViews(itemView, item);
         if(item.getBaseHMs().size()==0){
@@ -76,6 +84,7 @@ public class SectionHolder extends BaseViewHolder<SectionHM> {
                         }
                     })
                     .doOnSubscribe(()->{
+                        isLoadingmore = true;
                         item.getBaseHMs().add(new LoadMoreHM());
                     })
                     .subscribe(new Subscriber<List<BaseHM>>() {
@@ -87,6 +96,7 @@ public class SectionHolder extends BaseViewHolder<SectionHM> {
                         }
                         @Override
                         public void onNext(List<BaseHM> baseHMs) {
+                            isLoadingmore = false;
                             if(item.getBaseHMs().size()>0){
                                 BaseHM lastItem = item.getBaseHMs().get(item.getBaseHMs().size()-1);
                                 if(lastItem instanceof LoadMoreHM){
@@ -95,7 +105,7 @@ public class SectionHolder extends BaseViewHolder<SectionHM> {
                             }
 
                             item.getBaseHMs().addAll(baseHMs);
-
+                            item.upPage();
                         }
                     })
             ;
@@ -104,8 +114,16 @@ public class SectionHolder extends BaseViewHolder<SectionHM> {
 
     }
 
-
+    boolean isLoadingmore = false;
     private void setUpViews(View v,SectionHM item) {
+        isLoadingmore = false;
+        if(item.getBaseHMs().size()>0){
+            BaseHM lastItem = item.getBaseHMs().get(item.getBaseHMs().size()-1);
+            if(lastItem instanceof LoadMoreHM){
+                item.getBaseHMs().remove(item.getBaseHMs().size() - 1);
+            }
+        }
+
         final StaggeredGridLayoutManager staggeredGridLayoutManagerVertical =
                 new StaggeredGridLayoutManager(
                         columnNum, //The number of Columns in the grid
@@ -120,7 +138,55 @@ public class SectionHolder extends BaseViewHolder<SectionHM> {
         rvListInSection.setAdapter(baseAdapter);
         rvListInSection.setLayoutManager(staggeredGridLayoutManagerVertical);
         rvListInSection.setHasFixedSize(true);
-        rvListInSection.setNestedScrollingEnabled(false);
+        rvListInSection.addOnScrollListener(new InfiniteScrollListener(staggeredGridLayoutManagerVertical) {
+            @Override
+            public void onLoadMore() {
+                if (mLayoutManager.getChildCount()<=0)return;
+                try {
+                    postVivmallRepo.getLatest(new ProductsByTypeRequest(item.getProductType(), item.getPage()))
+                            .compose(withScheduler())
+                            .map(postVivmalls -> {
+                                List<BaseHM> baseHMs = new ArrayList<BaseHM>();
+                                for (PostVivmall baseHM : postVivmalls
+                                        ) {
+                                    baseHMs.add(new ProductItemHM(baseHM));
+                                }
+                                return baseHMs;
+                            })
+                            .doOnSubscribe(() -> {
+                                item.getBaseHMs().add(new LoadMoreHM());
+                                isLoadingmore = true;
+                            })
+                            .doOnNext(posts -> {
+                                Log.d(TAG, "loadMorePosts: ");
+                                isLoadingmore = false;
+                                if(item.getBaseHMs().size()>0){
+                                    BaseHM lastItem = item.getBaseHMs().get(item.getBaseHMs().size()-1);
+                                    if(lastItem instanceof LoadMoreHM){
+                                        item.getBaseHMs().remove(item.getBaseHMs().size() - 1);
+                                    }
+                                }
+
+                                item.getBaseHMs().addAll(posts);
+                                item.upPage();
+                            })
+                    .subscribe();
+                } catch (Exception e) {
+                    e.getStackTrace();
+                }
+            }
+
+            @Override
+            public boolean isLoading() {
+                return isLoadingmore;
+            }
+
+            @Override
+            public boolean isNoMore() {
+                return false;
+            }
+
+        });
     }
 
     public <E> Observable.Transformer<E, E> withScheduler() {

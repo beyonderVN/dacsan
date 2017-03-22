@@ -45,10 +45,9 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvProductTypeList"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="38dp"
             android:background="#719b9b9b"
             android:layout_gravity="top"
-            android:paddingBottom="4dp"
             />
     </FrameLayout>
 </layout>
