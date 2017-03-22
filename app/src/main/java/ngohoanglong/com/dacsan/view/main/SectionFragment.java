@@ -30,6 +30,9 @@ import ngohoanglong.com.dacsan.utils.recyclerview.MumAdapter;
 import ngohoanglong.com.dacsan.utils.recyclerview.SingleSelectedMumAdapter;
 import ngohoanglong.com.dacsan.utils.recyclerview.holderfactory.HolderFactoryImpl;
 import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.BaseHM;
+import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.SectionHM;
+import ngohoanglong.com.dacsan.utils.recyclerview.viewholder.BaseViewHolder;
+import ngohoanglong.com.dacsan.utils.recyclerview.viewholder.TypeHolder;
 import ngohoanglong.com.dacsan.view.BaseDelegateFragment;
 import ngohoanglong.com.dacsan.view.delegate.RxDelegate;
 import ngohoanglong.com.dacsan.view.delegate.StateDelegate;
@@ -39,27 +42,11 @@ import ngohoanglong.com.dacsan.view.delegate.StateDelegate;
  */
 
 public class SectionFragment extends BaseDelegateFragment {
-    private static final String TAG = "LastPostFragment";
+    private static final String TAG = "SectionFragment";
 
     private RxDelegate rxDelegate = new RxDelegate();
     ObservableArrayList<BaseHM> baseHMs2 = new ObservableArrayList<>();
     int selectedPosition =0;
-
-    private StateDelegate productTypeStateDelegate = new StateDelegate() {
-        @NonNull
-        @Override
-        protected ProductTypeViewModel createViewModel() {
-            return productTypeViewModel;
-        }
-
-        @NonNull
-        @Override
-        protected ProductTypeViewModel.ProductTypeState createStateModel() {
-            return new ProductTypeViewModel.ProductTypeState(
-                    selectedPosition,
-                    baseHMs2);
-        }
-    };
 
     private StateDelegate stateDelegate = new StateDelegate() {
         @NonNull
@@ -71,22 +58,19 @@ public class SectionFragment extends BaseDelegateFragment {
         @NonNull
         @Override
         protected SectionViewModel.LastPostsState createStateModel() {
-            return new SectionViewModel.LastPostsState(baseHMs,productType);
+            return new SectionViewModel.LastPostsState(baseHMs,new ProductType());
         }
     };
 
     ObservableArrayList<BaseHM> baseHMs = new ObservableArrayList<>();
-    ProductType productType = new ProductType();
+
     {
         lifecycleDelegates.add(rxDelegate);
-        lifecycleDelegates.add(productTypeStateDelegate);
         lifecycleDelegates.add(stateDelegate);
     }
 
     @Inject
     SectionViewModel viewModel;
-    @Inject
-    ProductTypeViewModel productTypeViewModel;
 
     private FragmentSectionBinding binding;
     @BindInt(R.integer.column_num)
@@ -119,7 +103,6 @@ public class SectionFragment extends BaseDelegateFragment {
         ButterKnife.bind(this, rootView);
         binding = DataBindingUtil.bind(rootView);
         binding.setViewModel(viewModel);
-        binding.setProductTypeViewModel(productTypeViewModel);
         setUpViews(rootView);
         return rootView;
     }
@@ -143,10 +126,10 @@ public class SectionFragment extends BaseDelegateFragment {
             @Override
             public void onLoadMore() {
                 try {
-//                    viewModel.loadMorePosts()
-//                            .takeUntil(rxDelegate.stopEvent())
-//                            .subscribe(baseHMs -> {
-//                            })
+                    viewModel.loadMore()
+                            .takeUntil(rxDelegate.stopEvent())
+                            .subscribe(baseHMs -> {
+                            })
                     ;
                 } catch (Exception e) {
                     e.getStackTrace();
@@ -189,9 +172,27 @@ public class SectionFragment extends BaseDelegateFragment {
                 new CenterLayoutManager(v.getContext(), LinearLayoutManager.HORIZONTAL, false);
         rvProductTypeList.setLayoutManager(linearLayoutManager);
         productTypeListAdapter = new SingleSelectedMumAdapter(getActivity(),
-                new HolderFactoryImpl(),
-                productTypeViewModel.getPosts(),
-                null);
+                new HolderFactoryImpl() {
+                    private final int ITEM_TYPE = R.layout.layout_type;
+                    @Override
+                    public BaseViewHolder createHolder(int type, View view) {
+                        switch(type) {
+                            case ITEM_TYPE: return new TypeHolder(view);
+                        }
+                        return super.createHolder(type, view);
+                    }
+
+                    @Override
+                    public int getType(SectionHM sectionHM) {
+                        return ITEM_TYPE;
+                    }
+                },
+                viewModel.getPosts(),
+                (pos, baseHM) -> {
+                    rvProductTypeList.smoothScrollToPosition(pos);
+                    ((StaggeredGridLayoutManager) rvPosts.getLayoutManager()).scrollToPositionWithOffset(pos, 0);
+                    ;
+                });
 
         rvProductTypeList.setAdapter(productTypeListAdapter);
 
@@ -217,18 +218,9 @@ public class SectionFragment extends BaseDelegateFragment {
     public void onStart() {
         super.onStart();
         bindViewModel();
-        productTypeListAdapter.setSelectedPosition(((ProductTypeViewModel.ProductTypeState)productTypeViewModel.getState()).getSelectedPosition());
     }
 
     protected void bindViewModel() {
-        productTypeViewModel.bindViewModel();
-        productTypeViewModel.loadProductTypes()
-                .takeUntil(rxDelegate.stopEvent())
-                .doOnTerminate(() -> {
-                })
-                .subscribe(baseHMs -> {
-                });
-
         viewModel.bindViewModel();
         viewModel.getIsLoadingMore()
                 .takeUntil(rxDelegate.stopEvent())

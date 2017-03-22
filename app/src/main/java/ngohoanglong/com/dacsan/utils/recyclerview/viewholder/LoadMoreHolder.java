@@ -13,18 +13,17 @@ import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.LoadMoreHM;
 
 public class LoadMoreHolder extends BaseViewHolder<LoadMoreHM> {
     private static final String TAG = "MovieViewHolder";
-//    ProgressBar progress;
+
     public LoadMoreHolder(View itemView) {
         super(itemView);
-//        progress = (ProgressBar) itemView;
+
     }
 
     @Override
     public  void bind(LoadMoreHM item) {
-
-        StaggeredGridLayoutManager.LayoutParams layoutParams = (StaggeredGridLayoutManager.LayoutParams) itemView.getLayoutParams();
-        layoutParams.setFullSpan(true);
-//        progress.setVisibility(View.VISIBLE );
-
+        if(itemView.getLayoutParams() instanceof StaggeredGridLayoutManager.LayoutParams){
+            StaggeredGridLayoutManager.LayoutParams layoutParams = (StaggeredGridLayoutManager.LayoutParams) itemView.getLayoutParams();
+            layoutParams.setFullSpan(true);
+        }
     }
 }

@@ -6,18 +6,16 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 import ngohoanglong.com.dacsan.data.repo.PostVivmallRepo;
 import ngohoanglong.com.dacsan.data.request.ProductTypeRequest;
-import ngohoanglong.com.dacsan.data.request.ProductsByTypeRequest;
 import ngohoanglong.com.dacsan.dependencyinjection.ActivityScope;
-import ngohoanglong.com.dacsan.model.PostVivmall;
 import ngohoanglong.com.dacsan.model.ProductType;
 import ngohoanglong.com.dacsan.utils.ThreadScheduler;
 import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.BaseHM;
-import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.ProductItemHM;
 import ngohoanglong.com.dacsan.utils.recyclerview.holdermodel.SectionHM;
 import ngohoanglong.com.dacsan.view.PostViewModel;
 import rx.Observable;
@@ -93,18 +91,22 @@ public class SectionViewModel extends PostViewModel {
 
     }
 
-    public Observable<List<BaseHM>> loadMorePosts() {
-        return postRepo.getLatest(new ProductsByTypeRequest(((LastPostsState) getState()).getProductType(), page + 1))
-                .takeUntil(refresh)
+    public Observable<List<BaseHM>> loadMore() {
+        return postRepo.getProductsType(new ProductTypeRequest())
+                .delay(2, TimeUnit.SECONDS)
                 .compose(withScheduler())
-                .map(postVivmalls -> {
+                .map(productTypeList -> {
                     List<BaseHM> baseHMs = new ArrayList<BaseHM>();
-                    for (PostVivmall baseHM : postVivmalls
+                    for (ProductType baseHM : productTypeList
                             ) {
-                        baseHMs.add(new ProductItemHM(baseHM));
+                        SectionHM sectionHM = new SectionHM(baseHM, new ObservableArrayList<BaseHM>());
+
+                        baseHMs.add(sectionHM);
                     }
                     return baseHMs;
                 })
+                .takeUntil(refresh)
+                .compose(withScheduler())
                 .doOnSubscribe(() -> {
                     isLoadingMore.onNext(true);
                 })
