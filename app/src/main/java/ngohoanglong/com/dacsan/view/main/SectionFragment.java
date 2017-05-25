@@ -15,8 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.vnwarriors.advancedui.appcore.common.recyclerviewhelper.InfiniteScrollListener;
-
 import javax.inject.Inject;
 
 import butterknife.BindInt;
@@ -118,7 +116,7 @@ public class SectionFragment extends BaseDelegateFragment {
         StaggeredGridLayoutManager staggeredGridLayoutManagerVertical =
                 new StaggeredGridLayoutManager(
                         1, //The number of Columns in the grid
-                        LinearLayoutManager.HORIZONTAL);
+                        LinearLayoutManager.VERTICAL);
         staggeredGridLayoutManagerVertical.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
         staggeredGridLayoutManagerVertical.invalidateSpanAssignments();
         staggeredGridLayoutManagerVertical.setItemPrefetchEnabled(false);
@@ -129,30 +127,30 @@ public class SectionFragment extends BaseDelegateFragment {
         rvPosts.setAdapter(baseAdapter);
         rvPosts.setLayoutManager(staggeredGridLayoutManagerVertical);
         rvPosts.setHasFixedSize(true);
-        rvPosts.addOnScrollListener(new InfiniteScrollListener(staggeredGridLayoutManagerVertical) {
-            @Override
-            public void onLoadMore() {
-                try {
-                    viewModel.loadMore()
-                            .takeUntil(rxDelegate.stopEvent())
-                            .subscribe(baseHMs -> {
-                            })
-                    ;
-                } catch (Exception e) {
-                    e.getStackTrace();
-                }
-            }
-
-            @Override
-            public boolean isLoading() {
-                return isLoadingMore;
-            }
-
-            @Override
-            public boolean isNoMore() {
-                return false;
-            }
-        });
+//        rvPosts.addOnScrollListener(new InfiniteScrollListener(staggeredGridLayoutManagerVertical) {
+//            @Override
+//            public void onLoadMore() {
+//                try {
+//                    viewModel.loadMore()
+//                            .takeUntil(rxDelegate.stopEvent())
+//                            .subscribe(baseHMs -> {
+//                            })
+//                    ;
+//                } catch (Exception e) {
+//                    e.getStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public boolean isLoading() {
+//                return isLoadingMore;
+//            }
+//
+//            @Override
+//            public boolean isNoMore() {
+//                return false;
+//            }
+//        });
         rvPosts.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
